@@ -235,26 +235,66 @@ The <code>redo</code> command fails as there are no <code>undo</code> commands e
 </tbody>
 </table>
 <div class="sect2">
-<h3 id="undo-redo-feature"><a class="link" href="#undo-redo-feature">Undo/Redo feature</a></h3>
+<h3 id="toggle-feature"><a class="link" href="#toggle-feature">Toggle feature</a></h3>
 <div class="sect3">
 <h4 id="current-implementation"><a class="link" href="#current-implementation">Current Implementation</a></h4>
 <div class="paragraph">
-<p>The undo/redo mechanism is facilitated by <code>VersionedAddressBook</code>.
-It extends <code>AddressBook</code> with an undo/redo history, stored internally as an <code>addressBookStateList</code> and <code>currentStatePointer</code>.
-Additionally, it implements the following operations:</p>
+<p>The toggle feature is facilitated by <code>FlashCards</code>.
+It ia stored internally and implements the following operations:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>VersionedAddressBook#commit()</code>&#8201;&#8212;&#8201;Saves the current address book state in its history.</p>
+<p><code>FlashCards#n()</code>&#8201;&#8212;&#8201;(next) Opens the next flash card in line.</p>
 </li>
 <li>
-<p><code>VersionedAddressBook#undo()</code>&#8201;&#8212;&#8201;Restores the previous address book state from its history.</p>
+<p><code>FlashCards#p()</code>&#8201;&#8212;&#8201;(previous) Restore the previous flash card.</p>
 </li>
 <li>
-<p><code>VersionedAddressBook#redo()</code>&#8201;&#8212;&#8201;Restores a previously undone address book state from its history.</p>
+<p><code>FlashCards#s()</code>&#8201;&#8212;&#8201;(skip) Skip the current flash card and move on to the next. The flash card skipped will move to the back of the line.</p>
+</li>
+<li>
+<p><code>FlashCards#c()</code>&#8201;&#8212;&#8201;(change) Closes the flash cards in the current subject and move on to the next subject selected/in line.</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="modes-of-quizzing-feature"><a class="link" href="#modes-of-quizzing-feature">Modes of Quizzing feature</a></h3>
+<div class="sect3">
+<h4 id="current-implementation-2"><a class="link" href="#current-implementation-2">Current Implementation</a></h4>
+<div class="paragraph">
+<p>The Modes of Quizzing feature is facilitated by <code>FlashCards</code>.
+For each subject the user has, he/she can create flash cards specifically for the topic. The user can also choose the testing mode he/she wishes to be tested on. These are the different modes available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>"Subject" Knowledge Testing Mode</code>&#8201;&#8212;&#8201;From the pool of flash cards under the selected subject, the user will choose the number of flash cards and there will be a mixture of frequency levels from the subject pool. This mode will focus on a specific subject and can be used for revision before mini quizzes held in school.</p>
+</li>
+<li>
+<p><code>"Focus" Subject Testing Mode</code>&#8201;&#8212;&#8201;This mode will be largely focused on weaker concepts and cards with higher frequency of being chosen from the database “FlashCards”. The frequency level can be toggled in this mode for the user to focus more on weaker concepts or strengthen their concepts. This mode is encouraged when exam dates are drawing near.</p>
+</li>
+<li>
+<p><code>"Random" Mass Testing Mode</code>&#8201;&#8212;&#8201;After selecting the number of cards to be tested, random flash cards will be chosen from the database “FlashCards” with varying frequency for the user to quiz himself/herself. This mode is encouraged if the user has free time or to pass time when travelling.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="shelf-life-of-flashcards"><a class="link" href="#shelf-life-of-flashcards">Shelf-Life of FlashCards</a></h3>
+<div class="sect3">
+<h4 id="current-implementation-3"><a class="link" href="#current-implementation-3">Current Implementation</a></h4>
+<div class="paragraph">
+<p>The user can determine how long the flash cards will exist in the database “FlashCards”.
+The following operations are available:
+* <code>FlashCards#clearall()</code>&#8201;&#8212;&#8201;Clears the entire database.
+* <code>FlashCards#clear()</code>&#8201;&#8212;&#8201;Clears a specific subject when in "Subject" Knowledge Testing Mode.</p>
+</div>
+<div class="paragraph">
+<p>For easier modes of implementation, the user can also choose to set a date whereby the flash cards would be unavailable thereafter. For example, in the event where the user knows the specific exam date for the selected subject, he/she can set the exam date under the “Subject Details” and the flash cards will be available for another month after the exam before the auto deletion function is activated.</p>
 </div>
 <div class="paragraph">
 <p>These operations are exposed in the <code>Model</code> interface as <code>Model#commitAddressBook()</code>, <code>Model#undoAddressBook()</code> and <code>Model#redoAddressBook()</code> respectively.</p>
@@ -452,4 +492,4 @@ If the <code>currentStatePointer</code> is at index <code>addressBookStateList.s
 <p><em>{Optionally, you may include other projects in your portfolio.}</em></p>
 </div>
 </div>
-</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2019-02-25 15:50:06 UTC</div></div></div></body></html>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2019-02-27 07:59:22 UTC</div></div></div></body></html>
