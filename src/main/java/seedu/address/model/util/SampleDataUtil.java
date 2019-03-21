@@ -6,12 +6,8 @@ import java.util.stream.Collectors;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Deadline;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
+import seedu.address.model.subject.*;
 import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Subject;
 
 import seedu.address.model.tag.Tag;
 

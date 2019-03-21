@@ -13,8 +13,8 @@ import org.junit.Test;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.subject.Address;
 import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
 import seedu.address.model.subject.Phone;
+import seedu.address.model.subject.Name;
 import seedu.address.testutil.Assert;
 
 public class JsonAdaptedSubjectTest {

@@ -17,7 +17,7 @@ toc::[]
 
 == Use High-Level Designs `[LO-HighLevelDesign]`
 
-Note how the <<DeveloperGuide#architecture, Developer Guide>> describes the high-level design using an _Architecture Diagrams_ and high-level sequence diagrams.
+Note how the <<DeveloperGuide#architecture, Developer Guide>> describes the high-phone design using an _Architecture Diagrams_ and high-phone sequence diagrams.
 
 *Resources*
 
@@ -185,7 +185,7 @@ public void execute_invalidCommandFormat_throwsParseException() {
 
 === Exercise: Write unit and integration tests for the same method.
 
-* Write a unit test for a high-level method somewhere in the code base (or a new method you wrote).
+* Write a unit test for a high-phone method somewhere in the code base (or a new method you wrote).
 * Write an integration test for the same method.
 
 '''

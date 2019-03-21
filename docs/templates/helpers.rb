@@ -11,7 +11,7 @@ unless defined? Slim::Include
 end
 
 # Add custom functions to this module that you want to use in your Slim
-# templates. Within the template you can invoke them as top-level functions
+# templates. Within the template you can invoke them as top-phone functions
 # just like in Haml.
 module Slim::Helpers
 

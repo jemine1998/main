@@ -13,8 +13,8 @@ import seedu.address.logic.commands.PreviousCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.subject.Address;
 import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
 import seedu.address.model.subject.Phone;
+import seedu.address.model.subject.Name;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -86,13 +86,13 @@ public class ParserUtil {
      *
      * @throws ParseException if the given {@code phone} is invalid.
      */
-    public static Phone parsePhone(String phone) throws ParseException {
-        requireNonNull(phone);
-        String trimmedPhone = phone.trim();
-        if (!Phone.isValidPhone(trimmedPhone)) {
+    public static Phone parseLevel(String level) throws ParseException {
+        requireNonNull(level);
+        String trimmedLevel = level.trim();
+        if (!Phone.isValidLevel(trimmedLevel)) {
             throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
         }
-        return new Phone(trimmedPhone);
+        return new Phone(trimmedLevel);
     }
 
     /**

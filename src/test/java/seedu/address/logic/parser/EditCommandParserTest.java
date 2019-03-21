@@ -38,8 +38,8 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditSubjectDescriptor;
 import seedu.address.model.subject.Address;
 import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
 import seedu.address.model.subject.Phone;
+import seedu.address.model.subject.Name;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EditSubjectDescriptorBuilder;
 

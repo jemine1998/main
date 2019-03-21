@@ -10,12 +10,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Deadline;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
+import seedu.address.model.subject.*;
 import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Subject;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -26,7 +22,7 @@ class JsonAdaptedSubject {
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Subject's %s field is missing!";
 
     private final String name;
-    private final String phone;
+    private final String level;
     private final String email;
     private final String address;
     private final String deadline;
@@ -36,12 +32,12 @@ class JsonAdaptedSubject {
      * Constructs a {@code JsonAdaptedSubject} with the given subject details.
      */
     @JsonCreator
-    public JsonAdaptedSubject(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
+    public JsonAdaptedSubject(@JsonProperty("name") String name, @JsonProperty("level") String level,
                               @JsonProperty("email") String email, @JsonProperty("address") String address,
                               @JsonProperty("deadline") String deadline,
                               @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.name = name;
-        this.phone = phone;
+        this.level = level;
         this.email = email;
         this.address = address;
         this.deadline = deadline;
@@ -55,7 +51,7 @@ class JsonAdaptedSubject {
      */
     public JsonAdaptedSubject(Subject source) {
         name = source.getName().fullName;
-        phone = source.getPhone().value;
+        level = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
         deadline = source.getDeadline().value;
@@ -83,13 +79,13 @@ class JsonAdaptedSubject {
         }
         final Name modelName = new Name(name);
 
-        if (phone == null) {
+        if (level == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Phone.class.getSimpleName()));
         }
-        if (!Phone.isValidPhone(phone)) {
+        if (!Phone.isValidLevel(level)) {
             throw new IllegalValueException(Phone.MESSAGE_CONSTRAINTS);
         }
-        final Phone modelPhone = new Phone(phone);
+        final Phone modelPhone = new Phone(level);
 
         if (email == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName()));
