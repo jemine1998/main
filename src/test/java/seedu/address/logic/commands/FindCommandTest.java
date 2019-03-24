@@ -3,12 +3,12 @@ package seedu.address.logic.commands;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.commons.core.Messages.MESSAGE_SUBJECTS_LISTED_OVERVIEW;
+import static seedu.address.commons.core.Messages.MESSAGE_FLASHCARDS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalSubjects.CARL;
-import static seedu.address.testutil.TypicalSubjects.ELLE;
-import static seedu.address.testutil.TypicalSubjects.FIONA;
-import static seedu.address.testutil.TypicalSubjects.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalFlashcards.CARL;
+import static seedu.address.testutil.TypicalFlashcards.ELLE;
+import static seedu.address.testutil.TypicalFlashcards.FIONA;
+import static seedu.address.testutil.TypicalFlashcards.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +19,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.subject.NameContainsKeywordsPredicate;
+import seedu.address.model.flashcard.NameContainsKeywordsPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
@@ -52,28 +52,28 @@ public class FindCommandTest {
         // null -> returns false
         assertFalse(findFirstCommand.equals(null));
 
-        // different subject -> returns false
+        // different flashcard -> returns false
         assertFalse(findFirstCommand.equals(findSecondCommand));
     }
 
     @Test
-    public void execute_zeroKeywords_noSubjectFound() {
-        String expectedMessage = String.format(MESSAGE_SUBJECTS_LISTED_OVERVIEW, 0);
+    public void execute_zeroKeywords_noFlashcardFound() {
+        String expectedMessage = String.format(MESSAGE_FLASHCARDS_LISTED_OVERVIEW, 0);
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredSubjectList(predicate);
+        expectedModel.updateFilteredFlashcardList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredSubjectList());
+        assertEquals(Collections.emptyList(), model.getFilteredFlashcardList());
     }
 
     @Test
-    public void execute_multipleKeywords_multipleSubjectsFound() {
-        String expectedMessage = String.format(MESSAGE_SUBJECTS_LISTED_OVERVIEW, 3);
+    public void execute_multipleKeywords_multipleFlashcardsFound() {
+        String expectedMessage = String.format(MESSAGE_FLASHCARDS_LISTED_OVERVIEW, 3);
         NameContainsKeywordsPredicate predicate = preparePredicate("Kurz Elle Kunz");
         FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredSubjectList(predicate);
+        expectedModel.updateFilteredFlashcardList(predicate);
         assertCommandSuccess(command, model, commandHistory, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredSubjectList());
+        assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredFlashcardList());
     }
 
     /**

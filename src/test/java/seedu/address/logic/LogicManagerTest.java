@@ -1,13 +1,13 @@
 package seedu.address.logic;
 
 import static org.junit.Assert.assertEquals;
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
-import static seedu.address.testutil.TypicalSubjects.AMY;
+import static seedu.address.testutil.TypicalFlashcards.AMY;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -28,11 +28,11 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
-import seedu.address.testutil.SubjectBuilder;
+import seedu.address.testutil.FlashcardBuilder;
 
 
 public class LogicManagerTest {
@@ -65,7 +65,7 @@ public class LogicManagerTest {
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
-        assertCommandException(deleteCommand, MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+        assertCommandException(deleteCommand, MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
         assertHistoryCorrect(deleteCommand);
     }
 
@@ -88,9 +88,9 @@ public class LogicManagerTest {
         // Execute add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_AMY;
-        Subject expectedSubject = new SubjectBuilder(AMY).withTags().build();
+        Flashcard expectedFlashcard = new FlashcardBuilder(AMY).withTags().build();
         ModelManager expectedModel = new ModelManager();
-        expectedModel.addSubject(expectedSubject);
+        expectedModel.addFlashcard(expectedFlashcard);
         expectedModel.commitAddressBook();
         String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
         assertCommandBehavior(CommandException.class, addCommand, expectedMessage, expectedModel);
@@ -98,9 +98,9 @@ public class LogicManagerTest {
     }
 
     @Test
-    public void getFilteredSubjectList_modifyList_throwsUnsupportedOperationException() {
+    public void getFilteredFlashcardList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        logic.getFilteredSubjectList().remove(0);
+        logic.getFilteredFlashcardList().remove(0);
     }
 
     /**

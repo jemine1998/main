@@ -3,8 +3,12 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
-import seedu.address.model.subject.*;
-import seedu.address.model.subject.Phone;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Deadline;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -14,7 +18,7 @@ import seedu.address.model.util.SampleDataUtil;
 public class SubjectBuilder {
 
     public static final String DEFAULT_NAME = "Alice Pauline";
-    public static final String DEFAULT_PHONE = "85355255";
+    public static final String DEFAULT_PHONE = "2";
     public static final String DEFAULT_EMAIL = "alice@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_DEADLINE = "";
@@ -38,7 +42,7 @@ public class SubjectBuilder {
     /**
      * Initializes the SubjectBuilder with the data of {@code subjectToCopy}.
      */
-    public SubjectBuilder(Subject subjectToCopy) {
+    public SubjectBuilder(Flashcard subjectToCopy) {
         name = subjectToCopy.getName();
         phone = subjectToCopy.getPhone();
         email = subjectToCopy.getEmail();
@@ -96,8 +100,8 @@ public class SubjectBuilder {
         return this;
     }
 
-    public Subject build() {
-        return new Subject(name, phone, email, address, deadline, tags);
+    public Flashcard build() {
+        return new Flashcard(name, phone, email, address, deadline, tags);
     }
 
 }

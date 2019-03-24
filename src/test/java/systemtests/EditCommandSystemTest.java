@@ -25,12 +25,12 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_SUBJECTS;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_SUBJECT;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_SUBJECT;
-import static seedu.address.testutil.TypicalSubjects.AMY;
-import static seedu.address.testutil.TypicalSubjects.BOB;
-import static seedu.address.testutil.TypicalSubjects.KEYWORD_MATCHING_MEIER;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_FLASHCARDS;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_FLASHCARD;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_FLASHCARD;
+import static seedu.address.testutil.TypicalFlashcards.AMY;
+import static seedu.address.testutil.TypicalFlashcards.BOB;
+import static seedu.address.testutil.TypicalFlashcards.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
@@ -40,14 +40,14 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
-import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
+import seedu.address.model.flashcard.Flashcard;
 import seedu.address.model.tag.Tag;
-import seedu.address.testutil.SubjectBuilder;
-import seedu.address.testutil.SubjectUtil;
+import seedu.address.testutil.FlashcardBuilder;
+import seedu.address.testutil.FlashcardUtil;
 
 public class EditCommandSystemTest extends AddressBookSystemTest {
 
@@ -64,63 +64,64 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
          * -> edited
          *//*
 
-        Index index = INDEX_FIRST_SUBJECT;
+        Index index = INDEX_FIRST_FLASHCARD;
         String command = " " + EditCommand.COMMAND_WORD + "  " + index.getOneBased() + "  " + NAME_DESC_BOB + "  "
                 + PHONE_DESC_BOB + " " + EMAIL_DESC_BOB + "  " + ADDRESS_DESC_BOB + " " + TAG_DESC_HUSBAND + " ";
-        Subject editedSubject = new SubjectBuilder(BOB).withTags(VALID_TAG_HUSBAND).build();
+        Flashcard editedSubject = new FlashcardBuilder(BOB).withTags(VALID_TAG_HUSBAND).build();
         assertCommandSuccess(command, index, editedSubject);
 
         */
-/* Case: undo editing the last subject in the list -> last subject restored *//*
+/* Case: undo editing the last flashcard in the list -> last flashcard restored *//*
 
         command = UndoCommand.COMMAND_WORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 
         */
-/* Case: redo editing the last subject in the list -> last subject edited again *//*
+/* Case: redo editing the last flashcard in the list -> last flashcard edited again *//*
 
         command = RedoCommand.COMMAND_WORD;
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
-        model.setSubject(getModel().getFilteredSubjectList().get(INDEX_FIRST_SUBJECT.getZeroBased()), editedSubject);
+        model.setFlashcard(getModel().getFilteredFlashcardList().get(INDEX_FIRST_FLASHCARD.getZeroBased()),
+        editedSubject);
         assertCommandSuccess(command, model, expectedResultMessage);
 
         */
-/* Case: edit a subject with new values same as existing values -> edited *//*
+/* Case: edit a flashcard with new values same as existing values -> edited *//*
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
         assertCommandSuccess(command, index, BOB);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different name -> edited *//*
+/* Case: edit a flashcard with new values same as another flashcard's values but with different name -> edited *//*
 
-        assertTrue(getModel().getAddressBook().getSubjectList().contains(BOB));
-        index = INDEX_SECOND_SUBJECT;
-        assertNotEquals(getModel().getFilteredSubjectList().get(index.getZeroBased()), BOB);
+        assertTrue(getModel().getAddressBook().getFlashcardList().contains(BOB));
+        index = INDEX_SECOND_FLASHCARD;
+        assertNotEquals(getModel().getFilteredFlashcardList().get(index.getZeroBased()), BOB);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        editedSubject = new SubjectBuilder(BOB).withName(VALID_NAME_AMY).build();
+        editedSubject = new FlashcardBuilder(BOB).withName(VALID_NAME_AMY).build();
         assertCommandSuccess(command, index, editedSubject);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different phone and email
+/* Case: edit a flashcard with new values same as another flashcard's values but with different phone and email
          * -> edited
          *//*
 
-        index = INDEX_SECOND_SUBJECT;
+        index = INDEX_SECOND_FLASHCARD;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        editedSubject = new SubjectBuilder(BOB).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).build();
+        editedSubject = new FlashcardBuilder(BOB).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).build();
         assertCommandSuccess(command, index, editedSubject);
 
         */
 /* Case: clear tags -> cleared *//*
 
-        index = INDEX_FIRST_SUBJECT;
+        index = INDEX_FIRST_FLASHCARD;
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix();
-        Subject subjectToEdit = getModel().getFilteredSubjectList().get(index.getZeroBased());
-        editedSubject = new SubjectBuilder(subjectToEdit).withTags().build();
+        Flashcard subjectToEdit = getModel().getFilteredFlashcardList().get(index.getZeroBased());
+        editedSubject = new FlashcardBuilder(subjectToEdit).withTags().build();
         assertCommandSuccess(command, index, editedSubject);
 
         */
@@ -128,42 +129,42 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
 
         */
-/* Case: filtered subject list, edit index within bounds of address book and subject list -> edited *//*
+/* Case: filtered flashcard list, edit index within bounds of address book and flashcard list -> edited *//*
 
-        showSubjectsWithName(KEYWORD_MATCHING_MEIER);
-        index = INDEX_FIRST_SUBJECT;
-        assertTrue(index.getZeroBased() < getModel().getFilteredSubjectList().size());
+        showFlashcardsWithName(KEYWORD_MATCHING_MEIER);
+        index = INDEX_FIRST_FLASHCARD;
+        assertTrue(index.getZeroBased() < getModel().getFilteredFlashcardList().size());
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + NAME_DESC_BOB;
-        subjectToEdit = getModel().getFilteredSubjectList().get(index.getZeroBased());
-        editedSubject = new SubjectBuilder(subjectToEdit).withName(VALID_NAME_BOB).build();
+        subjectToEdit = getModel().getFilteredFlashcardList().get(index.getZeroBased());
+        editedSubject = new FlashcardBuilder(subjectToEdit).withName(VALID_NAME_BOB).build();
         assertCommandSuccess(command, index, editedSubject);
 
         */
-/* Case: filtered subject list, edit index within bounds of address book but out of bounds of subject list
+/* Case: filtered flashcard list, edit index within bounds of address book but out of bounds of flashcard list
          * -> rejected
          *//*
 
-        showSubjectsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getAddressBook().getSubjectList().size();
+        showFlashcardsWithName(KEYWORD_MATCHING_MEIER);
+        int invalidIndex = getModel().getAddressBook().getFlashcardList().size();
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB,
-                Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+                Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
 
         */
-/* ------------------ Performing edit operation while a subject card is selected ----------------------- *//*
+/* ------------------ Performing edit operation while a flashcard card is selected ----------------------- *//*
 
 
         */
-/* Case: selects first card in the subject list, edit a subject -> edited, card selection remains unchanged but
+/* Case: selects first card in the flashcard list, edit a flashcard -> edited, card selection remains unchanged but
          * browser url changes
          *//*
 
-        showAllSubjectss();
-        index = INDEX_FIRST_SUBJECT;
-        selectSubject(index);
+        showAllFlashcards();
+        index = INDEX_FIRST_FLASHCARD;
+        selectFlashcard(index);
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_AMY + TAG_DESC_FRIEND;
         // this can be misleading: card selection actually remains unchanged but the
-        // browser's url is updated to reflect the new subject's name
+        // browser's url is updated to reflect the new flashcard's name
         assertCommandSuccess(command, index, AMY, index);
 
         */
@@ -185,9 +186,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         */
 /* Case: invalid index (size + 1) -> rejected *//*
 
-        invalidIndex = getModel().getFilteredSubjectList().size() + 1;
+        invalidIndex = getModel().getFilteredFlashcardList().size() + 1;
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB,
-                Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+                Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
 
         */
 /* Case: missing index -> rejected *//*
@@ -198,90 +199,90 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         */
 /* Case: missing all fields -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased(),
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased(),
                 EditCommand.MESSAGE_NOT_EDITED);
 
         */
 /* Case: invalid name -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased()
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased()
                 + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS);
 
         */
 /* Case: invalid phone -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased()
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased()
                 + INVALID_PHONE_DESC, Phone.MESSAGE_CONSTRAINTS);
 
         */
 /* Case: invalid email -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased()
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased()
                 + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS);
 
         */
 /* Case: invalid address -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased()
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased()
                 + INVALID_ADDRESS_DESC, Address.MESSAGE_CONSTRAINTS);
 
         */
 /* Case: invalid tag -> rejected *//*
 
-        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased()
+        assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased()
                 + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS);
 
         */
-/* Case: edit a subject with new values same as another subject's values -> rejected *//*
+/* Case: edit a flashcard with new values same as another flashcard's values -> rejected *//*
 
-        executeCommand(SubjectUtil.getAddCommand(BOB));
-        assertTrue(getModel().getAddressBook().getSubjectList().contains(BOB));
-        index = INDEX_FIRST_SUBJECT;
-        assertFalse(getModel().getFilteredSubjectList().get(index.getZeroBased()).equals(BOB));
+        executeCommand(FlashcardUtil.getAddCommand(BOB));
+        assertTrue(getModel().getAddressBook().getFlashcardList().contains(BOB));
+        index = INDEX_FIRST_FLASHCARD;
+        assertFalse(getModel().getFilteredFlashcardList().get(index.getZeroBased()).equals(BOB));
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_SUBJECT);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_FLASHCARD);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different tags
+/* Case: edit a flashcard with new values same as another flashcard's values but with different tags
         -> rejected *//*
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_SUBJECT);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_FLASHCARD);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different address
+/* Case: edit a flashcard with new values same as another flashcard's values but with different address
         -> rejected *//*
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + ADDRESS_DESC_AMY + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_SUBJECT);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_FLASHCARD);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different phone -> rejected *//*
+/* Case: edit a flashcard with new values same as another flashcard's values but with different phone -> rejected *//*
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_AMY + EMAIL_DESC_BOB
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_SUBJECT);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_FLASHCARD);
 
         */
-/* Case: edit a subject with new values same as another subject's values but with different email -> rejected *//*
+/* Case: edit a flashcard with new values same as another flashcard's values but with different email -> rejected *//*
 
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY
                 + ADDRESS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND;
-        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_SUBJECT);
+        assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_FLASHCARD);
     }
 
     */
 /**
-     * Performs the same verification as {@code assertCommandSuccess(String, Index, Subject, Index)} except that
+     * Performs the same verification as {@code assertCommandSuccess(String, Index, Flashcard, Index)} except that
      * the browser url and selected card remain unchanged.
      * @param toEdit the index of the current model's filtered list
      * @see EditCommandSystemTest#assertCommandSuccess(String, Index, Subject, Index)
      *//*
 
-    private void assertCommandSuccess(String command, Index toEdit, Subject editedSubject) {
+    private void assertCommandSuccess(String command, Index toEdit, Flashcard editedSubject) {
         assertCommandSuccess(command, toEdit, editedSubject, null);
     }
 
@@ -289,20 +290,20 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 /**
      * Performs the same verification as {@code assertCommandSuccess(String, Model, String, Index)} and in addition,<br>
      * 1. Asserts that result display box displays the success message of executing {@code EditCommand}.<br>
-     * 2. Asserts that the model related components are updated to reflect the subject at index {@code toEdit} being
+     * 2. Asserts that the model related components are updated to reflect the flashcard at index {@code toEdit} being
      * updated to values specified {@code editedSubject}.<br>
      * @param toEdit the index of the current model's filtered list.
      * @see EditCommandSystemTest#assertCommandSuccess(String, Model, String, Index)
      *//*
 
-    private void assertCommandSuccess(String command, Index toEdit, Subject editedSubject,
+    private void assertCommandSuccess(String command, Index toEdit, Flashcard editedSubject,
             Index expectedSelectedCardIndex) {
         Model expectedModel = getModel();
-        expectedModel.setSubject(expectedModel.getFilteredSubjectList().get(toEdit.getZeroBased()), editedSubject);
-        expectedModel.updateFilteredSubjectList(PREDICATE_SHOW_ALL_SUBJECTS);
+        expectedModel.setFlashcard(expectedModel.getFilteredFlashcardList().get(toEdit.getZeroBased()), editedSubject);
+        expectedModel.updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
 
         assertCommandSuccess(command, expectedModel,
-                String.format(EditCommand.MESSAGE_EDIT_SUBJECT_SUCCESS, editedSubject), expectedSelectedCardIndex);
+                String.format(EditCommand.MESSAGE_EDIT_FLASHCARD_SUCCESS, editedSubject), expectedSelectedCardIndex);
     }
 
     */
@@ -334,7 +335,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Model expectedModel, String expectedResultMessage,
             Index expectedSelectedCardIndex) {
         executeCommand(command);
-        expectedModel.updateFilteredSubjectList(PREDICATE_SHOW_ALL_SUBJECTS);
+        expectedModel.updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         if (expectedSelectedCardIndex != null) {

@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_SUBJECTS;
-import static seedu.address.testutil.TypicalSubjects.ALICE;
-import static seedu.address.testutil.TypicalSubjects.BENSON;
-import static seedu.address.testutil.TypicalSubjects.BOB;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_FLASHCARDS;
+import static seedu.address.testutil.TypicalFlashcards.ALICE;
+import static seedu.address.testutil.TypicalFlashcards.BENSON;
+import static seedu.address.testutil.TypicalFlashcards.BOB;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,11 +19,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.model.subject.NameContainsKeywordsPredicate;
-import seedu.address.model.subject.Subject;
-import seedu.address.model.subject.exceptions.SubjectNotFoundException;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.NameContainsKeywordsPredicate;
+import seedu.address.model.flashcard.exceptions.FlashcardNotFoundException;
 import seedu.address.testutil.AddressBookBuilder;
-import seedu.address.testutil.SubjectBuilder;
+import seedu.address.testutil.FlashcardBuilder;
 
 public class ModelManagerTest {
     @Rule
@@ -36,7 +36,7 @@ public class ModelManagerTest {
         assertEquals(new UserPrefs(), modelManager.getUserPrefs());
         assertEquals(new GuiSettings(), modelManager.getGuiSettings());
         assertEquals(new AddressBook(), new AddressBook(modelManager.getAddressBook()));
-        assertEquals(null, modelManager.getSelectedSubject());
+        assertEquals(null, modelManager.getSelectedFlashcard());
     }
 
     @Test
@@ -86,72 +86,72 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void hasSubject_nullSubject_throwsNullPointerException() {
+    public void hasFlashcard_nullFlashcard_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
-        modelManager.hasSubject(null);
+        modelManager.hasFlashcard(null);
     }
 
     @Test
-    public void hasSubject_subjectNotInAddressBook_returnsFalse() {
-        assertFalse(modelManager.hasSubject(ALICE));
+    public void hasFlashcard_flashcardNotInAddressBook_returnsFalse() {
+        assertFalse(modelManager.hasFlashcard(ALICE));
     }
 
     @Test
-    public void hasSubject_subjectInAddressBook_returnsTrue() {
-        modelManager.addSubject(ALICE);
-        assertTrue(modelManager.hasSubject(ALICE));
+    public void hasFlashcard_flashcardInAddressBook_returnsTrue() {
+        modelManager.addFlashcard(ALICE);
+        assertTrue(modelManager.hasFlashcard(ALICE));
     }
 
     @Test
-    public void deleteSubject_subjectIsSelectedAndFirstSubjectInFilteredSubjectList_selectionCleared() {
-        modelManager.addSubject(ALICE);
-        modelManager.setSelectedSubject(ALICE);
-        modelManager.deleteSubject(ALICE);
-        assertEquals(null, modelManager.getSelectedSubject());
+    public void deleteFlashcard_flashcardIsSelectedAndFirstFlashcardInFilteredFlashcardList_selectionCleared() {
+        modelManager.addFlashcard(ALICE);
+        modelManager.setSelectedFlashcard(ALICE);
+        modelManager.deleteFlashcard(ALICE);
+        assertEquals(null, modelManager.getSelectedFlashcard());
     }
 
     @Test
-    public void deleteSubject_subjectIsSelectedAndSecondSubjectInFilteredSubjectList_firstSubjectSelected() {
-        modelManager.addSubject(ALICE);
-        modelManager.addSubject(BOB);
-        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredSubjectList());
-        modelManager.setSelectedSubject(BOB);
-        modelManager.deleteSubject(BOB);
-        assertEquals(ALICE, modelManager.getSelectedSubject());
+    public void deleteFlashcard_flashcardIsSelectedAndSecondFlashcardInFilteredFlashcardList_firstFlashcardSelected() {
+        modelManager.addFlashcard(ALICE);
+        modelManager.addFlashcard(BOB);
+        assertEquals(Arrays.asList(ALICE, BOB), modelManager.getFilteredFlashcardList());
+        modelManager.setSelectedFlashcard(BOB);
+        modelManager.deleteFlashcard(BOB);
+        assertEquals(ALICE, modelManager.getSelectedFlashcard());
     }
 
     @Test
-    public void setSubject_subjectIsSelected_selectedSubjectUpdated() {
-        modelManager.addSubject(ALICE);
-        modelManager.setSelectedSubject(ALICE);
-        Subject updatedAlice = new SubjectBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
-        modelManager.setSubject(ALICE, updatedAlice);
-        assertEquals(updatedAlice, modelManager.getSelectedSubject());
+    public void setFlashcard_flashcardIsSelected_selectedFlashcardUpdated() {
+        modelManager.addFlashcard(ALICE);
+        modelManager.setSelectedFlashcard(ALICE);
+        Flashcard updatedAlice = new FlashcardBuilder(ALICE).withEmail(VALID_EMAIL_BOB).build();
+        modelManager.setFlashcard(ALICE, updatedAlice);
+        assertEquals(updatedAlice, modelManager.getSelectedFlashcard());
     }
 
     @Test
-    public void getFilteredSubjectList_modifyList_throwsUnsupportedOperationException() {
+    public void getFilteredFlashcardList_modifyList_throwsUnsupportedOperationException() {
         thrown.expect(UnsupportedOperationException.class);
-        modelManager.getFilteredSubjectList().remove(0);
+        modelManager.getFilteredFlashcardList().remove(0);
     }
 
     @Test
-    public void setSelectedSubject_subjectNotInFilteredSubjectList_throwsSubjectNotFoundException() {
-        thrown.expect(SubjectNotFoundException.class);
-        modelManager.setSelectedSubject(ALICE);
+    public void setSelectedFlashcard_flashcardNotInFilteredFlashcardList_throwsFlashcardNotFoundException() {
+        thrown.expect(FlashcardNotFoundException.class);
+        modelManager.setSelectedFlashcard(ALICE);
     }
 
     @Test
-    public void setSelectedSubject_subjectInFilteredSubjectList_setsSelectedSubject() {
-        modelManager.addSubject(ALICE);
-        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredSubjectList());
-        modelManager.setSelectedSubject(ALICE);
-        assertEquals(ALICE, modelManager.getSelectedSubject());
+    public void setSelectedFlashcard_flashcardInFilteredFlashcardList_setsSelectedFlashcard() {
+        modelManager.addFlashcard(ALICE);
+        assertEquals(Collections.singletonList(ALICE), modelManager.getFilteredFlashcardList());
+        modelManager.setSelectedFlashcard(ALICE);
+        assertEquals(ALICE, modelManager.getSelectedFlashcard());
     }
 
     @Test
     public void equals() {
-        AddressBook addressBook = new AddressBookBuilder().withSubject(ALICE).withSubject(BENSON).build();
+        AddressBook addressBook = new AddressBookBuilder().withFlashcard(ALICE).withFlashcard(BENSON).build();
         AddressBook differentAddressBook = new AddressBook();
         UserPrefs userPrefs = new UserPrefs();
 
@@ -174,11 +174,11 @@ public class ModelManagerTest {
 
         // different filteredList -> returns false
         String[] keywords = ALICE.getName().fullName.split("\\s+");
-        modelManager.updateFilteredSubjectList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
+        modelManager.updateFilteredFlashcardList(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
         assertFalse(modelManager.equals(new ModelManager(addressBook, userPrefs)));
 
         // resets modelManager to initial state for upcoming tests
-        modelManager.updateFilteredSubjectList(PREDICATE_SHOW_ALL_SUBJECTS);
+        modelManager.updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
 
         // different userPrefs -> returns false
         UserPrefs differentUserPrefs = new UserPrefs();

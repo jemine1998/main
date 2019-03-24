@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -19,16 +19,16 @@ import seedu.address.model.subject.Subject;
 @JsonRootName(value = "addressbook")
 class JsonSerializableAddressBook {
 
-    public static final String MESSAGE_DUPLICATE_SUBJECT = "Subjects list contains duplicate subject(s).";
+    public static final String MESSAGE_DUPLICATE_FLASHCARD = "Flashcards list contains duplicate flashcard(s).";
 
-    private final List<JsonAdaptedSubject> subjects = new ArrayList<>();
+    private final List<JsonAdaptedFlashcard> flashcards = new ArrayList<>();
 
     /**
-     * Constructs a {@code JsonSerializableAddressBook} with the given subjects.
+     * Constructs a {@code JsonSerializableAddressBook} with the given flashcards.
      */
     @JsonCreator
-    public JsonSerializableAddressBook(@JsonProperty("subjects") List<JsonAdaptedSubject> subjects) {
-        this.subjects.addAll(subjects);
+    public JsonSerializableAddressBook(@JsonProperty("flashcards") List<JsonAdaptedFlashcard> flashcards) {
+        this.flashcards.addAll(flashcards);
     }
 
     /**
@@ -37,7 +37,8 @@ class JsonSerializableAddressBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableAddressBook}.
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
-        subjects.addAll(source.getSubjectList().stream().map(JsonAdaptedSubject::new).collect(Collectors.toList()));
+        flashcards.addAll(source.getFlashcardList().stream().map(JsonAdaptedFlashcard::new)
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -47,12 +48,12 @@ class JsonSerializableAddressBook {
      */
     public AddressBook toModelType() throws IllegalValueException {
         AddressBook addressBook = new AddressBook();
-        for (JsonAdaptedSubject jsonAdaptedSubject : subjects) {
-            Subject subject = jsonAdaptedSubject.toModelType();
-            if (addressBook.hasSubject(subject)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_SUBJECT);
+        for (JsonAdaptedFlashcard jsonAdaptedFlashcard : flashcards) {
+            Flashcard flashcard = jsonAdaptedFlashcard.toModelType();
+            if (addressBook.hasFlashcard(flashcard)) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_FLASHCARD);
             }
-            addressBook.addSubject(subject);
+            addressBook.addFlashcard(flashcard);
         }
         return addressBook;
     }

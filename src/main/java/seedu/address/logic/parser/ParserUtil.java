@@ -11,10 +11,10 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.NextCommand;
 import seedu.address.logic.commands.PreviousCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Name;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
 
 /**

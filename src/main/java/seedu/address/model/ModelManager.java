@@ -15,8 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.subject.Subject;
-import seedu.address.model.subject.exceptions.SubjectNotFoundException;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.exceptions.FlashcardNotFoundException;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -26,8 +26,8 @@ public class ModelManager implements Model {
 
     private final VersionedAddressBook versionedAddressBook;
     private final UserPrefs userPrefs;
-    private final FilteredList<Subject> filteredSubjects;
-    private final SimpleObjectProperty<Subject> selectedSubject = new SimpleObjectProperty<>();
+    private final FilteredList<Flashcard> filteredFlashcards;
+    private final SimpleObjectProperty<Flashcard> selectedFlashcard = new SimpleObjectProperty<>();
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -40,8 +40,8 @@ public class ModelManager implements Model {
 
         versionedAddressBook = new VersionedAddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
-        filteredSubjects = new FilteredList<>(versionedAddressBook.getSubjectList());
-        filteredSubjects.addListener(this::ensureSelectedSubjectIsValid);
+        filteredFlashcards = new FilteredList<>(versionedAddressBook.getFlashcardList());
+        filteredFlashcards.addListener(this::ensureSelectedFlashcardIsValid);
     }
 
     public ModelManager() {
@@ -96,44 +96,44 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public boolean hasSubject(Subject subject) {
-        requireNonNull(subject);
-        return versionedAddressBook.hasSubject(subject);
+    public boolean hasFlashcard(Flashcard flashcard) {
+        requireNonNull(flashcard);
+        return versionedAddressBook.hasFlashcard(flashcard);
     }
 
     @Override
-    public void deleteSubject(Subject target) {
-        versionedAddressBook.removeSubject(target);
+    public void deleteFlashcard(Flashcard target) {
+        versionedAddressBook.removeFlashcard(target);
     }
 
     @Override
-    public void addSubject(Subject subject) {
-        versionedAddressBook.addSubject(subject);
-        updateFilteredSubjectList(PREDICATE_SHOW_ALL_SUBJECTS);
+    public void addFlashcard(Flashcard flashcard) {
+        versionedAddressBook.addFlashcard(flashcard);
+        updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
     }
 
     @Override
-    public void setSubject(Subject target, Subject editedSubject) {
-        requireAllNonNull(target, editedSubject);
+    public void setFlashcard(Flashcard target, Flashcard editedFlashcard) {
+        requireAllNonNull(target, editedFlashcard);
 
-        versionedAddressBook.setSubject(target, editedSubject);
+        versionedAddressBook.setFlashcard(target, editedFlashcard);
     }
 
-    //=========== Filtered Subject List Accessors =============================================================
+    //=========== Filtered Flashcard List Accessors =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Subject} backed by the internal list of
+     * Returns an unmodifiable view of the list of {@code Flashcard} backed by the internal list of
      * {@code versionedAddressBook}
      */
     @Override
-    public ObservableList<Subject> getFilteredSubjectList() {
-        return filteredSubjects;
+    public ObservableList<Flashcard> getFilteredFlashcardList() {
+        return filteredFlashcards;
     }
 
     @Override
-    public void updateFilteredSubjectList(Predicate<Subject> predicate) {
+    public void updateFilteredFlashcardList(Predicate<Flashcard> predicate) {
         requireNonNull(predicate);
-        filteredSubjects.setPredicate(predicate);
+        filteredFlashcards.setPredicate(predicate);
     }
 
     //=========== Undo/Redo =================================================================================
@@ -163,52 +163,52 @@ public class ModelManager implements Model {
         versionedAddressBook.commit();
     }
 
-    //=========== Selected subject ===========================================================================
+    //=========== Selected flashcard ===========================================================================
 
     @Override
-    public ReadOnlyProperty<Subject> selectedSubjectProperty() {
-        return selectedSubject;
+    public ReadOnlyProperty<Flashcard> selectedFlashcardProperty() {
+        return selectedFlashcard;
     }
 
     @Override
-    public Subject getSelectedSubject() {
-        return selectedSubject.getValue();
+    public Flashcard getSelectedFlashcard() {
+        return selectedFlashcard.getValue();
     }
 
     @Override
-    public void setSelectedSubject(Subject subject) {
-        if (subject != null && !filteredSubjects.contains(subject)) {
-            throw new SubjectNotFoundException();
+    public void setSelectedFlashcard(Flashcard flashcard) {
+        if (flashcard != null && !filteredFlashcards.contains(flashcard)) {
+            throw new FlashcardNotFoundException();
         }
-        selectedSubject.setValue(subject);
+        selectedFlashcard.setValue(flashcard);
     }
 
     /**
-     * Ensures {@code selectedSubject} is a valid subject in {@code filteredSubjects}.
+     * Ensures {@code selectedFlashcard} is a valid flashcard in {@code filteredFlashcards}.
      */
-    private void ensureSelectedSubjectIsValid(ListChangeListener.Change<? extends Subject> change) {
+    private void ensureSelectedFlashcardIsValid(ListChangeListener.Change<? extends Flashcard> change) {
         while (change.next()) {
-            if (selectedSubject.getValue() == null) {
-                // null is always a valid selected subject, so we do not need to check that it is valid anymore.
+            if (selectedFlashcard.getValue() == null) {
+                // null is always a valid selected flashcard, so we do not need to check that it is valid anymore.
                 return;
             }
 
-            boolean wasSelectedSubjectReplaced = change.wasReplaced()
+            boolean wasSelectedFlashcardReplaced = change.wasReplaced()
                     && change.getAddedSize() == change.getRemovedSize()
-                    && change.getRemoved().contains(selectedSubject.getValue());
-            if (wasSelectedSubjectReplaced) {
-                // Update selectedSubject to its new value.
-                int index = change.getRemoved().indexOf(selectedSubject.getValue());
-                selectedSubject.setValue(change.getAddedSubList().get(index));
+                    && change.getRemoved().contains(selectedFlashcard.getValue());
+            if (wasSelectedFlashcardReplaced) {
+                // Update selectedFlashcard to its new value.
+                int index = change.getRemoved().indexOf(selectedFlashcard.getValue());
+                selectedFlashcard.setValue(change.getAddedSubList().get(index));
                 continue;
             }
 
-            boolean wasSelectedSubjectRemoved = change.getRemoved().stream()
-                    .anyMatch(removedSubject -> selectedSubject.getValue().isSameSubject(removedSubject));
-            if (wasSelectedSubjectRemoved) {
-                // Select the subject that came before it in the list,
-                // or clear the selection if there is no such subject.
-                selectedSubject.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
+            boolean wasSelectedFlashcardRemoved = change.getRemoved().stream()
+                    .anyMatch(removedFlashcard -> selectedFlashcard.getValue().isSameFlashcard(removedFlashcard));
+            if (wasSelectedFlashcardRemoved) {
+                // Select the flashcard that came before it in the list,
+                // or clear the selection if there is no such flashcard.
+                selectedFlashcard.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
             }
         }
     }
@@ -229,8 +229,8 @@ public class ModelManager implements Model {
         ModelManager other = (ModelManager) obj;
         return versionedAddressBook.equals(other.versionedAddressBook)
                 && userPrefs.equals(other.userPrefs)
-                && filteredSubjects.equals(other.filteredSubjects)
-                && Objects.equals(selectedSubject.get(), other.selectedSubject.get());
+                && filteredFlashcards.equals(other.filteredFlashcards)
+                && Objects.equals(selectedFlashcard.get(), other.selectedFlashcard.get());
     }
 
 }

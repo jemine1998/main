@@ -26,60 +26,61 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.testutil.TypicalSubjects.AMY;
-import static seedu.address.testutil.TypicalSubjects.BOB;
+import static seedu.address.testutil.TypicalFlashcards.AMY;
+import static seedu.address.testutil.TypicalFlashcards.BOB;
 
 import org.junit.Test;
 
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
-import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
-import seedu.address.testutil.SubjectBuilder;
+import seedu.address.testutil.FlashcardBuilder;
 
 public class AddCommandParserTest {
     private AddCommandParser parser = new AddCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Subject expectedSubject = new SubjectBuilder(BOB).withTags(VALID_TAG_FRIEND).build();
+        Flashcard expectedFlashcard = new FlashcardBuilder(BOB).withTags(VALID_TAG_FRIEND).build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedSubject));
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedFlashcard));
 
         // multiple names - last name accepted
         assertParseSuccess(parser, NAME_DESC_AMY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedSubject));
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedFlashcard));
 
         // multiple phones - last phone accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedSubject));
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedFlashcard));
 
         // multiple emails - last email accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedSubject));
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedFlashcard));
 
         // multiple addresses - last address accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_AMY
-                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedSubject));
+                + ADDRESS_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedFlashcard));
 
         // multiple tags - all accepted
-        Subject expectedSubjectMultipleTags = new SubjectBuilder(BOB).withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
+        Flashcard expectedFlashcardMultipleTags =
+                new FlashcardBuilder(BOB).withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
                 .build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, new AddCommand(expectedSubjectMultipleTags));
+                + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, new AddCommand(expectedFlashcardMultipleTags));
     }
 
     @Test
     public void parse_optionalFieldsMissing_success() {
         // zero tags
-        Subject expectedSubject = new SubjectBuilder(AMY).withTags().build();
+        Flashcard expectedFlashcard = new FlashcardBuilder(AMY).withTags().build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY,
-                new AddCommand(expectedSubject));
+                new AddCommand(expectedFlashcard));
     }
 
     @Test

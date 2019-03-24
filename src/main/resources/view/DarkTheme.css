@@ -328,7 +328,7 @@
     -fx-text-fill: white;
 }
 
-#filterField, #subjectListPanel, #subjectWebpage {
+#filterField, #flashcardListPanel, #flashcardWebpage {
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
 }
 

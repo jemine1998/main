@@ -7,7 +7,7 @@ import javafx.stage.Stage;
  */
 public class MainWindowHandle extends StageHandle {
 
-    private final SubjectListPanelHandle subjectListPanel;
+    private final FlashcardListPanelHandle flashcardListPanel;
     private final ResultDisplayHandle resultDisplay;
     private final CommandBoxHandle commandBox;
     private final StatusBarFooterHandle statusBarFooter;
@@ -17,7 +17,8 @@ public class MainWindowHandle extends StageHandle {
     public MainWindowHandle(Stage stage) {
         super(stage);
 
-        subjectListPanel = new SubjectListPanelHandle(getChildNode(SubjectListPanelHandle.SUBJECT_LIST_VIEW_ID));
+        flashcardListPanel =
+                new FlashcardListPanelHandle(getChildNode(FlashcardListPanelHandle.FLASHCARD_LIST_VIEW_ID));
         resultDisplay = new ResultDisplayHandle(getChildNode(ResultDisplayHandle.RESULT_DISPLAY_ID));
         commandBox = new CommandBoxHandle(getChildNode(CommandBoxHandle.COMMAND_INPUT_FIELD_ID));
         statusBarFooter = new StatusBarFooterHandle(getChildNode(StatusBarFooterHandle.STATUS_BAR_PLACEHOLDER));
@@ -25,8 +26,8 @@ public class MainWindowHandle extends StageHandle {
         browserPanel = new BrowserPanelHandle(getChildNode(BrowserPanelHandle.BROWSER_ID));
     }
 
-    public SubjectListPanelHandle getSubjectListPanel() {
-        return subjectListPanel;
+    public FlashcardListPanelHandle getFlashcardListPanel() {
+        return flashcardListPanel;
     }
 
     public ResultDisplayHandle getResultDisplay() {

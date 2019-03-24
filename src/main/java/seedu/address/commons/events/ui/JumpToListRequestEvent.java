@@ -4,7 +4,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.events.BaseEvent;
 
 /**
- * Indicates a request to jump to the list of subjects
+ * Indicates a request to jump to the list of flashcards
  */
 public class JumpToListRequestEvent extends BaseEvent {
 

@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import guitests.guihandles.FlashcardCardHandle;
+import guitests.guihandles.FlashcardListPanelHandle;
 import guitests.guihandles.ResultDisplayHandle;
-import guitests.guihandles.SubjectCardHandle;
-import guitests.guihandles.SubjectListPanelHandle;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
  * A set of assertion methods useful for writing GUI tests.
@@ -17,7 +17,7 @@ public class GuiTestAssert {
     /**
      * Asserts that {@code actualCard} displays the same values as {@code expectedCard}.
      */
-    public static void assertCardEquals(SubjectCardHandle expectedCard, SubjectCardHandle actualCard) {
+    public static void assertCardEquals(FlashcardCardHandle expectedCard, FlashcardCardHandle actualCard) {
         assertEquals(expectedCard.getId(), actualCard.getId());
         assertEquals(expectedCard.getAddress(), actualCard.getAddress());
         assertEquals(expectedCard.getEmail(), actualCard.getEmail());
@@ -27,42 +27,45 @@ public class GuiTestAssert {
     }
 
     /**
-     * Asserts that {@code actualCard} displays the details of {@code expectedSubject}.
+     * Asserts that {@code actualCard} displays the details of {@code expectedFlashcard}.
      */
-    public static void assertCardDisplaysSubject(Subject expectedSubject, SubjectCardHandle actualCard) {
-        assertEquals(expectedSubject.getName().fullName, actualCard.getName());
-        assertEquals(expectedSubject.getPhone().value, actualCard.getPhone());
-        assertEquals(expectedSubject.getEmail().value, actualCard.getEmail());
-        assertEquals(expectedSubject.getAddress().value, actualCard.getAddress());
-        assertEquals(expectedSubject.getDeadline().value, actualCard.getDeadline());
-        assertEquals(expectedSubject.getTags().stream().map(tag -> tag.tagName).collect(Collectors.toList()),
+    public static void assertCardDisplaysFlashcard(Flashcard expectedFlashcard, FlashcardCardHandle actualCard) {
+        assertEquals(expectedFlashcard.getName().fullName, actualCard.getName());
+        assertEquals(expectedFlashcard.getPhone().value, actualCard.getPhone());
+        assertEquals(expectedFlashcard.getEmail().value, actualCard.getEmail());
+        assertEquals(expectedFlashcard.getAddress().value, actualCard.getAddress());
+        assertEquals(expectedFlashcard.getDeadline().value, actualCard.getDeadline());
+        assertEquals(expectedFlashcard.getTags().stream().map(tag -> tag.tagName).collect(Collectors.toList()),
                 actualCard.getTags());
     }
 
     /**
-     * Asserts that the list in {@code subjectListPanelHandle} displays the details of {@code subjects} correctly and
+     * Asserts that the list in {@code flashcardListPanelHandle} displays the details of {@code flashcards} correctly
+     * and
      * in the correct order.
      */
-    public static void assertListMatching(SubjectListPanelHandle subjectListPanelHandle, Subject... subjects) {
-        for (int i = 0; i < subjects.length; i++) {
-            subjectListPanelHandle.navigateToCard(i);
-            assertCardDisplaysSubject(subjects[i], subjectListPanelHandle.getSubjectCardHandle(i));
+    public static void assertListMatching(FlashcardListPanelHandle flashcardListPanelHandle, Flashcard... flashcards) {
+        for (int i = 0; i < flashcards.length; i++) {
+            flashcardListPanelHandle.navigateToCard(i);
+            assertCardDisplaysFlashcard(flashcards[i], flashcardListPanelHandle.getFlashcardCardHandle(i));
         }
     }
 
     /**
-     * Asserts that the list in {@code subjectListPanelHandle} displays the details of {@code subjects} correctly and
+     * Asserts that the list in {@code flashcardListPanelHandle} displays the details of {@code flashcards} correctly
+     * and
      * in the correct order.
      */
-    public static void assertListMatching(SubjectListPanelHandle subjectListPanelHandle, List<Subject> subjects) {
-        assertListMatching(subjectListPanelHandle, subjects.toArray(new Subject[0]));
+    public static void assertListMatching(FlashcardListPanelHandle flashcardListPanelHandle,
+                                          List<Flashcard> flashcards) {
+        assertListMatching(flashcardListPanelHandle, flashcards.toArray(new Flashcard[0]));
     }
 
     /**
-     * Asserts the size of the list in {@code subjectListPanelHandle} equals to {@code size}.
+     * Asserts the size of the list in {@code flashcardListPanelHandle} equals to {@code size}.
      */
-    public static void assertListSize(SubjectListPanelHandle subjectListPanelHandle, int size) {
-        int numberOfPeople = subjectListPanelHandle.getListSize();
+    public static void assertListSize(FlashcardListPanelHandle flashcardListPanelHandle, int size) {
+        int numberOfPeople = flashcardListPanelHandle.getListSize();
         assertEquals(size, numberOfPeople);
     }
 

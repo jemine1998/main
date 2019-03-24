@@ -32,7 +32,7 @@ public class MainWindow extends UiPart<Stage> {
 
     // Independent Ui parts residing in this Ui container
     private BrowserPanel browserPanel;
-    private SubjectListPanel subjectListPanel;
+    private FlashcardListPanel flashcardListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
 
@@ -46,7 +46,7 @@ public class MainWindow extends UiPart<Stage> {
     private MenuItem helpMenuItem;
 
     @FXML
-    private StackPane subjectListPanelPlaceholder;
+    private StackPane flashcardListPanelPlaceholder;
 
     @FXML
     private StackPane resultDisplayPlaceholder;
@@ -114,18 +114,18 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        browserPanel = new BrowserPanel(logic.selectedSubjectProperty());
+        browserPanel = new BrowserPanel(logic.selectedFlashcardProperty());
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
-        subjectListPanel = new SubjectListPanel(logic.getFilteredSubjectList(), logic.selectedSubjectProperty(),
-                logic::setSelectedSubject);
-        subjectListPanelPlaceholder.getChildren().add(subjectListPanel.getRoot());
+        flashcardListPanel = new FlashcardListPanel(logic.getFilteredFlashcardList(), logic.selectedFlashcardProperty(),
+                logic::setSelectedFlashcard);
+        flashcardListPanelPlaceholder.getChildren().add(flashcardListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
         StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getAddressBookFilePath(), logic.getAddressBook(),
-                logic.getFilteredSubjectList().size());
+                logic.getFilteredFlashcardList().size());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand, logic.getHistory());
@@ -172,8 +172,8 @@ public class MainWindow extends UiPart<Stage> {
         primaryStage.hide();
     }
 
-    public SubjectListPanel getSubjectListPanel() {
-        return subjectListPanel;
+    public FlashcardListPanel getFlashcardListPanel() {
+        return flashcardListPanel;
     }
 
     /**

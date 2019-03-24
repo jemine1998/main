@@ -8,10 +8,10 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
- * Displays next person in the address book to the user.
+ * Displays next flashcard in the FlashCards to the user.
  */
 public class NextCommand extends Command {
 
@@ -20,7 +20,8 @@ public class NextCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Viewing flashcard %1$s";
     public static final String MESSAGE_LAST_FLASHCARD = "This is the last flash card!";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The next flash card index provided is invalid";
+    public static final String MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX =
+            "The next flash card index provided is invalid";
 
     private static Integer nextInteger;
 
@@ -53,13 +54,13 @@ public class NextCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        List<Subject> filteredSubjectList = model.getFilteredSubjectList();
+        List<Flashcard> filteredFlashcardList = model.getFilteredFlashcardList();
 
-        if (nextInteger >= filteredSubjectList.size() + 1) {
+        if (nextInteger >= filteredFlashcardList.size() + 1) {
             throw new CommandException(MESSAGE_LAST_FLASHCARD);
         }
         PreviousCommand.setPreviousInteger(nextInteger, flashCardBegin);
-        model.setSelectedSubject(filteredSubjectList.get(nextIndex.getZeroBased()));
+        model.setSelectedFlashcard(filteredFlashcardList.get(nextIndex.getZeroBased()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, nextIndex.getOneBased()));
 
     }

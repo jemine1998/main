@@ -3,10 +3,10 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.model.Model.PREDICATE_SHOW_ALL_SUBJECTS;
+import static seedu.address.model.Model.PREDICATE_SHOW_ALL_FLASHCARDS;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -20,20 +20,24 @@ import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.subject.*;
-import seedu.address.model.subject.Phone;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Deadline;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of an existing subject in the address book.
+ * Edits the details of an existing flashcard in the address book.
  */
 public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
     public static final String COMMAND_ALIAS = "e";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the subject identified "
-            + "by the index number used in the displayed subject list. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the flashcard identified "
+            + "by the index number used in the displayed flashcard list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
@@ -45,62 +49,63 @@ public class EditCommand extends Command {
             + PREFIX_LEVEL + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_SUBJECT_SUCCESS = "Edited Subject: %1$s";
+    public static final String MESSAGE_EDIT_FLASHCARD_SUCCESS = "Edited Flashcard: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_SUBJECT = "This subject already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_FLASHCARD = "This flashcard already exists in the address book.";
 
     private final Index index;
-    private final EditSubjectDescriptor editSubjectDescriptor;
+    private final EditFlashcardDescriptor editFlashcardDescriptor;
 
     /**
-     * @param index of the subject in the filtered subject list to edit
-     * @param editSubjectDescriptor details to edit the subject with
+     * @param index of the flashcard in the filtered flashcard list to edit
+     * @param editFlashcardDescriptor details to edit the flashcard with
      */
-    public EditCommand(Index index, EditSubjectDescriptor editSubjectDescriptor) {
+    public EditCommand(Index index, EditFlashcardDescriptor editFlashcardDescriptor) {
         requireNonNull(index);
-        requireNonNull(editSubjectDescriptor);
+        requireNonNull(editFlashcardDescriptor);
 
         this.index = index;
-        this.editSubjectDescriptor = new EditSubjectDescriptor(editSubjectDescriptor);
+        this.editFlashcardDescriptor = new EditFlashcardDescriptor(editFlashcardDescriptor);
     }
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
-        List<Subject> lastShownList = model.getFilteredSubjectList();
+        List<Flashcard> lastShownList = model.getFilteredFlashcardList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
         }
 
-        Subject subjectToEdit = lastShownList.get(index.getZeroBased());
-        Subject editedSubject = createEditedSubject(subjectToEdit, editSubjectDescriptor);
+        Flashcard flashcardToEdit = lastShownList.get(index.getZeroBased());
+        Flashcard editedFlashcard = createEditedFlashcard(flashcardToEdit, editFlashcardDescriptor);
 
-        if (!subjectToEdit.isSameSubject(editedSubject) && model.hasSubject(editedSubject)) {
-            throw new CommandException(MESSAGE_DUPLICATE_SUBJECT);
+        if (!flashcardToEdit.isSameFlashcard(editedFlashcard) && model.hasFlashcard(editedFlashcard)) {
+            throw new CommandException(MESSAGE_DUPLICATE_FLASHCARD);
         }
 
-        model.setSubject(subjectToEdit, editedSubject);
-        model.updateFilteredSubjectList(PREDICATE_SHOW_ALL_SUBJECTS);
+        model.setFlashcard(flashcardToEdit, editedFlashcard);
+        model.updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
         model.commitAddressBook();
-        return new CommandResult(String.format(MESSAGE_EDIT_SUBJECT_SUCCESS, editedSubject));
+        return new CommandResult(String.format(MESSAGE_EDIT_FLASHCARD_SUCCESS, editedFlashcard));
     }
 
     /**
-     * Creates and returns a {@code Subject} with the details of {@code subjectToEdit}
-     * edited with {@code editSubjectDescriptor}.
+     * Creates and returns a {@code Flashcard} with the details of {@code flashcardToEdit}
+     * edited with {@code editFlashcardDescriptor}.
      */
-    private static Subject createEditedSubject(Subject subjectToEdit, EditSubjectDescriptor editSubjectDescriptor) {
-        assert subjectToEdit != null;
+    private static Flashcard createEditedFlashcard(Flashcard flashcardToEdit,
+                                                   EditFlashcardDescriptor editFlashcardDescriptor) {
+        assert flashcardToEdit != null;
 
-        Name updatedName = editSubjectDescriptor.getName().orElse(subjectToEdit.getName());
-        Phone updatedPhone = editSubjectDescriptor.getPhone().orElse(subjectToEdit.getPhone());
-        Email updatedEmail = editSubjectDescriptor.getEmail().orElse(subjectToEdit.getEmail());
-        Address updatedAddress = editSubjectDescriptor.getAddress().orElse(subjectToEdit.getAddress());
-        Deadline updatedDeadline = subjectToEdit.getDeadline(); //edit command does not allow editing deadlines
-        Set<Tag> updatedTags = editSubjectDescriptor.getTags().orElse(subjectToEdit.getTags());
+        Name updatedName = editFlashcardDescriptor.getName().orElse(flashcardToEdit.getName());
+        Phone updatedPhone = editFlashcardDescriptor.getPhone().orElse(flashcardToEdit.getPhone());
+        Email updatedEmail = editFlashcardDescriptor.getEmail().orElse(flashcardToEdit.getEmail());
+        Address updatedAddress = editFlashcardDescriptor.getAddress().orElse(flashcardToEdit.getAddress());
+        Deadline updatedDeadline = flashcardToEdit.getDeadline(); //edit command does not allow editing deadlines
+        Set<Tag> updatedTags = editFlashcardDescriptor.getTags().orElse(flashcardToEdit.getTags());
 
-        return new Subject(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedDeadline, updatedTags);
+        return new Flashcard(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedDeadline, updatedTags);
     }
 
     @Override
@@ -118,27 +123,27 @@ public class EditCommand extends Command {
         // state check
         EditCommand e = (EditCommand) other;
         return index.equals(e.index)
-                && editSubjectDescriptor.equals(e.editSubjectDescriptor);
+                && editFlashcardDescriptor.equals(e.editFlashcardDescriptor);
     }
 
     /**
-     * Stores the details to edit the subject with. Each non-empty field value will replace the
-     * corresponding field value of the subject.
+     * Stores the details to edit the flashcard with. Each non-empty field value will replace the
+     * corresponding field value of the flashcard.
      */
-    public static class EditSubjectDescriptor {
+    public static class EditFlashcardDescriptor {
         private Name name;
         private Phone phone;
         private Email email;
         private Address address;
         private Set<Tag> tags;
 
-        public EditSubjectDescriptor() {}
+        public EditFlashcardDescriptor() {}
 
         /**
          * Copy constructor.
          * A defensive copy of {@code tags} is used internally.
          */
-        public EditSubjectDescriptor(EditSubjectDescriptor toCopy) {
+        public EditFlashcardDescriptor(EditFlashcardDescriptor toCopy) {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
@@ -210,12 +215,12 @@ public class EditCommand extends Command {
             }
 
             // instanceof handles nulls
-            if (!(other instanceof EditSubjectDescriptor)) {
+            if (!(other instanceof EditFlashcardDescriptor)) {
                 return false;
             }
 
             // state check
-            EditSubjectDescriptor e = (EditSubjectDescriptor) other;
+            EditFlashcardDescriptor e = (EditFlashcardDescriptor) other;
 
             return getName().equals(e.getName())
                     && getPhone().equals(e.getPhone())

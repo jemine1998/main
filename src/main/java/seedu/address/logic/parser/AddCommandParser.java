@@ -3,8 +3,8 @@ package seedu.address.logic.parser;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
@@ -12,12 +12,12 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.subject.Address;
-import seedu.address.model.subject.Deadline;
-import seedu.address.model.subject.Email;
-import seedu.address.model.subject.Name;
-import seedu.address.model.subject.Phone;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Deadline;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -46,9 +46,9 @@ public class AddCommandParser implements Parser<AddCommand> {
         Deadline deadline = new Deadline(""); //add command does not allow adding deadlines straightaway
         Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
 
-        Subject subject = new Subject(name, phone, email, address, deadline, tagList);
+        Flashcard flashcard = new Flashcard(name, phone, email, address, deadline, tagList);
 
-        return new AddCommand(subject);
+        return new AddCommand(flashcard);
     }
 
     /**

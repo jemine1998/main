@@ -13,7 +13,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
  * The Browser Panel of the App.
@@ -31,26 +31,26 @@ public class BrowserPanel extends UiPart<Region> {
     @FXML
     private WebView browser;
 
-    public BrowserPanel(ObservableValue<Subject> selectedSubject) {
+    public BrowserPanel(ObservableValue<Flashcard> selectedSubject) {
         super(FXML);
 
         // To prevent triggering events for typing inside the loaded Web page.
         getRoot().setOnKeyPressed(Event::consume);
 
-        // Load subject page when selected subject changes.
+        // Load flashcard page when selected flashcard changes.
         selectedSubject.addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
                 loadDefaultPage();
                 return;
             }
-            loadSubjectPage(newValue);
+            loadFlashcardPage(newValue);
         });
 
         loadDefaultPage();
     }
 
-    private void loadSubjectPage(Subject subject) {
-        loadPage(SEARCH_PAGE_URL + subject.getName().fullName);
+    private void loadFlashcardPage(Flashcard flashcard) {
+        loadPage(SEARCH_PAGE_URL + flashcard.getName().fullName);
     }
 
     public void loadPage(String url) {

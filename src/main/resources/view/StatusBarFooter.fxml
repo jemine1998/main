@@ -10,6 +10,6 @@
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10" halignment="RIGHT" />
   </columnConstraints>
   <Label fx:id="syncStatus" />
-  <Label styleClass="stack-pane" fx:id="totalSubjectsStatus" GridPane.columnIndex="1" />
+  <Label styleClass="stack-pane" fx:id="totalFlashcardsStatus" GridPane.columnIndex="1" />
   <Label styleClass="stack-pane" fx:id="saveLocationStatus" GridPane.columnIndex="2" nodeOrientation="RIGHT_TO_LEFT" />
 </GridPane>

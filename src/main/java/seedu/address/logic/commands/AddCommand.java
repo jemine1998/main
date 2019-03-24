@@ -3,23 +3,23 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
- * Adds a subject to the address book.
+ * Adds a flashcard to the address book.
  */
 public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a subject to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a flashcard to the address book. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_LEVEL + "PHONE "
@@ -34,28 +34,30 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New subject added: %1$s";
-    public static final String MESSAGE_DUPLICATE_SUBJECT = "This subject already exists in the address book";
+    public static final String MESSAGE_SUCCESS = "New flashcard added: %1$s";
+    public static final String MESSAGE_DUPLICATE_FLASHCARD = "This flashcard already exists in the address book";
 
-    private final Subject toAdd;
+    private final Flashcard toAdd;
+
+    private Integer difficultyValue;
 
     /**
-     * Creates an AddCommand to add the specified {@code Subject}
+     * Creates an AddCommand to add the specified {@code Flashcard}
      */
-    public AddCommand(Subject subject) {
-        requireNonNull(subject);
-        toAdd = subject;
+    public AddCommand(Flashcard flashcard) {
+        requireNonNull(flashcard);
+        toAdd = flashcard;
     }
 
     @Override
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasSubject(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_SUBJECT);
+        if (model.hasFlashcard(toAdd)) {
+            throw new CommandException(MESSAGE_DUPLICATE_FLASHCARD);
         }
 
-        model.addSubject(toAdd);
+        model.addFlashcard(toAdd);
         model.commitAddressBook();
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }

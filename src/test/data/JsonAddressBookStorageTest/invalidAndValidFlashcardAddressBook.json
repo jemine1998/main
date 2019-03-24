@@ -1,0 +1,15 @@
+{
+  "flashcards": [ {
+    "name": "Valid Flashcard",
+    "phone": "9482424",
+    "email": "hans@example.com",
+    "address": "4th street",
+    "deadline": "21 July 2022"
+  }, {
+    "name": "Flashcard With Invalid Phone Field",
+    "phone": "948asdf2424",
+    "email": "hans@example.com",
+    "address": "4th street",
+    "deadline": "23 August 2023"
+  } ]
+}

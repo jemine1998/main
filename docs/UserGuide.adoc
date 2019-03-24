@@ -18,14 +18,14 @@ By: `Team M11-3`      Since: `Jan 2019`      Licence: `MIT`
 
 == Introduction
 
-FlashCards is for those who *prefer to use a desktop app for managing contacts*.
-More importantly, AB4 is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB4 can get your contact management tasks done faster than traditional GUI apps. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
+FlashCards is for those who *prefer to use a desktop app for managing their notes*.
+More importantly, FlashCards is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, FlashCards can let you retrieve and access your notes for various subjects faster than sieving through your hardcopied notes. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
 
 == Quick Start
 
 .  Ensure you have Java version `9` or later installed in your Computer.
-.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
-.  Copy the file to the folder you want to use as the home folder for your Address Book.
+.  Download the latest `flashcard.jar` link:{repoURL}/releases[here].
+.  Copy the file to the folder you want to use as the home folder for your FlashCardBook.
 .  Double-click the file to start the app. The GUI should appear in a few seconds.
 +
 image::Ui.png[width="790"]
@@ -34,9 +34,9 @@ image::Ui.png[width="790"]
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Some example commands you can try:
 
-* *`list`* : lists all contacts
-* **`add`**`n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : adds a contact named `John Doe` to the Address Book.
-* **`delete`**`3` : deletes the 3rd contact shown in the current list
+* *`list`* : lists all flashcards
+* **`add`**`t/Pythagoras Theorem c/a^2+b^2=c^2 d/21 March 2019 s/Math` : adds a flashcard named `Pythagoras Theorem` under the subject `Math` to the FlashCards Book.
+* **`delete`**`3` : deletes the 3rd flashcard shown in the current list
 * *`exit`* : exits the app
 
 .  Refer to <<Features>> for details of each command.
@@ -47,10 +47,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 ====
 *Command Format*
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
-* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
-* Items with `…`​ after them can be used multiple times including zero times e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
-* Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+* Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `add t/TOPIC`, `TOPIC` is a parameter which can be used as `add t/Pythagoras Theorem`.
+* Parameters can be in any order e.g. if the command specifies `t/TOPIC c/CONTENT`, `c/CONTENT t/TOPIC` is also acceptable.
 ====
 
 === Creating an account: `create`
@@ -59,7 +57,7 @@ Create an account for the user. +
 Supports multiple users. +
 Format: `create <username>`
 
-* Subsequent adding of flash cards will be tagged to the same user account.
+* Subsequent adding of flashcards will be tagged to the same user account.
 
 Examples:
 
@@ -68,7 +66,7 @@ A new user account called "John Doe" is created.
 
 === Logging in: `login`
 
-Login to the user account to perform operations pertaining to your own flash cards. +
+Login to the user account to perform operations pertaining to your own flashcards. +
 Secures the data with a password. +
 Supports multiple users. +
 Format: `login <username> <password>`
@@ -86,65 +84,63 @@ Format: `help`
 
 //don't need to put examples but maybe can put pictures if necessary.
 
-=== Adding a subject or flash card: `add`
+=== Adding a subject or flashcard: `add`
 
-Adds a flash card with subject and data field. +
-Format: `add <subject> <data>`
+Adds a flashcard with subject and data field. +
+Format: `add <topic> <content> <deadline> <subject>`
 
-* Lists the flash card that was just added.
-
-[TIP]
-A subject can have any number of tags (including 0)
+* Lists the flashcard that was just added.
 
 Examples:
 
-* `add maths pythagoras' theorem`
-Adds the subject and content of a new flash card to be "maths" and "pythagoras' theorem" respectively.
-* `add science definition`
-Adds the subject and content of a new flash card to be "science" and "definition" respectively.
+* `add t/Pythagoras Theorem c/a^2+b^2=c^2 d/21 March 2019 s/Math`
+Adds the flashcard named "Pythagoras Theorem" with content "a^2+b^2=c^2" and tagged under the subject "Math". Assigns an expiry deadline "21 March 2019".
+* `add t/Photosynthesis c/A chemical reaction that takes place inside a plant, producing food for the plant to survive d/22 March 2019 s/Science`
+Adds the flashcard named "Photosynthesis" with the content "A chemical reaction that takes place inside a plant, producing food for the plant to survive" and tagged under the subject "Science". Assigns an expiry deadline "22 March 2019".
 
-=== Listing all flash cards categorized by subjects : `list` `l`
+=== Listing all flashcards categorized by subjects : `list` `l`
 
-Displays an indexed list of flash cards categorized by subjects. +
+Displays an indexed list of flashcards categorized by subjects. +
 Format: `list` or `l`
 
-Tags will be colour-coded. Same tags will have the same colour.
+Subject tags will be colour-coded. Same subject tags will have the same colour.
 
-=== Editing a flash card : `edit` `e`
+=== Editing a flashcard : `edit` `e`
 
-Edits the content of a flash card. +
-Enter the subject that the flash card belongs to.
+
+Edits the content of a flashcard. +
+Enter the subject that the flashcard belongs to.
 Format: `edit INDEX <subject>`
 
 ****
-* Edits the flash card at the specified `INDEX`. The index refers to the index number shown in the displayed subject list. The index *must be a positive integer* 1, 2, 3, ...
+* Edits the flashcard at the specified `INDEX`. The index refers to the index number shown in the displayed subject list. The index *must be a positive integer* 1, 2, 3, ...
 * At least one of the optional fields must be provided.
-* A list of flash cards belonging to that subject will be displayed.
-* Select the index of the flash card to edit.
+* A list of flashcards belonging to that subject will be displayed.
+* Select the index of the flashcard to edit.
 * Existing values will be updated to the input values.
-* The updated flash card will be displayed.
-* When editing flash cards, the existing tags of the flash card will be removed i.e adding of tags is not cumulative.
-* You can remove all the flash card's tags by typing `t/` without specifying any tags after it.
+* The updated flashcard will be displayed.
+* When editing flashcards, the existing tags of the flashcard will be removed i.e adding of tags is not cumulative.
+* You can remove all the flashcard's tags by typing `t/` without specifying any tags after it.
 ****
 
 Examples:
 
 * `edit 1 definition` +
-Edits the content of flash card.
+Edits the content of flashcard.
 * `e 2 definition` +
-Edits the content of flash card.
+Edits the content of flashcard.
 
-=== Finding a flash card: `find` `f`
+=== Finding a flashcard: `find` `f`
 
-Find flash cards based on the given keyword. +
+Find flashcards based on the given keyword. +
 Format: `find <KEYWORD> [MORE_KEYWORDS]`
 
 ****
 * The search is case insensitive. e.g `hans` will not match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* The search is based on the flash card's content.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Flash cards containing the keyword will be displayed (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* The order of the keywords does not matter. e.g. `Pythagoras Theorem` will match `Theorem Pythagoras`
+* The search is based on the flashcard's content.
+* Only full words will be matched e.g. `Theorem` will not match `Theorems`
+* Flashcards containing the keyword will be displayed (i.e. `OR` search). e.g. `Photosynthesis Theorem` will return `Photosynthesis`, `Pythagoras Theorem`
 ****
 
 Examples:
@@ -152,21 +148,21 @@ Examples:
 * `find math` +
 Returns `math` and `Mathematics`
 * `f science english math` +
-Returns any flash cards having names `science`, `english`, or `math`
+Returns any flashcards having names `science`, `english`, or `math`
 
-=== Deleting a subject or flash card : `delete` `d`
+=== Deleting a subject or flashcard : `delete` `d`
 
-Deletes the specified subject or flash card. +
-Enter the subject that the flash card belongs to. +
+Deletes the specified subject or flashcard. +
+Enter the subject that the flashcard belongs to. +
 Format: `delete INDEX <subject>`
 
 ****
-* A list of flash cards belonging to the subject will be displayed.
-* Select the index of the flash card to delete.
-* Deletes the flash card at the specified `INDEX`.
+* A list of flashcards belonging to the subject will be displayed.
+* Select the index of the flashcard to delete.
+* Deletes the flashcard at the specified `INDEX`.
 * The index refers to the index number shown in the displayed subject list.
 * The index *must be a positive integer* 1, 2, 3, ...
-* The updated list of flash cards will be displayed.
+* The updated list of flashcards will be displayed.
 ****
 
 Examples:
@@ -175,17 +171,17 @@ Examples:
 `delete 2` +
 Deletes the specified content of index 2.
 
-* `f Betsy` +
+* `f Pythagoras Theorem` +
 `d 1` +
 Deletes the specified content of index 1.
 
-=== Selecting a subject : `select`
+=== Selecting a flashcard : `select`
 
-Selects the flash card identified by the index number used in the displayed list. +
+Selects the flashcard identified by the index number used in the displayed list. +
 Format: `select INDEX`
 
 ****
-* Selects the flash card and loads the content of the flash card at the specified `INDEX`.
+* Selects the flashcard and loads the content of the flashcard at the specified `INDEX`.
 * The index refers to the index number shown in the displayed list.
 * The index *must be a positive integer* `1, 2, 3, ...`
 ****
@@ -194,19 +190,19 @@ Examples:
 
 * `list` +
 `select 2` +
-Selects the 2nd flash card in the list.
+Selects the 2nd flashcard in the list.
 * `find definition` +
 `select 1` +
-Selects the 1st flash card in the results of the `find` command.
+Selects the 1st flashcard in the results of the `find` command.
 
-=== Viewing the next flash card : `next` `n`
+=== Viewing the next flashcard : `next` `n`
 
-Views the next flash card that is next in line for the chosen subject.
+Views the next flashcard that is next in line for the chosen subject.
  +
 Format: `next` or `n`
 
 ****
-* Displays the next flash card and loads the content of the flash card of the next index.
+* Displays the next flashcard and loads the content of the flashcard of the next index.
 * The index refers to the index number shown in the displayed list.
 * The index *must be a positive integer* `1, 2, 3, ...`
 ****
@@ -215,19 +211,19 @@ Examples:
 
 * `select 2` +
 `next` +
-Displays the 3rd flash card in the list.
+Displays the 3rd flashcard in the list.
 * `select 5` +
 `n` +
-Displays the 5th flash card in the list.
+Displays the 5th flashcard in the list.
 
-=== Viewing the next flash card : `previous` `p`
+=== Viewing the next flashcard : `previous` `p`
 
-Views the previous flash card that is next in line for the chosen subject.
+Views the previous flashcard that is next in line for the chosen subject.
  +
 Format: `previous` or `p`
 
 ****
-* Displays the previous flash card and loads the content of the flash card of the next index.
+* Displays the previous flashcard and loads the content of the flashcard of the next index.
 * The index refers to the index number shown in the displayed list.
 * The index *must be a positive integer* `1, 2, 3, ...`
 ****
@@ -236,10 +232,10 @@ Examples:
 
 * `select 2` +
 `previous` +
-Displays the 1st flash card in the list.
+Displays the 1st flashcard in the list.
 * `select 5` +
 `p` +
-Displays the 4th flash card in the list.
+Displays the 4th flashcard in the list.
 
 
 === Listing entered commands : `history`
@@ -255,12 +251,12 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 // tag::undoredo[]
 === Undoing previous command : `undo`
 
-Restores the flash card to the state before the previous _undoable_ command was executed. +
+Restores the flashcard to the state before the previous _undoable_ command was executed. +
 Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify the flash card's content (`add`, `delete`, `edit` and `clear`).
+Undoable commands: those commands that modify the flashcard's content (`add`, `delete`, `edit` and `clear`).
 ====
 
 Examples:
@@ -307,9 +303,9 @@ The `redo` command fails as there are no `undo` commands executed previously.
 Reverses the 'clear' and 'delete 1' commands and reapplies both commands.
 // end::undoredo[]
 
-=== Clearing all flash cards : `clear` `c`
+=== Clearing all flashcards : `clear` `c`
 
-Clears all flash cards belonging to user. +
+Clears all flashcards belonging to user. +
 Format: `clear` or `c`
 
 === Exiting the program : `exit`
@@ -331,16 +327,16 @@ _{explain how the user can enable/disable data encryption}_
 == FAQ
 
 *Q*: How do I transfer my data to another Computer? +
-*A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
+*A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous FlashCard Book folder.
 
 == Command Summary
 
-* *Add* `add <subject> <data>` +
-e.g. `add science definition`
+* *Add* `add <topic> <content> <deadline> <subject>` +
+e.g. `add t/Pythagoras Theorem c/a^2+b^2=c^2 d/21 March 2019 s/Math`
 * *Clear* : `clear` or `c`
 * *Delete* : `delete INDEX` +
 e.g. `delete 3` or `d 3`
-* *Edit* : `edit INDEX <subject>` +
+* *Edit* : `edit INDEX <flashcard>` +
 e.g. `edit 2 definition` or
 e.g. `e 2 definition`
 * *Find* : `find <KEYWORD> [MORE_KEYWORDS]` +

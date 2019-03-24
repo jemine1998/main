@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static seedu.address.testutil.TypicalSubjects.AMY;
-import static seedu.address.testutil.TypicalSubjects.BOB;
-import static seedu.address.testutil.TypicalSubjects.CARL;
+import static seedu.address.testutil.TypicalFlashcards.AMY;
+import static seedu.address.testutil.TypicalFlashcards.BOB;
+import static seedu.address.testutil.TypicalFlashcards.CARL;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,9 +18,9 @@ import seedu.address.testutil.AddressBookBuilder;
 
 public class VersionedAddressBookTest {
 
-    private final ReadOnlyAddressBook addressBookWithAmy = new AddressBookBuilder().withSubject(AMY).build();
-    private final ReadOnlyAddressBook addressBookWithBob = new AddressBookBuilder().withSubject(BOB).build();
-    private final ReadOnlyAddressBook addressBookWithCarl = new AddressBookBuilder().withSubject(CARL).build();
+    private final ReadOnlyAddressBook addressBookWithAmy = new AddressBookBuilder().withFlashcard(AMY).build();
+    private final ReadOnlyAddressBook addressBookWithBob = new AddressBookBuilder().withFlashcard(BOB).build();
+    private final ReadOnlyAddressBook addressBookWithCarl = new AddressBookBuilder().withFlashcard(CARL).build();
     private final ReadOnlyAddressBook emptyAddressBook = new AddressBookBuilder().build();
 
     @Test

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
  * A utility class for test cases.
@@ -33,23 +33,23 @@ public class TestUtil {
     }
 
     /**
-     * Returns the middle index of the subject in the {@code model}'s subject list.
+     * Returns the middle index of the flashcard in the {@code model}'s flashcard list.
      */
     public static Index getMidIndex(Model model) {
-        return Index.fromOneBased(model.getFilteredSubjectList().size() / 2);
+        return Index.fromOneBased(model.getFilteredFlashcardList().size() / 2);
     }
 
     /**
-     * Returns the last index of the subject in the {@code model}'s subject list.
+     * Returns the last index of the flashcard in the {@code model}'s flashcard list.
      */
     public static Index getLastIndex(Model model) {
-        return Index.fromOneBased(model.getFilteredSubjectList().size());
+        return Index.fromOneBased(model.getFilteredFlashcardList().size());
     }
 
     /**
-     * Returns the subject in the {@code model}'s subject list at {@code index}.
+     * Returns the flashcard in the {@code model}'s flashcard list at {@code index}.
      */
-    public static Subject getSubject(Model model, Index index) {
-        return model.getFilteredSubjectList().get(index.getZeroBased());
+    public static Flashcard getFlashcard(Model model, Index index) {
+        return model.getFilteredFlashcardList().get(index.getZeroBased());
     }
 }

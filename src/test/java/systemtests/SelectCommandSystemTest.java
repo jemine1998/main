@@ -2,13 +2,13 @@ package systemtests;
 
 import static org.junit.Assert.assertTrue;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX;
+import static seedu.address.commons.core.Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.logic.commands.SelectCommand.MESSAGE_SELECT_SUBJECT_SUCCESS;
+import static seedu.address.logic.commands.SelectCommand.MESSAGE_SELECT_FLASHCARD_SUCCESS;
 import static seedu.address.testutil.TestUtil.getLastIndex;
 import static seedu.address.testutil.TestUtil.getMidIndex;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_SUBJECT;
-import static seedu.address.testutil.TypicalSubjects.KEYWORD_MATCHING_MEIER;
+import static seedu.address.testutil.TypicalFlashcards.KEYWORD_MATCHING_MEIER;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_FLASHCARD;
 
 import org.junit.Test;
 
@@ -23,13 +23,13 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
     public void select() {
         /* ------------------------ Perform select operations on the shown unfiltered list -------------------------- */
 
-        /* Case: select the first card in the subject list, command with leading spaces and trailing spaces
+        /* Case: select the first card in the flashcard list, command with leading spaces and trailing spaces
          * -> selected
          */
-        String command = "   " + SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased() + "   ";
-        assertCommandSuccess(command, INDEX_FIRST_SUBJECT);
+        String command = "   " + SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased() + "   ";
+        assertCommandSuccess(command, INDEX_FIRST_FLASHCARD);
 
-        /* Case: select the last card in the subject list -> selected */
+        /* Case: select the last card in the flashcard list -> selected */
         Index subjectCount = getLastIndex(getModel());
         command = SelectCommand.COMMAND_WORD + " " + subjectCount.getOneBased();
         assertCommandSuccess(command, subjectCount);
@@ -44,7 +44,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 
-        /* Case: select the middle card in the subject list -> selected */
+        /* Case: select the middle card in the flashcard list -> selected */
         Index middleIndex = getMidIndex(getModel());
         command = SelectCommand.COMMAND_WORD + " " + middleIndex.getOneBased();
         assertCommandSuccess(command, middleIndex);
@@ -54,16 +54,17 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------------ Perform select operations on the shown filtered list ---------------------------- */
 
-        /* Case: filtered subject list, select index within bounds of address book but out of bounds of subject list
+        /* Case: filtered flashcard list, select index within bounds of address book but out of bounds of flashcard list
          * -> rejected
          */
-        showSubjectsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getAddressBook().getSubjectList().size();
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+        showFlashcardsWithName(KEYWORD_MATCHING_MEIER);
+        int invalidIndex = getModel().getAddressBook().getFlashcardList().size();
+        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex,
+                MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
 
-        /* Case: filtered subject list, select index within bounds of address book and subject list -> selected */
+        /* Case: filtered flashcard list, select index within bounds of address book and flashcard list -> selected */
         Index validIndex = Index.fromOneBased(1);
-        assertTrue(validIndex.getZeroBased() < getModel().getFilteredSubjectList().size());
+        assertTrue(validIndex.getZeroBased() < getModel().getFilteredFlashcardList().size());
         command = SelectCommand.COMMAND_WORD + " " + validIndex.getOneBased();
         assertCommandSuccess(command, validIndex);
 
@@ -78,8 +79,9 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
         /* Case: invalid index (size + 1) -> rejected */
-        invalidIndex = getModel().getFilteredSubjectList().size() + 1;
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+        invalidIndex = getModel().getFilteredFlashcardList().size() + 1;
+        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex,
+                MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
 
         /* Case: invalid arguments (alphabets) -> rejected */
         assertCommandFailure(SelectCommand.COMMAND_WORD + " abc",
@@ -93,9 +95,9 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure("SeLeCt 1", MESSAGE_UNKNOWN_COMMAND);
 
         /* Case: select from empty address book -> rejected */
-        deleteAllSubjects();
-        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_SUBJECT.getOneBased(),
-                MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+        deleteAllFlashcards();
+        assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_FLASHCARD.getOneBased(),
+                MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
     }
 
     /**
@@ -103,8 +105,8 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
      * 1. Command box displays an empty string.<br>
      * 2. Command box has the default style class.<br>
      * 3. Result display box displays the success message of executing select command with the
-     * {@code expectedSelectedCardIndex} of the selected subject.<br>
-     * 4. {@code Storage} and {@code SubjectListPanel} remain unchanged.<br>
+     * {@code expectedSelectedCardIndex} of the selected flashcard.<br>
+     * 4. {@code Storage} and {@code FlashcardListPanel} remain unchanged.<br>
      * 5. Selected card is at {@code expectedSelectedCardIndex} and the browser url is updated accordingly.<br>
      * 6. Status bar remains unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
@@ -115,8 +117,8 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
     private void assertCommandSuccess(String command, Index expectedSelectedCardIndex) {
         Model expectedModel = getModel();
         String expectedResultMessage = String.format(
-                MESSAGE_SELECT_SUBJECT_SUCCESS, expectedSelectedCardIndex.getOneBased());
-        int preExecutionSelectedCardIndex = getSubjectListPanel().getSelectedCardIndex();
+                MESSAGE_SELECT_FLASHCARD_SUCCESS, expectedSelectedCardIndex.getOneBased());
+        int preExecutionSelectedCardIndex = getFlashcardListPanel().getSelectedCardIndex();
 
         executeCommand(command);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
@@ -136,7 +138,7 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
      * 1. Command box displays {@code command}.<br>
      * 2. Command box has the error style class.<br>
      * 3. Result display box displays {@code expectedResultMessage}.<br>
-     * 4. {@code Storage} and {@code SubjectListPanel} remain unchanged.<br>
+     * 4. {@code Storage} and {@code FlashcardListPanel} remain unchanged.<br>
      * 5. Browser url, selected card and status bar remain unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>

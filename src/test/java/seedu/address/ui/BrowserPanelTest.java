@@ -2,7 +2,7 @@ package seedu.address.ui;
 
 import static guitests.guihandles.WebViewUtil.waitUntilBrowserLoaded;
 import static org.junit.Assert.assertEquals;
-import static seedu.address.testutil.TypicalSubjects.ALICE;
+import static seedu.address.testutil.TypicalFlashcards.ALICE;
 
 import java.net.URL;
 
@@ -11,16 +11,16 @@ import org.junit.Test;
 
 import guitests.guihandles.BrowserPanelHandle;
 import javafx.beans.property.SimpleObjectProperty;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 public class BrowserPanelTest extends GuiUnitTest {
-    private SimpleObjectProperty<Subject> selectedSubject = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<Flashcard> selectedFlashcard = new SimpleObjectProperty<>();
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
     @Before
     public void setUp() {
-        guiRobot.interact(() -> browserPanel = new BrowserPanel(selectedSubject));
+        guiRobot.interact(() -> browserPanel = new BrowserPanel(selectedFlashcard));
         uiPartRule.setUiPart(browserPanel);
 
         browserPanelHandle = new BrowserPanelHandle(browserPanel.getRoot());
@@ -31,8 +31,8 @@ public class BrowserPanelTest extends GuiUnitTest {
         // default web page
         assertEquals(BrowserPanel.DEFAULT_PAGE, browserPanelHandle.getLoadedUrl());
 
-        // associated web page of a subject
-        guiRobot.interact(() -> selectedSubject.set(ALICE));
+        // associated web page of a flashcard
+        guiRobot.interact(() -> selectedFlashcard.set(ALICE));
         URL expectedSubjectUrl = new URL(BrowserPanel.SEARCH_PAGE_URL + ALICE.getName()
                 .fullName.replaceAll(" ", "%20"));
 

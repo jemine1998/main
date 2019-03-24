@@ -9,7 +9,7 @@ import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAddressBook;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
  * API of the Logic component
@@ -25,14 +25,14 @@ public interface Logic {
     CommandResult execute(String commandText) throws CommandException, ParseException;
 
     /**
-     * Returns the AddressBook.
+     * Returns the FlashCards.
      *
      * @see seedu.address.model.Model#getAddressBook()
      */
     ReadOnlyAddressBook getAddressBook();
 
-    /** Returns an unmodifiable view of the filtered list of subjects */
-    ObservableList<Subject> getFilteredSubjectList();
+    /** Returns an unmodifiable view of the filtered list of flashcards */
+    ObservableList<Flashcard> getFilteredFlashcardList();
 
     /**
      * Returns an unmodifiable view of the list of commands entered by the user.
@@ -56,17 +56,17 @@ public interface Logic {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
-     * Selected subject in the filtered subject list.
-     * null if no subject is selected.
+     * Selected flashcard in the filtered flashcard list.
+     * null if no flashcard is selected.
      *
-     * @see seedu.address.model.Model#selectedSubjectProperty()
+     * @see seedu.address.model.Model#selectedFlashcardProperty()
      */
-    ReadOnlyProperty<Subject> selectedSubjectProperty();
+    ReadOnlyProperty<Flashcard> selectedFlashcardProperty();
 
     /**
-     * Sets the selected subject in the filtered subject list.
+     * Sets the selected flashcard in the filtered flashcard list.
      *
-     * @see seedu.address.model.Model#setSelectedSubject(Subject)
+     * @see seedu.address.model.Model#setSelectedFlashcard(Flashcard)
      */
-    void setSelectedSubject(Subject subject);
+    void setSelectedFlashcard (Flashcard flashcard);
 }

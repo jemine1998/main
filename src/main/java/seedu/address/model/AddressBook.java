@@ -7,16 +7,16 @@ import java.util.List;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.InvalidationListenerManager;
-import seedu.address.model.subject.Subject;
-import seedu.address.model.subject.UniqueSubjectList;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.UniqueFlashcardList;
 
 /**
  * Wraps all data at the address-book level
- * Duplicates are not allowed (by .isSameSubject comparison)
+ * Duplicates are not allowed (by .isSameFlashcard comparison)
  */
 public class AddressBook implements ReadOnlyAddressBook {
 
-    private final UniqueSubjectList subjects;
+    private final UniqueFlashcardList flashcards;
     private final InvalidationListenerManager invalidationListenerManager = new InvalidationListenerManager();
 
     /*
@@ -27,13 +27,13 @@ public class AddressBook implements ReadOnlyAddressBook {
      *   among constructors.
      */
     {
-        subjects = new UniqueSubjectList();
+        flashcards = new UniqueFlashcardList();
     }
 
     public AddressBook() {}
 
     /**
-     * Creates an AddressBook using the Subjects in the {@code toBeCopied}
+     * Creates an AddressBook using the Flashcards in the {@code toBeCopied}
      */
     public AddressBook(ReadOnlyAddressBook toBeCopied) {
         this();
@@ -43,11 +43,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     //// list overwrite operations
 
     /**
-     * Replaces the contents of the subject list with {@code subjects}.
-     * {@code subjects} must not contain duplicate subjects.
+     * Replaces the contents of the flashcard list with {@code flashcards}.
+     * {@code flashcards} must not contain duplicate flashcards.
      */
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects.setSubjects(subjects);
+    public void setFlashcards(List<Flashcard> flashcards) {
+        this.flashcards.setFlashcards(flashcards);
         indicateModified();
     }
 
@@ -57,38 +57,38 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
 
-        setSubjects(newData.getSubjectList());
+        setFlashcards(newData.getFlashcardList());
     }
 
-    //// subject-level operations
+    //// flashcard-level operations
 
     /**
-     * Returns true if a subject with the same identity as {@code subject} exists in the address book.
+     * Returns true if a flashcard with the same identity as {@code flashcard} exists in the address book.
      */
-    public boolean hasSubject(Subject subject) {
-        requireNonNull(subject);
-        return subjects.contains(subject);
+    public boolean hasFlashcard(Flashcard flashcard) {
+        requireNonNull(flashcard);
+        return flashcards.contains(flashcard);
     }
 
     /**
-     * Adds a subject to the address book.
-     * The subject must not already exist in the address book.
+     * Adds a flashcard to the address book.
+     * The flashcard must not already exist in the address book.
      */
-    public void addSubject(Subject p) {
-        subjects.add(p);
+    public void addFlashcard(Flashcard p) {
+        flashcards.add(p);
         indicateModified();
     }
 
     /**
-     * Replaces the given subject {@code target} in the list with {@code editedSubject}.
+     * Replaces the given flashcard {@code target} in the list with {@code editedFlashcard}.
      * {@code target} must exist in the address book.
-     * The subject identity of {@code editedSubject} must not be the same as another
-     * existing subject in the address book.
+     * The flashcard identity of {@code editedFlashcard} must not be the same as another
+     * existing flashcard in the address book.
      */
-    public void setSubject(Subject target, Subject editedSubject) {
-        requireNonNull(editedSubject);
+    public void setFlashcard(Flashcard target, Flashcard editedFlashcard) {
+        requireNonNull(editedFlashcard);
 
-        subjects.setSubject(target, editedSubject);
+        flashcards.setFlashcard(target, editedFlashcard);
         indicateModified();
     }
 
@@ -96,8 +96,8 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Removes {@code key} from this {@code AddressBook}.
      * {@code key} must exist in the address book.
      */
-    public void removeSubject(Subject key) {
-        subjects.remove(key);
+    public void removeFlashcard(Flashcard key) {
+        flashcards.remove(key);
         indicateModified();
     }
 
@@ -122,24 +122,25 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     @Override
     public String toString() {
-        return subjects.asUnmodifiableObservableList().size() + " subjects";
+        return flashcards.asUnmodifiableObservableList().size() + " flashcards";
         // TODO: refine later
     }
 
     @Override
-    public ObservableList<Subject> getSubjectList() {
-        return subjects.asUnmodifiableObservableList();
+    public ObservableList<Flashcard> getFlashcardList() {
+        return flashcards.asUnmodifiableObservableList();
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddressBook // instanceof handles nulls
-                && subjects.equals(((AddressBook) other).subjects));
+                && flashcards.equals(((AddressBook) other).flashcards));
     }
 
     @Override
     public int hashCode() {
-        return subjects.hashCode();
+        return flashcards.hashCode();
     }
+
 }

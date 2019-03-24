@@ -1,9 +1,9 @@
 package seedu.address.logic.commands;
 
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showSubjectAtIndex;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_SUBJECT;
-import static seedu.address.testutil.TypicalSubjects.getTypicalAddressBook;
+import static seedu.address.logic.commands.CommandTestUtil.showFlashcardAtIndex;
+import static seedu.address.testutil.TypicalFlashcards.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_FLASHCARD;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class ListCommandTest {
 
     @Test
     public void execute_listIsFiltered_showsEverything() {
-        showSubjectAtIndex(model, INDEX_FIRST_SUBJECT);
+        showFlashcardAtIndex(model, INDEX_FIRST_FLASHCARD);
         assertCommandSuccess(new ListCommand(), model, commandHistory, ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 }

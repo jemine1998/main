@@ -5,9 +5,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand;
-import seedu.address.logic.commands.EditCommand.EditSubjectDescriptor;
-import seedu.address.model.subject.*;
-import seedu.address.model.subject.Phone;
+import seedu.address.logic.commands.EditCommand.EditFlashcardDescriptor;
+import seedu.address.model.flashcard.Address;
+import seedu.address.model.flashcard.Email;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.model.flashcard.Name;
+import seedu.address.model.flashcard.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -15,21 +18,21 @@ import seedu.address.model.tag.Tag;
  */
 public class EditSubjectDescriptorBuilder {
 
-    private EditSubjectDescriptor descriptor;
+    private EditFlashcardDescriptor descriptor;
 
     public EditSubjectDescriptorBuilder() {
-        descriptor = new EditSubjectDescriptor();
+        descriptor = new EditFlashcardDescriptor();
     }
 
-    public EditSubjectDescriptorBuilder(EditCommand.EditSubjectDescriptor descriptor) {
-        this.descriptor = new EditSubjectDescriptor(descriptor);
+    public EditSubjectDescriptorBuilder(EditCommand.EditFlashcardDescriptor descriptor) {
+        this.descriptor = new EditFlashcardDescriptor(descriptor);
     }
 
     /**
      * Returns an {@code EditSubjectDescriptor} with fields containing {@code subject}'s details
      */
-    public EditSubjectDescriptorBuilder(Subject subject) {
-        descriptor = new EditSubjectDescriptor();
+    public EditSubjectDescriptorBuilder(Flashcard subject) {
+        descriptor = new EditFlashcardDescriptor();
         descriptor.setName(subject.getName());
         descriptor.setPhone(subject.getPhone());
         descriptor.setEmail(subject.getEmail());
@@ -79,7 +82,7 @@ public class EditSubjectDescriptorBuilder {
         return this;
     }
 
-    public EditSubjectDescriptor build() {
+    public EditFlashcardDescriptor build() {
         return descriptor;
     }
 }

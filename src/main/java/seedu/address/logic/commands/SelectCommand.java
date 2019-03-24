@@ -9,21 +9,21 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 /**
- * Selects a subject identified using it's displayed index from the address book.
+ * Selects a flashcard identified using it's displayed index from the address book.
  */
 public class SelectCommand extends Command {
 
     public static final String COMMAND_WORD = "select";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Selects the subject identified by the index number used in the displayed subject list.\n"
+            + ": Selects the flashcard identified by the index number used in the displayed flashcard list.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_SELECT_SUBJECT_SUCCESS = "Selected Subject: %1$s";
+    public static final String MESSAGE_SELECT_FLASHCARD_SUCCESS = "Selected Flashcard: %1$s";
 
     private final Index targetIndex;
 
@@ -36,14 +36,14 @@ public class SelectCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        List<Subject> filteredSubjectList = model.getFilteredSubjectList();
+        List<Flashcard> filteredFlashcardList = model.getFilteredFlashcardList();
 
-        if (targetIndex.getZeroBased() >= filteredSubjectList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_SUBJECT_DISPLAYED_INDEX);
+        if (targetIndex.getZeroBased() >= filteredFlashcardList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
         }
 
-        model.setSelectedSubject(filteredSubjectList.get(targetIndex.getZeroBased()));
-        return new CommandResult(String.format(MESSAGE_SELECT_SUBJECT_SUCCESS, targetIndex.getOneBased()));
+        model.setSelectedFlashcard(filteredFlashcardList.get(targetIndex.getZeroBased()));
+        return new CommandResult(String.format(MESSAGE_SELECT_FLASHCARD_SUCCESS, targetIndex.getOneBased()));
 
     }
 

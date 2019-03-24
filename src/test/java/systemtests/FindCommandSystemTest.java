@@ -1,12 +1,12 @@
 package systemtests;
 
 import static org.junit.Assert.assertFalse;
-import static seedu.address.commons.core.Messages.MESSAGE_SUBJECTS_LISTED_OVERVIEW;
+import static seedu.address.commons.core.Messages.MESSAGE_FLASHCARDS_LISTED_OVERVIEW;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
-import static seedu.address.testutil.TypicalSubjects.BENSON;
-import static seedu.address.testutil.TypicalSubjects.CARL;
-import static seedu.address.testutil.TypicalSubjects.DANIEL;
-import static seedu.address.testutil.TypicalSubjects.KEYWORD_MATCHING_MEIER;
+import static seedu.address.testutil.TypicalFlashcards.BENSON;
+import static seedu.address.testutil.TypicalFlashcards.CARL;
+import static seedu.address.testutil.TypicalFlashcards.DANIEL;
+import static seedu.address.testutil.TypicalFlashcards.KEYWORD_MATCHING_MEIER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +34,15 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: repeat previous find command where subject list is displaying the subjects we are finding
+        /* Case: repeat previous find command where flashcard list is displaying the subjects we are finding
          * -> 2 subjects found
          */
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find subject where subject list is not displaying the subject we are finding -> 1 subject found */
+        /* Case: find flashcard where flashcard list is not displaying the flashcard we are finding
+        -> 1 flashcard found */
         command = FindCommand.COMMAND_WORD + " Carl";
         ModelHelper.setFilteredList(expectedModel, CARL);
         assertCommandSuccess(command, expectedModel);
@@ -80,69 +81,69 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         expectedResultMessage = RedoCommand.MESSAGE_FAILURE;
         assertCommandFailure(command, expectedResultMessage);
 
-        /* Case: find same subjects in address book after deleting 1 of them -> 1 subject found */
+        /* Case: find same subjects in address book after deleting 1 of them -> 1 flashcard found */
         executeCommand(DeleteCommand.COMMAND_WORD + " 1");
-        assertFalse(getModel().getAddressBook().getSubjectList().contains(BENSON));
+        assertFalse(getModel().getAddressBook().getFlashcardList().contains(BENSON));
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find subject in address book, keyword is same as name but of different case -> 1 subject found */
+        /* Case: find flashcard in address book, keyword is same as name but of different case -> 1 flashcard found */
         command = FindCommand.COMMAND_WORD + " MeIeR";
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find subject in address book, keyword is substring of name -> 0 subjects found */
+        /* Case: find flashcard in address book, keyword is substring of name -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " Mei";
         ModelHelper.setFilteredList(expectedModel);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find subject in address book, name is substring of keyword -> 0 subjects found */
+        /* Case: find flashcard in address book, name is substring of keyword -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " Meiers";
         ModelHelper.setFilteredList(expectedModel);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find subject not in address book -> 0 subjects found */
+        /* Case: find flashcard not in address book -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " Mark";
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find phone number of subject in address book -> 0 subjects found */
+        /* Case: find phone number of flashcard in address book -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " " + DANIEL.getPhone().value;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find address of subject in address book -> 0 subjects found */
+        /* Case: find address of flashcard in address book -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " " + DANIEL.getAddress().value;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find email of subject in address book -> 0 subjects found */
+        /* Case: find email of flashcard in address book -> 0 subjects found */
         command = FindCommand.COMMAND_WORD + " " + DANIEL.getEmail().value;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find tags of subject in address book -> 0 subjects found */
+        /* Case: find tags of flashcard in address book -> 0 subjects found */
         List<Tag> tags = new ArrayList<>(DANIEL.getTags());
         command = FindCommand.COMMAND_WORD + " " + tags.get(0).tagName;
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
-        /* Case: find while a subject is selected -> selected card deselected */
-        showAllSubjectss();
-        selectSubject(Index.fromOneBased(1));
-        assertFalse(getSubjectListPanel().getHandleToSelectedCard().getName().equals(DANIEL.getName().fullName));
+        /* Case: find while a flashcard is selected -> selected card deselected */
+        showAllFlashcards();
+        selectFlashcard(Index.fromOneBased(1));
+        assertFalse(getFlashcardListPanel().getHandleToSelectedCard().getName().equals(DANIEL.getName().fullName));
         command = FindCommand.COMMAND_WORD + " Daniel";
         ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardDeselected();
 
-        /* Case: find subject in empty address book -> 0 subjects found */
-        deleteAllSubjects();
+        /* Case: find flashcard in empty address book -> 0 subjects found */
+        deleteAllFlashcards();
         command = FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, DANIEL);
@@ -156,7 +157,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
 
     /**
      * Executes {@code command} and verifies that the command box displays an empty string, the result display
-     * box displays {@code Messages#MESSAGE_SUBJECTS_LISTED_OVERVIEW} with the number of people in the filtered list,
+     * box displays {@code Messages#MESSAGE_FLASHCARDS_LISTED_OVERVIEW} with the number of people in the filtered list,
      * and the model related components equal to {@code expectedModel}.
      * These verifications are done by
      * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
@@ -166,7 +167,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
      */
     private void assertCommandSuccess(String command, Model expectedModel) {
         String expectedResultMessage = String.format(
-                MESSAGE_SUBJECTS_LISTED_OVERVIEW, expectedModel.getFilteredSubjectList().size());
+                MESSAGE_FLASHCARDS_LISTED_OVERVIEW, expectedModel.getFilteredFlashcardList().size());
 
         executeCommand(command);
         assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);

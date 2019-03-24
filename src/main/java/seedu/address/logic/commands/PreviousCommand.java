@@ -8,12 +8,12 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.subject.Subject;
+import seedu.address.model.flashcard.Flashcard;
 
 
 
 /**
- * Displays previous person in the address book to the user.
+ * Displays previous flashcard in the FlashCards to the user.
  */
 public class PreviousCommand extends Command {
 
@@ -57,12 +57,12 @@ public class PreviousCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        List<Subject> filteredSubjectList = model.getFilteredSubjectList();
+        List<Flashcard> filteredFlashcardList = model.getFilteredFlashcardList();
 
         if (previousInteger <= 0) {
             throw new CommandException(MESSAGE_FIRST_FLASHCARD);
         }
-        model.setSelectedSubject(filteredSubjectList.get(previousIndex.getZeroBased()));
+        model.setSelectedFlashcard(filteredFlashcardList.get(previousIndex.getZeroBased()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, previousIndex.getOneBased()));
 
     }

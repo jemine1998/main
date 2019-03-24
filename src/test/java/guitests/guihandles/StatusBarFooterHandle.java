@@ -11,22 +11,22 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
 
     private static final String SYNC_STATUS_ID = "#syncStatus";
     private static final String SAVE_LOCATION_STATUS_ID = "#saveLocationStatus";
-    private static final String TOTAL_SUBJECTS_STATUS_ID = "#totalSubjectsStatus";
+    private static final String TOTAL_FLASHCARDS_STATUS_ID = "#totalFlashcardsStatus";
 
     private final Labeled syncStatusNode;
-    private final Labeled totalSubjectsStatusNode;
+    private final Labeled totalFlashcardsStatusNode;
     private final Labeled saveLocationNode;
 
     private String lastRememberedSyncStatus;
     private String lastRememberedSaveLocation;
-    private String lastRememberedTotalSubjectsStatus;
+    private String lastRememberedTotalFlashcardsStatus;
 
     public StatusBarFooterHandle(Node statusBarFooterNode) {
         super(statusBarFooterNode);
 
         syncStatusNode = getChildNode(SYNC_STATUS_ID);
         saveLocationNode = getChildNode(SAVE_LOCATION_STATUS_ID);
-        totalSubjectsStatusNode = getChildNode(TOTAL_SUBJECTS_STATUS_ID);
+        totalFlashcardsStatusNode = getChildNode(TOTAL_FLASHCARDS_STATUS_ID);
     }
 
     /**
@@ -44,10 +44,10 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
     }
 
     /**
-     * Returns the text of the 'total subjects' portion of the status bar.
+     * Returns the text of the 'total flashcards' portion of the status bar.
      */
-    public String getTotalSubjectsStatus() {
-        return totalSubjectsStatusNode.getText();
+    public String getTotalFlashcardsStatus() {
+        return totalFlashcardsStatusNode.getText();
     }
 
 
@@ -82,18 +82,18 @@ public class StatusBarFooterHandle extends NodeHandle<Node> {
     }
 
     /**
-     * Remembers the content of the 'total subjects' portion of the status bar.
+     * Remembers the content of the 'total flashcards' portion of the status bar.
      */
-    public void rememberTotalSubjectsStatus() {
-        lastRememberedTotalSubjectsStatus = getTotalSubjectsStatus();
+    public void rememberTotalFlashcardsStatus() {
+        lastRememberedTotalFlashcardsStatus = getTotalFlashcardsStatus();
     }
 
     /**
-     * Returns true if the current content of the 'total subjects' is different from the value remembered by the most
-     * recent {@code rememberTotalSubjectsStatus()} call.
+     * Returns true if the current content of the 'total flashcards' is different from the value remembered by the most
+     * recent {@code rememberTotalFlashcardsStatus()} call.
      */
-    public boolean isTotalSubjectsStatusChanged() {
-        return !lastRememberedTotalSubjectsStatus.equals(getTotalSubjectsStatus());
+    public boolean isTotalFlashcardsStatusChanged() {
+        return !lastRememberedTotalFlashcardsStatus.equals(getTotalFlashcardsStatus());
     }
 
 }

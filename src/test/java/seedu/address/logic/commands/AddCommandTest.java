@@ -23,8 +23,8 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
-import seedu.address.model.subject.Subject;
-import seedu.address.testutil.SubjectBuilder;
+import seedu.address.model.flashcard.Flashcard;
+import seedu.address.testutil.FlashcardBuilder;
 
 public class AddCommandTest {
 
@@ -36,38 +36,38 @@ public class AddCommandTest {
     private CommandHistory commandHistory = new CommandHistory();
 
     @Test
-    public void constructor_nullSubject_throwsNullPointerException() {
+    public void constructor_nullFlashcard_throwsNullPointerException() {
         thrown.expect(NullPointerException.class);
         new AddCommand(null);
     }
 
     @Test
-    public void execute_subjectAcceptedByModel_addSuccessful() throws Exception {
-        ModelStubAcceptingSubjectAdded modelStub = new ModelStubAcceptingSubjectAdded();
-        Subject validSubject = new SubjectBuilder().build();
+    public void execute_flashcardAcceptedByModel_addSuccessful() throws Exception {
+        ModelStubAcceptingFlashcardAdded modelStub = new ModelStubAcceptingFlashcardAdded();
+        Flashcard validFlashcard = new FlashcardBuilder().build();
 
-        CommandResult commandResult = new AddCommand(validSubject).execute(modelStub, commandHistory);
+        CommandResult commandResult = new AddCommand(validFlashcard).execute(modelStub, commandHistory);
 
-        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validSubject), commandResult.getFeedbackToUser());
-        assertEquals(Arrays.asList(validSubject), modelStub.subjectsAdded);
+        assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validFlashcard), commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(validFlashcard), modelStub.flashcardsAdded);
         assertEquals(EMPTY_COMMAND_HISTORY, commandHistory);
     }
 
     @Test
-    public void execute_duplicateSubject_throwsCommandException() throws Exception {
-        Subject validSubject = new SubjectBuilder().build();
-        AddCommand addCommand = new AddCommand(validSubject);
-        ModelStub modelStub = new ModelStubWithSubject(validSubject);
+    public void execute_duplicateFlashcard_throwsCommandException() throws Exception {
+        Flashcard validFlashcard = new FlashcardBuilder().build();
+        AddCommand addCommand = new AddCommand(validFlashcard);
+        ModelStub modelStub = new ModelStubWithFlashcard(validFlashcard);
 
         thrown.expect(CommandException.class);
-        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_SUBJECT);
+        thrown.expectMessage(AddCommand.MESSAGE_DUPLICATE_FLASHCARD);
         addCommand.execute(modelStub, commandHistory);
     }
 
     @Test
     public void equals() {
-        Subject alice = new SubjectBuilder().withName("Alice").build();
-        Subject bob = new SubjectBuilder().withName("Bob").build();
+        Flashcard alice = new FlashcardBuilder().withName("Alice").build();
+        Flashcard bob = new FlashcardBuilder().withName("Bob").build();
         AddCommand addAliceCommand = new AddCommand(alice);
         AddCommand addBobCommand = new AddCommand(bob);
 
@@ -84,7 +84,7 @@ public class AddCommandTest {
         // null -> returns false
         assertFalse(addAliceCommand.equals(null));
 
-        // different subject -> returns false
+        // different flashcard -> returns false
         assertFalse(addAliceCommand.equals(addBobCommand));
     }
 
@@ -123,7 +123,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public void addSubject(Subject subject) {
+        public void addFlashcard(Flashcard flashcard) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -138,27 +138,27 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasSubject(Subject subject) {
+        public boolean hasFlashcard(Flashcard flashcard) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void deleteSubject(Subject target) {
+        public void deleteFlashcard(Flashcard target) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setSubject(Subject target, Subject editedSubject) {
+        public void setFlashcard(Flashcard target, Flashcard editedFlashcard) {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public ObservableList<Subject> getFilteredSubjectList() {
+        public ObservableList<Flashcard> getFilteredFlashcardList() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void updateFilteredSubjectList(Predicate<Subject> predicate) {
+        public void updateFilteredFlashcardList(Predicate<Flashcard> predicate) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -188,55 +188,55 @@ public class AddCommandTest {
         }
 
         @Override
-        public ReadOnlyProperty<Subject> selectedSubjectProperty() {
+        public ReadOnlyProperty<Flashcard> selectedFlashcardProperty() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public Subject getSelectedSubject() {
+        public Flashcard getSelectedFlashcard() {
             throw new AssertionError("This method should not be called.");
         }
 
         @Override
-        public void setSelectedSubject(Subject subject) {
+        public void setSelectedFlashcard(Flashcard flashcard) {
             throw new AssertionError("This method should not be called.");
         }
     }
 
     /**
-     * A Model stub that contains a single subject.
+     * A Model stub that contains a single flashcard.
      */
-    private class ModelStubWithSubject extends ModelStub {
-        private final Subject subject;
+    private class ModelStubWithFlashcard extends ModelStub {
+        private final Flashcard flashcard;
 
-        ModelStubWithSubject(Subject subject) {
-            requireNonNull(subject);
-            this.subject = subject;
+        ModelStubWithFlashcard(Flashcard flashcard) {
+            requireNonNull(flashcard);
+            this.flashcard = flashcard;
         }
 
         @Override
-        public boolean hasSubject(Subject subject) {
-            requireNonNull(subject);
-            return this.subject.isSameSubject(subject);
+        public boolean hasFlashcard(Flashcard flashcard) {
+            requireNonNull(flashcard);
+            return this.flashcard.isSameFlashcard(flashcard);
         }
     }
 
     /**
-     * A Model stub that always accept the subject being added.
+     * A Model stub that always accept the flashcard being added.
      */
-    private class ModelStubAcceptingSubjectAdded extends ModelStub {
-        final ArrayList<Subject> subjectsAdded = new ArrayList<>();
+    private class ModelStubAcceptingFlashcardAdded extends ModelStub {
+        final ArrayList<Flashcard> flashcardsAdded = new ArrayList<>();
 
         @Override
-        public boolean hasSubject(Subject subject) {
-            requireNonNull(subject);
-            return subjectsAdded.stream().anyMatch(subject::isSameSubject);
+        public boolean hasFlashcard(Flashcard flashcard) {
+            requireNonNull(flashcard);
+            return flashcardsAdded.stream().anyMatch(flashcard::isSameFlashcard);
         }
 
         @Override
-        public void addSubject(Subject subject) {
-            requireNonNull(subject);
-            subjectsAdded.add(subject);
+        public void addFlashcard(Flashcard flashcard) {
+            requireNonNull(flashcard);
+            flashcardsAdded.add(flashcard);
         }
 
         @Override
