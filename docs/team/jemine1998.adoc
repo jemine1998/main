@@ -9,10 +9,14 @@
 
 == Overview
 FlashCards is a desktop flashcard consolidation application for students to compile and organise notes for different subjects.
-It provides an easy way to have a simple way to store different notes
-The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+It provides an easy way to have a simple way to store and categorise notes digitally. Additionaly users can also conduct self quizzing when needed. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
 
+We decided to morph the base code provided, AddressBook4, to create this useful and meaning application for students.
+
+I was in charge of developing the toggle features and quizzing format as explained below. 
 == Summary of contributions
+
+The following are the my contributions and their purpose in the application:
 
 * *Major enhancement*: added *Toggle feature*
 ** What it does: It allows the user to navigate between flashcard easily with a next and previous command.
@@ -59,11 +63,12 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
+
+include::../UserGuide.adoc[tag=togglemode]
+include::../UserGuide.adoc[tag=togglefeature]
 include::../UserGuide.adoc[tag=findCommand]
 
 include::../UserGuide.adoc[tag=selectSubject]
-
-include::../UserGuide.adoc[tag=togglefeature]
 
 
 == Contributions to the Developer Guide
@@ -72,6 +77,13 @@ include::../UserGuide.adoc[tag=togglefeature]
 |===
 
 include::../DeveloperGuide.adoc[tag=togglefeature]
+include::../DeveloperGuide.adoc[tag=quizzingbydifficulty] 
 
-include::../DeveloperGuide.adoc[tag=quizzingbydifficulty]
+
+
+//== PROJECT: PowerPointLabs
+//
+//---
+//
+//_{Optionally, you may include other projects in your portfolio.}_
 

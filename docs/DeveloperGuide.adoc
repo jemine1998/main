@@ -356,37 +356,36 @@ There are 2 possible cases when adding a flashcard:
 
 1. *Subject tag is unique among other flashcards* +
 The Subject tag will be added to the `UniqueSubjectList` object.
-+
+
 Shown below is the adding mechanism of a flashcard with a unique subject among other flashcards: +
-+
+
 * The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
-+
+
 * The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
-+
+
 * The `SubjectBook` class will create an `UniqueSubjectList` object to store all unique subjects.
-+
+
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
 Since it is unique in this scenario, the subject tag of the current flashcard will be added to this `UniqueSubjectList` object.
-+
+
 * The `SubjectListPanel` class then displays this newly added subject in the subjects panel.
-+
+
 
 2. *Subject tag already exists in other flashcards* +
 No Subject tag is added to the `UniqueSubjectList` object.
-+
+
 Shown below is the adding mechanism of a flashcard whose subject already exists in other flashcards:
-+
+
 * The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
-+
+
 * The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
-+
+
 * `SubjectBook` will create a `UniqueSubjectList` object that stores all unique subjects.
-+
+
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
 Since it is not unique in this scenario, the subject tag *will not* be added to this `UniqueSubjectList` object.
-+
-* The subjects panel remains unchanged.
 
+* The subjects panel remains unchanged.
 
 The following sequence diagram summarises what happens in Step 1: +
 
@@ -485,102 +484,114 @@ image::SortCommandSD.png[width="800"]
 
 // end::quizzingbydifficulty[]
 
+// tag::shelflifeofflashcards[]
+
 === Shelf-Life of FlashCards
 ==== Current Implementation
 
-The user can determine how long the flashcards will exist in the database “FlashCards”.
+The user can determine set a deadline for the flashcards and determine how long the flash cards will exist in the database “FlashCards”.
 The following operations are available:
 
-* `FlashCards#clear()` -- Clears the entire database.
-* `FlashCards#clear()` -- Clears a specific flashcard when in "Subject" Knowledge Testing Mode.
 * `FlashCards#deadline()` or `FlashCards#note()` -- Adds a deadline/note for the specified flashcard.
+* `FlashCards#deleteSubject()` -- Deletes a specific subject when in "Subject" Knowledge Testing Mode.
+* `FlashCards#clear()` -- Clears the entire database.
 
-For easier modes of implementation, the user can also choose to set a date whereby the flashcards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flashcards will be available for another month after the exam before the auto deletion function is activated.
+These operations are exposed in the `Logic` interface as `Logic#deadline()`, `Logic#note()`, `Logic#deleteSubject()` and `Logic#clear()` respectively.
 
-These operations are exposed in the `Logic` interface as `Logic#clearall()`, `Logic#clear()`, `Logic#deadline()` and `Logic#exam()` respectively.
+==== Deadline Command
+For the `deadline` command, the user can input a date whereby the flashcards would be unavailable thereafter.
 
-Given below is an example usage scenario and how the deadline/exam mechanism behaves at each step.
+Step 1. The user can input a deadline for the flashcard. An example of the command is `deadline 3 d/12 January 2020`.
 
-Step 1. The user launches the application for the first time. The `VersionedFlashCards` will be initialized with the initial flashcard state, and the `currentStatePointer` pointing to that single flashcard state.
+Step 2. Upon adding to a specified flashcard, the deadline `12 January 2020` will be added to the `index 3` flashcard.
 
-image::UndoRedoStartingStateListDiagram.png[width="800"]
+Step 3. The `deadline` command also calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `flashBookStateList`.
 
+Step 4. In the case that a new date is to be added to a flashcard with an existing deadline or note, corrections can be made by overwriting the existing information with the same commands.
 
-Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flashcard after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flashcard state.
+==== Deleting Flashcards
+The user now decides that the deadline is over/the note is redundant and do not wish to save the flashcard in the database.
+For the user to delete the existing flashcards in the database, there are two options available:
+* Option 1: Deleting flashcards by subject. (`deleteSubject` command)
+* Option 2: Deleting all flashcards. (`clear` command)
 
+==== Option 1: Deleting flashcards by subject. (`deleteSubject` command)
+By executing the `deleteSubject` command, the user can delete all the flashcards under the specified subject. In this case, we will be deleting the subject `physics`.
 
-image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
+Step 1. When the `deleteSubject` command is called, it will be executed by the `LogicManager`.
 
-Step 3. The user executes `deadline 1 d/...` or `exam 1 d/...` to add a new deadline or exam date for the specified flashcard. The `deadline` command also calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `addressBookStateList`.
+Step 2. Next, it will be parsed through the `FlashBookParser` with commandWord `deleteSubject()` under `parseCommand`.
 
-image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
+Step 3. The `deleteSubject()` in Model will then be executed and the specified subject `physics` will be deleted from the `VersionedFlashBook`.
 
-[NOTE]
-If a command fails its execution, it will not call `Model#commitFlashBook()`, so the flash book state will not be saved into the `flashBookStateList`.
+Step 4. The `deleteSubject` command calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `flashBookStateList`.
 
-
-Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flashcard. By executing the `clear` command, he can delete all the respective flashcards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards of the specified flashcard.
-
-Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flashcards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards in FlashCards.
-
-
-image::undoredoExecuteUndoStateListDiagram.png[width="800"]
-
-[NOTE]
-If the `currentStatePointer` is at index 0, pointing to the initial flash book state, then there are no previous flash book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
-
-The following sequence diagram shows how the undo operation works:
-
-image::UndoRedoSequenceDiagram.png[width="800"]
-
-The `redo` command does the opposite -- it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the flash book to that state.
+Step 5. The `SubjectListPanel` and `FlashCardListPanel` will also be updated with new indexes after the deletion.
 
 [NOTE]
-If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest flash book state, then there are no undone flash book states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+This action is not reversible. The `undo` and `redo` command do not apply to the deletion of subjects.
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the flash book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+The sequence diagram below illustrate how `deleteSubjectCommand` is executed.
+image::deleteSubjectSequenceDiagram.png[width="800"]
 
-image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
+==== Option 2: Deleting all flashcards. (`clear` command)
+By executing the `clear` command, all the flashcards will be cleared from the database.
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
+Step 1. When the `clear` command is called, it will call `Logic#clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards in FlashCards.
+
+Step 2. This command also calls `Model#commitAddressBook()`.
+
+Step 3. Since the `currentStatePointer` is not pointing at the end of the `flashBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `clear` command. This is the behavior that most modern desktop applications follow.
+
+Step 4. Hence, all flashcards and subjects will be deleted in the database.
+
+Step 5. The FlashBook will then be in a clean slate, at fb3.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
 
-The following activity diagram summarizes what happens when a user executes a new command:
+The following activity diagram summarizes what happens when a user executes a 'clear' command:
 
 image::UndoRedoActivityDiagram.png[width="650"]
 
+[NOTE]
+This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.
+
 ==== Design Considerations
 
-===== Aspect: How deadline/exam executes
+===== Aspect: How deadline/note executes
 
-* **Alternative 1 (current choice):** Auto deletion of the flashcards.
-** Pros: Easy to implement and convenient for the user.
-** Cons: Need to have additional internal calendar for the auto deletion.
-* **Alternative 2:** Manual deletion of the flashcards.
+* **Alternative 1 (current choice):** Manual deletion of the flashcards.
 ** Pros: Allow the user to have the choice of keeping the flashcards or removing it.
 ** Cons: Might be troublesome for some users.
+* **Alternative 2:** Auto deletion of the flashcards.
+** Pros: Easy to implement and convenient for the user. Deletes the flashcards right after the deadline.
+** Cons: Need to have additional internal calendar for the auto deletion. E.g. Java Calendar
 
-Alternative 1 is chosen to prevent overloading of overdue flashcards, which will take up excess storage if the user does not manually delete.
+Alternative 1 is chosen to provide users with the choice of keeping and deleting flashcards as and when they want. Even though it will result in overloading of overdue flashcards
+and take up excess storage if the user does not manually delete, we designed the command in such a way that it accepts both dates and text. This provides two options for the users:
+He/She can choose to write a date or write a note under the flashcard, for example, `Clarify with the Teacher` or `Edit photosynthesis`. This will allow the user to have the freedom to write whatever they require rather than just deadlines.
 
-===== Aspect: Data structure to support the deadline/exam commands
+===== Aspect: Data structure to support the deadline/note commands
 
-* **Alternative 1 (current choice):** Implement an internal calendar to calculate the number of days left.
-** Pros: Auto deletion of flashcards.
-** Cons: Need to pay extra caution for Leap years.
-* **Alternative 2:** Use the `clear` or `clearall` function to manually delete.
-** Pros: Give the user the choice to keep or delete.
-** Cons: Might be troublesome for some users.
+* **Alternative 1 (current choice):** Use the `deleteSubject` or `clear` command to manually delete flashcards.
+** Pros: Give the user the choice to keep or delete the flashcards. Also, the user can choose to delete the flashcards by subjects or delete all the flashcards altogether.
+** Cons: Both `deleteSubject` and `clear` commands cannot be undone once implemented.
+* **Alternative 2:** Implement an internal calendar to calculate the number of days left and auto-deletion of flashcards after the deadline.
+** Pros: Auto deletion of flash cards.
+** Cons: Need to pay extra caution for Leap years. Users do not have the choice of keeping flashcards after the deadline.
 
-Alternative 1 is chosen to prevent overloading of overdue flashcards, which will take up excess storage if the user does not manually delete.
+Alternative 1 is chosen to provide users with the choice of deleting flashcards as and when they want. Even though it will take up extra storage if the user does not manually delete,
+the user will have better control over what they want to store and delete in the application.
+
+// end::shelflifeofflashcards[]
 
 // end::undoredo[]
 
 // tag::dataencryption[]
-=== [Proposed] Data Encryption
-
-_{Explain here how the data encryption feature will be implemented}_
-
+//=== [Proposed] Data Encryption
+//
+//_{Explain here how the data encryption feature will be implemented}_
+//
 // end::dataencryption[]
 
 === Logging
@@ -1115,11 +1126,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Find a flashcard |Locate the flashcard I need without going through the entire list
 
-|`* * *` |User |Add a deadline or exam date to a flashcard |Aware of when the content is needed
-
-|`* * *` |User |Add a countdown calendar for my flashcards |Aware of how many days left to be familiar with the content
-
-|`* * *` |User |Delete unnecessary flashcards automatically |Prevent overloading of flashcards
+|`* * *` |User |Add a deadline or note to a flashcard |Aware of when the content is needed
 
 |`* * *` |User |Sort the flashcards according to Difficulty |Categorise the flashcards according to the difficulty levels
 
@@ -1141,9 +1148,13 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Show the content of my flashcard |Quiz myself more effectively
 
+|`* *` |User |Add a countdown calendar for my flashcards |Aware of how many days left to be familiar with the content
+
 |`* *` |User |Categorize each flashcard by importance |Prioritise which information to study or memorise first
 
-|`* *` |User |Choose the color of the subject tag  |Personalize my flashbook
+|`* *` |User |Choose the color of the subject tag  |Personalize my FlashBook
+
+|`* *` |User |Delete unnecessary flashcards automatically |Prevent overloading of flashcards
 
 |`* *` |User |Retrieve a recently deleted flashcard |Retrieve the flashcard which I might have accidentally deleted
 
@@ -1175,7 +1186,19 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 Use case ends.
 
 [discrete]
+=== Use case: Editing a Flashcard
 
+*MSS*
+1.  User enters the flashcard of the flashcard to be edited
+2.  FlashCards displays a list of flashcards belonging to the same flashcard
+3.  User selects the index of the flashcard to edit
+4.  FlashCards prompts for new data
+5. User enters new data
+6. FlashCards displays the updated flashcard
+
+Use case ends.
+
+[discrete]
 === Use case: Deleting a Flashcard
 
 *MSS*
@@ -1187,18 +1210,13 @@ Use case ends.
 Use case ends.
 
 [discrete]
-
-=== Use case: Editing a Flashcard
+=== Use Case: Deleting Flashcards Based on Subject
 
 *MSS*
 
-1.  User enters the flashcard of the flashcard to be edited
-2.  FlashCards displays a list of flashcards belonging to the same flashcard
-3.  User selects the index of the flashcard to edit
-4.  FlashCards prompts for new data
-5. User enters new data
-6. FlashCards displays the updated flashcard
-
+1.  User selects a subject
+2.  FlashCards deletes the list of flashcards for that subject.
++
 Use case ends.
 
 [discrete]

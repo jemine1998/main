@@ -78,8 +78,8 @@ https://github.com/cs2113-ay1819s2-m11-3/main/pull/79[#79]
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=add]
-include::../UserGuide.adoc[tag=edit]
+include::../UserGuide.adoc[tag=adddeadline]
+include::../UserGuide.adoc[tag=deletesubject]
 include::../UserGuide.adoc[tag=clear]
 
 == Contributions to the Developer Guide
@@ -90,8 +90,7 @@ include::../UserGuide.adoc[tag=clear]
 
 ** Came up with the three features which were further implemented by my team mates.
 
-include::../DeveloperGuide.adoc[tag=Implementation]
-include::../DeveloperGuide.adoc[tag=ShelfLifeofFlashcards]
+include::../DeveloperGuide.adoc[tag=shelflifeofflashcards]
 
 
 
