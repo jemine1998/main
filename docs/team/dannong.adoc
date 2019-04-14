@@ -6,7 +6,7 @@
 == PROJECT: FlashCards
 
 ---
-//test
+
 == Overview
 
 This portfolio is written to document the process of developing FlashCards throughout the course of one semester in a team of 3 members.
@@ -20,23 +20,22 @@ The following sections illustrate these enhancements in more details, as well as
 
 == Summary of contributions
 This sections summarises my coding, documentation and other relevant contributions to the team project.
-
-* *Major enhancement 1*: added *the ability to add deadlines to flashcards* (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/12[#12], https://github.com/cs2113-ay1819s2-m11-3/main/pull/13[#13], https://github.com/cs2113-ay1819s2-m11-3/main/pull/14[#14])
-** What it does: The *deadline* command allows the user to add deadline or exam dates to a specified flashcard. The feature also includes an internal Calendar which will count the number of days left before the deadline and display it below the deadline.
-** Justification: This feature improves the product significantly as it serves as a reminder to the user about the upcoming deadlines or exams.
-** Highlights: This enhancement does not affect existing commands and commands to be added in future. It is an independent command and it can only be added after the selected flashcards exist in the FlashBook. This gives the user the choice to decide if he/she wants to assign a deadline to the flashcard.
-Also, if the user wants to update the existing deadline, he can enter the command again with a different date and this new date will override the existing date.
-Implementation of the command was simple and straightforward, however, implementing the Java.util.Calendar together with it was a challenge as the system has to check if the date entered is valid before accepting it.
+NOTE
+* *Major enhancement 1*: added *the ability to add deadlines to flashcards* (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/12[#12], https://github.com/cs2113-ay1819s2-m11-3/main/pull/13[#13], https://github.com/cs2113-ay1819s2-m11-3/main/pull/14[#14], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
+** What it does: The *deadline* command allows the user to add deadline or notes to a specified flashcard.
+** Justification: Initially, my team decided on implementing an internal Calendar which will count the number of days left before the deadline and display it below the deadline. However, we decided that it will be more versatile if the user can input his notes in. For example, Clarify with the Teacher. This feature improves the product significantly as it serves as a reminder to the user about the upcoming deadlines or the notes attached.
+** Highlights: This enhancement does not affect existing commands and commands to be added in future. It is an independent command and it can only be added after the selected flashcards exist in the FlashBook. This gives the user the choice to decide if he/she wants to assign a deadline or a note to the flashcard.
+Also, if the user wants to update the existing deadline, he can enter the command again with a different date and this new date will override the existing date. Implementation of the command was simple and straightforward.
 ** Credits: Help from [https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html[Oracle Java Class Calendar]]
-* *Minor enhancement*: Added tests for *deadline* command.
+* *Minor enhancement*: Added tests for *deadline* command. Add *Note* alias (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 * *Code contributed*: [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/java/seedu/address/logic/commands/DeadlineCommand.java[Functional code]] [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/test/java/seedu/address/logic/commands/DeadlineCommandTest.java[Test code]]
 
-* *Major enhancement 2*: added *GUI display of topic and content* (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80])
+* *Major enhancement 2*: added *GUI display of topic and content* (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80], https://github.com/cs2113-ay1819s2-m11-3/main/pull/102[#102], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 ** What it does: The *GUI display* allows the user to alternate between the topic and the content of the flashcard.
 ** Justification: The physical copy of a flashcard has two sides, and to simulate that in the application, I added two buttons for *topic* and *content* respectively. This allows the user to switch between topic and content easily.
 ** Highlights: -
-** Credits: -
-* *Minor enhancement*: Changed the background of GUI display to black for the text to stand out (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86])
+** Credits: https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Button.html[Button]
+* *Minor enhancement*: Changed the background of GUI display to black for the text to stand out. Add mnemonicParsing for the buttons. (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86])
 * *Code contributed*: [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/java/seedu/address/ui/RightPanel.java[Functional code in Java]] [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/resources/view/RightPanel.fxml[Functional code in FXML]]
 
 * *Other contributions*:
@@ -48,17 +47,18 @@ Implementation of the command was simple and straightforward, however, implement
 ** Enhancements to existing features:
 *** Added alias and relevant tests for 5 commands (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/9[#9])
 *** Added new StackPane and split the window into 3 placeholders (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/30[#30])
+*** Add deleteSubject Command (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 *** Refactored Subjects to Flashcards (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/43[#43])
 *** Refactored Name to Topic, Phone to Difficulty, Address to Content and AddressBook to FlashBook (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/45[#45]
-*** Edited relevant fields (Email) (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/46[#46])
+*** Edited relevant fields (Email & Content Label in Flashcard) (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/46[#46], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 *** Merged PRs after merge conflicts (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/14[#14], https://github.com/cs2113-ay1819s2-m11-3/main/pull/48[#48])
 
 ** Documentation:
 *** Did cosmetic tweaks to existing contents of the User Guide: (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/3[#3], https://github.com/cs2113-ay1819s2-m11-3/main/pull/9[#9], https://github.com/cs2113-ay1819s2-m11-3/main/pull/10[#10],
-https://github.com/cs2113-ay1819s2-m11-3/main/pull/20[#20], https://github.com/cs2113-ay1819s2-m11-3/main/pull/45[#45])
+https://github.com/cs2113-ay1819s2-m11-3/main/pull/20[#20], https://github.com/cs2113-ay1819s2-m11-3/main/pull/45[#45], https://github.com/cs2113-ay1819s2-m11-3/main/pull/89[#89], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 *** Did cosmetic tweaks to existing contents of the Developer Guide: (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/3[#3], https://github.com/cs2113-ay1819s2-m11-3/main/pull/8[#8], https://github.com/cs2113-ay1819s2-m11-3/main/pull/43[#43],
-https://github.com/cs2113-ay1819s2-m11-3/main/pull/45[#45], https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86])
-*** Added relevant information and links to relevant documentations (e.g. Build.gradle, README etc) (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/3[#3], https://github.com/cs2113-ay1819s2-m11-3/main/pull/4[#4], https://github.com/cs2113-ay1819s2-m11-3/main/pull/16[#16], https://github.com/cs2113-ay1819s2-m11-3/main/pull/18[#18])
+https://github.com/cs2113-ay1819s2-m11-3/main/pull/45[#45], https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86], https://github.com/cs2113-ay1819s2-m11-3/main/pull/89[#89], https://github.com/cs2113-ay1819s2-m11-3/main/pull/102[#102], https://github.com/cs2113-ay1819s2-m11-3/main/pull/111[#111])
+*** Added relevant information and links to relevant documentations (e.g. Build.gradle, README etc) (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/3[#3], https://github.com/cs2113-ay1819s2-m11-3/main/pull/4[#4], https://github.com/cs2113-ay1819s2-m11-3/main/pull/16[#16], https://github.com/cs2113-ay1819s2-m11-3/main/pull/18[#18], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 *** Managed relevant documentations (e.g. User Guide, Developer Guide etc.) by ensuring everything is well-documented.
 
 ** Community:
