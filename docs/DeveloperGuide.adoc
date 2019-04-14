@@ -189,7 +189,7 @@ image::LogicClassDiagram.png[width="800"]
 *API* :
 link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
-.  `Logic` uses the `AddressBookParser` class to parse the user command.
+.  `Logic` uses the `FlashBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
 .  The command execution can affect the `Model` (e.g. adding a flashcard).
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
@@ -356,37 +356,36 @@ There are 2 possible cases when adding a flashcard:
 
 1. *Subject tag is unique among other flashcards* +
 The Subject tag will be added to the `UniqueSubjectList` object.
-+
+
 Shown below is the adding mechanism of a flashcard with a unique subject among other flashcards: +
-+
+
 * The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
-+
+
 * The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
-+
+
 * The `SubjectBook` class will create an `UniqueSubjectList` object to store all unique subjects.
-+
+
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
 Since it is unique in this scenario, the subject tag of the current flashcard will be added to this `UniqueSubjectList` object.
-+
+
 * The `SubjectListPanel` class then displays this newly added subject in the subjects panel.
-+
+
 
 2. *Subject tag already exists in other flashcards* +
 No Subject tag is added to the `UniqueSubjectList` object.
-+
+
 Shown below is the adding mechanism of a flashcard whose subject already exists in other flashcards:
-+
+
 * The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
-+
+
 * The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
-+
+
 * `SubjectBook` will create a `UniqueSubjectList` object that stores all unique subjects.
-+
+
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
 Since it is not unique in this scenario, the subject tag *will not* be added to this `UniqueSubjectList` object.
-+
-* The subjects panel remains unchanged.
 
+* The subjects panel remains unchanged.
 
 The following sequence diagram summarises what happens in Step 1: +
 
@@ -485,102 +484,114 @@ image::SortCommandSD.png[width="800"]
 
 // end::quizzingbydifficulty[]
 
+// tag::shelflifeofflashcards[]
+
 === Shelf-Life of FlashCards
 ==== Current Implementation
 
-The user can determine how long the flashcards will exist in the database “FlashCards”.
+The user can determine set a deadline for the flashcards and determine how long the flash cards will exist in the database “FlashCards”.
 The following operations are available:
 
-* `FlashCards#clear()` -- Clears the entire database.
-* `FlashCards#clear()` -- Clears a specific flashcard when in "Subject" Knowledge Testing Mode.
 * `FlashCards#deadline()` or `FlashCards#note()` -- Adds a deadline/note for the specified flashcard.
+* `FlashCards#deleteSubject()` -- Deletes a specific subject when in "Subject" Knowledge Testing Mode.
+* `FlashCards#clear()` -- Clears the entire database.
 
-For easier modes of implementation, the user can also choose to set a date whereby the flashcards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flashcards will be available for another month after the exam before the auto deletion function is activated.
+These operations are exposed in the `Logic` interface as `Logic#deadline()`, `Logic#note()`, `Logic#deleteSubject()` and `Logic#clear()` respectively.
 
-These operations are exposed in the `Logic` interface as `Logic#clearall()`, `Logic#clear()`, `Logic#deadline()` and `Logic#exam()` respectively.
+==== Deadline Command
+For the `deadline` command, the user can input a date whereby the flashcards would be unavailable thereafter.
 
-Given below is an example usage scenario and how the deadline/exam mechanism behaves at each step.
+Step 1. The user can input a deadline for the flashcard. An example of the command is `deadline 3 d/12 January 2020`.
 
-Step 1. The user launches the application for the first time. The `VersionedFlashCards` will be initialized with the initial flashcard state, and the `currentStatePointer` pointing to that single flashcard state.
+Step 2. Upon adding to a specified flashcard, the deadline `12 January 2020` will be added to the `index 3` flashcard.
 
-image::UndoRedoStartingStateListDiagram.png[width="800"]
+Step 3. The `deadline` command also calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `flashBookStateList`.
 
+Step 4. In the case that a new date is to be added to a flashcard with an existing deadline or note, corrections can be made by overwriting the existing information with the same commands.
 
-Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flashcard after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flashcard state.
+==== Deleting Flashcards
+The user now decides that the deadline is over/the note is redundant and do not wish to save the flashcard in the database.
+For the user to delete the existing flashcards in the database, there are two options available:
+* Option 1: Deleting flashcards by subject. (`deleteSubject` command)
+* Option 2: Deleting all flashcards. (`clear` command)
 
+==== Option 1: Deleting flashcards by subject. (`deleteSubject` command)
+By executing the `deleteSubject` command, the user can delete all the flashcards under the specified subject. In this case, we will be deleting the subject `physics`.
 
-image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
+Step 1. When the `deleteSubject` command is called, it will be executed by the `LogicManager`.
 
-Step 3. The user executes `deadline 1 d/...` or `exam 1 d/...` to add a new deadline or exam date for the specified flashcard. The `deadline` command also calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `addressBookStateList`.
+Step 2. Next, it will be parsed through the `FlashBookParser` with commandWord `deleteSubject()` under `parseCommand`.
 
-image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
+Step 3. The `deleteSubject()` in Model will then be executed and the specified subject `physics` will be deleted from the `VersionedFlashBook`.
 
-[NOTE]
-If a command fails its execution, it will not call `Model#commitFlashBook()`, so the flash book state will not be saved into the `flashBookStateList`.
+Step 4. The `deleteSubject` command calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `flashBookStateList`.
 
-
-Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flashcard. By executing the `clear` command, he can delete all the respective flashcards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards of the specified flashcard.
-
-Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flashcards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards in FlashCards.
-
-
-image::undoredoExecuteUndoStateListDiagram.png[width="800"]
-
-[NOTE]
-If the `currentStatePointer` is at index 0, pointing to the initial flash book state, then there are no previous flash book states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the undo.
-
-The following sequence diagram shows how the undo operation works:
-
-image::UndoRedoSequenceDiagram.png[width="800"]
-
-The `redo` command does the opposite -- it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the flash book to that state.
+Step 5. The `SubjectListPanel` and `FlashCardListPanel` will also be updated with new indexes after the deletion.
 
 [NOTE]
-If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest flash book state, then there are no undone flash book states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
+This action is not reversible. The `undo` and `redo` command do not apply to the deletion of subjects.
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the flash book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+The sequence diagram below illustrate how `deleteSubjectCommand` is executed.
+image::deleteSubjectSequenceDiagram.png[width="800"]
 
-image::UndoRedoNewCommand3StateListDiagram.png[width="800"]
+==== Option 2: Deleting all flashcards. (`clear` command)
+By executing the `clear` command, all the flashcards will be cleared from the database.
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `add n/David ...` command. This is the behavior that most modern desktop applications follow.
+Step 1. When the `clear` command is called, it will call `Logic#clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards in FlashCards.
+
+Step 2. This command also calls `Model#commitAddressBook()`.
+
+Step 3. Since the `currentStatePointer` is not pointing at the end of the `flashBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `clear` command. This is the behavior that most modern desktop applications follow.
+
+Step 4. Hence, all flashcards and subjects will be deleted in the database.
+
+Step 5. The FlashBook will then be in a clean slate, at fb3.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
 
-The following activity diagram summarizes what happens when a user executes a new command:
+The following activity diagram summarizes what happens when a user executes a 'clear' command:
 
 image::UndoRedoActivityDiagram.png[width="650"]
 
+[NOTE]
+This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.
+
 ==== Design Considerations
 
-===== Aspect: How deadline/exam executes
+===== Aspect: How deadline/note executes
 
-* **Alternative 1 (current choice):** Auto deletion of the flashcards.
-** Pros: Easy to implement and convenient for the user.
-** Cons: Need to have additional internal calendar for the auto deletion.
-* **Alternative 2:** Manual deletion of the flashcards.
+* **Alternative 1 (current choice):** Manual deletion of the flashcards.
 ** Pros: Allow the user to have the choice of keeping the flashcards or removing it.
 ** Cons: Might be troublesome for some users.
+* **Alternative 2:** Auto deletion of the flashcards.
+** Pros: Easy to implement and convenient for the user. Deletes the flashcards right after the deadline.
+** Cons: Need to have additional internal calendar for the auto deletion. E.g. Java Calendar
 
-Alternative 1 is chosen to prevent overloading of overdue flashcards, which will take up excess storage if the user does not manually delete.
+Alternative 1 is chosen to provide users with the choice of keeping and deleting flashcards as and when they want. Even though it will result in overloading of overdue flashcards
+and take up excess storage if the user does not manually delete, we designed the command in such a way that it accepts both dates and text. This provides two options for the users:
+He/She can choose to write a date or write a note under the flashcard, for example, `Clarify with the Teacher` or `Edit photosynthesis`. This will allow the user to have the freedom to write whatever they require rather than just deadlines.
 
-===== Aspect: Data structure to support the deadline/exam commands
+===== Aspect: Data structure to support the deadline/note commands
 
-* **Alternative 1 (current choice):** Implement an internal calendar to calculate the number of days left.
-** Pros: Auto deletion of flashcards.
-** Cons: Need to pay extra caution for Leap years.
-* **Alternative 2:** Use the `clear` or `clearall` function to manually delete.
-** Pros: Give the user the choice to keep or delete.
-** Cons: Might be troublesome for some users.
+* **Alternative 1 (current choice):** Use the `deleteSubject` or `clear` command to manually delete flashcards.
+** Pros: Give the user the choice to keep or delete the flashcards. Also, the user can choose to delete the flashcards by subjects or delete all the flashcards altogether.
+** Cons: Both `deleteSubject` and `clear` commands cannot be undone once implemented.
+* **Alternative 2:** Implement an internal calendar to calculate the number of days left and auto-deletion of flashcards after the deadline.
+** Pros: Auto deletion of flash cards.
+** Cons: Need to pay extra caution for Leap years. Users do not have the choice of keeping flashcards after the deadline.
 
-Alternative 1 is chosen to prevent overloading of overdue flashcards, which will take up excess storage if the user does not manually delete.
+Alternative 1 is chosen to provide users with the choice of deleting flashcards as and when they want. Even though it will take up extra storage if the user does not manually delete,
+the user will have better control over what they want to store and delete in the application.
+
+// end::shelflifeofflashcards[]
 
 // end::undoredo[]
 
 // tag::dataencryption[]
-=== [Proposed] Data Encryption
-
-_{Explain here how the data encryption feature will be implemented}_
-
+//=== [Proposed] Data Encryption
+//
+//_{Explain here how the data encryption feature will be implemented}_
+//
 // end::dataencryption[]
 
 === Logging
@@ -819,9 +830,9 @@ Do take a look at <<Design-Logic>> before attempting to modify the `Logic` compo
 ****
 * Hints
 ** Just like we store each individual command word constant `COMMAND_WORD` inside `*Command.java` (e.g.  link:{repoURL}/src/main/java/seedu/address/logic/commands/FindCommand.java[`FindCommand#COMMAND_WORD`], link:{repoURL}/src/main/java/seedu/address/logic/commands/DeleteCommand.java[`DeleteCommand#COMMAND_WORD`]), you need a new constant for aliases as well (e.g. `FindCommand#COMMAND_ALIAS`).
-** link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] is responsible for analyzing command words.
+** link:{repoURL}/src/main/java/seedu/address/logic/parser/FlashBookParser.java[`FlashBookParser`] is responsible for analyzing command words.
 * Solution
-** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
+** Modify the switch statement in link:{repoURL}/src/main/java/seedu/address/logic/parser/FlashBookParser.java[`FlashBookParser#parseCommand(String)`] such that both the proper command word and alias can be used to execute the same intended command.
 ** Add new tests for each of the aliases that you have added.
 ** Update the user guide to document the new aliases.
 ** See this https://github.com/se-edu/addressbook-level4/pull/785[PR] for the full solution.
@@ -839,12 +850,12 @@ Do take a look at <<Design-Model>> before attempting to modify the `Model` compo
 +
 ****
 * Hints
-** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] API need to be updated.
+** The link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model`] and the link:{repoURL}/src/main/java/seedu/address/model/FlashBook.java[`FlashBook`] API need to be updated.
 ** Think about how you can use SLAP to design the method. Where should we place the main logic of deleting tags?
-**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] and link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`] allows you to update a flashcard, and link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`] allows you to update the tags.
+**  Find out which of the existing API methods in  link:{repoURL}/src/main/java/seedu/address/model/FlashBook.java[`FlashBook`] and link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`] classes can be used to implement the tag removal logic. link:{repoURL}/src/main/java/seedu/address/model/FlashBook.java[`FlashBook`] allows you to update a flashcard, and link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`] allows you to update the tags.
 * Solution
-** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/AddressBook.java[`AddressBook`]. Loop through each flashcard, and remove the `tag` from each flashcard.
-** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `AddressBook#removeTag(Tag)`.
+** Implement a `removeTag(Tag)` method in link:{repoURL}/src/main/java/seedu/address/model/FlashBook.java[`FlashBook`]. Loop through each flashcard, and remove the `tag` from each flashcard.
+** Add a new API method `deleteTag(Tag)` in link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`]. Your link:{repoURL}/src/main/java/seedu/address/model/ModelManager.java[`ModelManager`] should call `FlashBook#removeTag(Tag)`.
 ** Add new tests for each of the new public methods that you have added.
 ** See this https://github.com/se-edu/addressbook-level4/pull/790[PR] for the full solution.
 ****
@@ -869,11 +880,11 @@ image::getting-started-ui-tag-after.png[width="300"]
 +
 ****
 * Hints
-** The tag labels are created inside link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[the `PersonCard` constructor] (`new Label(tag.subjectName)`). https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Label.html[JavaFX's `Label` class] allows you to modify the style of each Label, such as changing its color.
+** The tag labels are created inside link:{repoURL}/src/main/java/seedu/address/ui/FlashcardCard.java[the `FlashcardCard` constructor] (`new Label(tag.subjectName)`). https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Label.html[JavaFX's `Label` class] allows you to modify the style of each Label, such as changing its color.
 ** Use the .css attribute `-fx-background-color` to add a color.
 ** You may wish to modify link:{repoURL}/src/main/resources/view/DarkTheme.css[`DarkTheme.css`] to include some pre-defined colors using css, especially if you have experience with web-based css.
 * Solution
-** You can modify the existing test methods for `PersonCard` 's to include testing the tag's color as well.
+** You can modify the existing test methods for `FlashcardCard` 's to include testing the tag's color as well.
 ** See this https://github.com/se-edu/addressbook-level4/pull/798[PR] for the full solution.
 *** The PR uses the hash code of the tag names to generate a color. This is deliberately designed to ensure consistent colors each time the application runs. You may wish to expand on this design to include additional features, such as allowing users to set their own tag colors, and directly saving the colors to storage, so that tags retain their colors even if the hash code algorithm changes.
 ****
@@ -897,7 +908,7 @@ image::getting-started-ui-result-after.png[width="200"]
 ** Modify link:{repoURL}/src/main/java/seedu/address/ui/ResultDisplay.java[`ResultDisplay#handleNewResultAvailableEvent(NewResultAvailableEvent)`] to react to this event appropriately.
 ** You can write two different kinds of tests to ensure that the functionality works:
 *** The unit tests for `ResultDisplay` can be modified to include verification of the color.
-*** The system tests link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest#assertCommandBoxShowsDefaultStyle() and AddressBookSystemTest#assertCommandBoxShowsErrorStyle()`] to include verification for `ResultDisplay` as well.
+*** The system tests link:{repoURL}/src/test/java/systemtests/FlashBookSystemTest.java[`FlashBookSystemTest#assertCommandBoxShowsDefaultStyle() and FlashBookSystemTest#assertCommandBoxShowsErrorStyle()`] to include verification for `ResultDisplay` as well.
 ** See this https://github.com/se-edu/addressbook-level4/pull/799[PR] for the full solution.
 *** Do read the commits one at a time if you feel overwhelmed.
 ****
@@ -918,9 +929,9 @@ image::getting-started-ui-status-after.png[width="500"]
 ** link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] needs to initialize the status bar on application start, and to update it accordingly whenever the flash book is updated.
 * Solution
 ** Modify the constructor of link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter`] to take in the number of flashcards when the application just started.
-** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleAddressBookChangedEvent(AddressBookChangedEvent)`] to update the number of flashcards whenever there are new changes to the addressbook.
+** Use link:{repoURL}/src/main/java/seedu/address/ui/StatusBarFooter.java[`StatusBarFooter#handleFlashBookChangedEvent(FlashBookChangedEvent)`] to update the number of flashcards whenever there are new changes to the addressbook.
 ** For tests, modify link:{repoURL}/src/test/java/guitests/guihandles/StatusBarFooterHandle.java[`StatusBarFooterHandle`] by adding a state-saving functionality for the total number of people status, just like what we did for save location and sync status.
-** For system tests, modify link:{repoURL}/src/test/java/systemtests/AddressBookSystemTest.java[`AddressBookSystemTest`] to also verify the new total number of flashcards status bar.
+** For system tests, modify link:{repoURL}/src/test/java/systemtests/FlashBookSystemTest.java[`FlashBookSystemTest`] to also verify the new total number of flashcards status bar.
 ** See this https://github.com/se-edu/addressbook-level4/pull/803[PR] for the full solution.
 ****
 
@@ -932,7 +943,7 @@ image::getting-started-ui-status-after.png[width="500"]
 [TIP]
 Do take a look at <<Design-Storage>> before attempting to modify the `Storage` component.
 
-. Add a new method `backupAddressBook(ReadOnlyAddressBook)`, so that the flash book can be saved in a fixed temporary location.
+. Add a new method `backupFlashBook(ReadOnlyFlashBook)`, so that the flash book can be saved in a fixed temporary location.
 +
 ****
 * Hint
@@ -968,12 +979,12 @@ Let's start by teaching the application how to parse a `remark` command. We will
 **Main:**
 
 . Add a `RemarkCommand` that extends link:{repoURL}/src/main/java/seedu/address/logic/commands/Command.java[`Command`]. Upon execution, it should just throw an `Exception`.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to accept a `RemarkCommand`.
+. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/FlashBookParser.java[`FlashBookParser`] to accept a `RemarkCommand`.
 
 **Tests:**
 
 . Add `RemarkCommandTest` that tests that `execute()` throws an Exception.
-. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
+. Add new test method to link:{repoURL}/src/test/java/seedu/address/logic/parser/FlashBookParserTest.java[`FlashBookParserTest`], which tests that typing "remark" returns an instance of `RemarkCommand`.
 
 ===== [Step 2] Logic: Teach the app to accept 'remark' arguments
 Let's teach the application to parse arguments that our `remark` command will accept. E.g. `1 r/Likes to drink coffee.`
@@ -982,26 +993,26 @@ Let's teach the application to parse arguments that our `remark` command will ac
 
 . Modify `RemarkCommand` to take in an `Index` and `String` and print those two parameters as the error message.
 . Add `RemarkCommandParser` that knows how to parse two arguments, one index and one with prefix 'r/'.
-. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/AddressBookParser.java[`AddressBookParser`] to use the newly implemented `RemarkCommandParser`.
+. Modify link:{repoURL}/src/main/java/seedu/address/logic/parser/FlashBookParser.java[`FlashBookParser`] to use the newly implemented `RemarkCommandParser`.
 
 **Tests:**
 
 . Modify `RemarkCommandTest` to test the `RemarkCommand#equals()` method.
 . Add `RemarkCommandParserTest` that tests different boundary values
 for `RemarkCommandParser`.
-. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/AddressBookParserTest.java[`AddressBookParserTest`] to test that the correct command is generated according to the user input.
+. Modify link:{repoURL}/src/test/java/seedu/address/logic/parser/FlashBookParserTest.java[`FlashBookParserTest`] to test that the correct command is generated according to the user input.
 
-===== [Step 3] Ui: Add a placeholder for remark in `PersonCard`
-Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] s to display a remark for each flashcard later.
+===== [Step 3] Ui: Add a placeholder for remark in `FlashcardCard`
+Let's add a placeholder on all our link:{repoURL}/src/main/java/seedu/address/ui/FlashCard.java[`FlashCard`] s to display a remark for each flashcard later.
 
 **Main:**
 
-. Add a `Label` with any random text inside link:{repoURL}/src/main/resources/view/PersonListCard.fxml[`PersonListCard.fxml`].
-. Add FXML annotation in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] to tie the variable to the actual label.
+. Add a `Label` with any random text inside link:{repoURL}/src/main/resources/view/FlashcardListCard.fxml[`FlashcardListCard.fxml`].
+. Add FXML annotation in link:{repoURL}/src/main/java/seedu/address/ui/FlashCard.java[`FlashCard`] to tie the variable to the actual label.
 
 **Tests:**
 
-. Modify link:{repoURL}/src/test/java/guitests/guihandles/PersonCardHandle.java[`PersonCardHandle`] so that future tests can read the contents of the remark label.
+. Modify link:{repoURL}/src/test/java/guitests/guihandles/FlashCardHandle.java[`FlashCardHandle`] so that future tests can read the contents of the remark label.
 
 ===== [Step 4] Model: Add `Remark` class
 We have to properly encapsulate the remark in our link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`] class. Instead of just using a `String`, let's follow the conventional class structure that the codebase already uses by adding a `Remark` class.
@@ -1022,10 +1033,10 @@ Now we have the `Remark` class, we need to actually use it inside link:{repoURL}
 
 . Add `getRemark()` in link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`].
 . You may assume that the user will not be able to use the `add` and `edit` commands to modify the remarks field (i.e. the flashcard will be created without a remark).
-. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `data/addressbook.json` so that the application will load the sample data when you launch it.)
+. Modify link:{repoURL}/src/main/java/seedu/address/model/util/SampleDataUtil.java/[`SampleDataUtil`] to add remarks for the sample data (delete your `data/flashbook.json` so that the application will load the sample data when you launch it.)
 
-===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedPerson` class
-We now have `Remark` s for `Flashcard` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedPerson.java[`JsonAdaptedPerson`] to include a `Remark` field so that it will be saved.
+===== [Step 6] Storage: Add `Remark` field to `JsonAdaptedFlashcard` class
+We now have `Remark` s for `Flashcard` s, but they will be gone when we exit the application. Let's modify link:{repoURL}/src/main/java/seedu/address/storage/JsonAdaptedFlashcard.java[`JsonAdaptedFlashcard`] to include a `Remark` field so that it will be saved.
 
 **Main:**
 
@@ -1033,27 +1044,27 @@ We now have `Remark` s for `Flashcard` s, but they will be gone when we exit the
 
 **Tests:**
 
-. Fix `invalidAndValidPersonAddressBook.json`, `typicalPersonsAddressBook.json`, `validAddressBook.json` etc., such that the JSON tests will not fail due to a missing `remark` field.
+. Fix `invalidAndValidFlashcardFlashBook.json`, `typicalFlashcardsFlashBook.json`, `validFlashBook.json` etc., such that the JSON tests will not fail due to a missing `remark` field.
 
-===== [Step 6b] Test: Add withRemark() for `PersonBuilder`
-Since `Flashcard` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`].
+===== [Step 6b] Test: Add withRemark() for `FlashcardBuilder`
+Since `Flashcard` can now have a `Remark`, we should add a helper method to link:{repoURL}/src/test/java/seedu/address/testutil/FlashcardBuilder.java[`FlashcardBuilder`], so that users are able to create remarks when building a link:{repoURL}/src/main/java/seedu/address/model/flashcard/Flashcard.java[`Flashcard`].
 
 **Tests:**
 
-. Add a new method `withRemark()` for link:{repoURL}/src/test/java/seedu/address/testutil/PersonBuilder.java[`PersonBuilder`]. This method will create a new `Remark` for the flashcard that it is currently building.
-. Try and use the method on any sample `Flashcard` in link:{repoURL}/src/test/java/seedu/address/testutil/TypicalPersons.java[`TypicalPersons`].
+. Add a new method `withRemark()` for link:{repoURL}/src/test/java/seedu/address/testutil/FlashcardBuilder.java[`FlashcardBuilder`]. This method will create a new `Remark` for the flashcard that it is currently building.
+. Try and use the method on any sample `Flashcard` in link:{repoURL}/src/test/java/seedu/address/testutil/TypicalFlashcards.java[`TypicalFlashcards`].
 
-===== [Step 7] Ui: Connect `Remark` field to `PersonCard`
-Our remark label in link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`] is still a placeholder. Let's bring it to life by binding it with the actual `remark` field.
+===== [Step 7] Ui: Connect `Remark` field to `FlashcardCard`
+Our remark label in link:{repoURL}/src/main/java/seedu/address/ui/FlashcardCard.java[`FlashcardCard`] is still a placeholder. Let's bring it to life by binding it with the actual `remark` field.
 
 **Main:**
 
-. Modify link:{repoURL}/src/main/java/seedu/address/ui/PersonCard.java[`PersonCard`]'s constructor to bind the `Remark` field to the `Flashcard
+. Modify link:{repoURL}/src/main/java/seedu/address/ui/FlashcardCard.java[`FlashcardCard`]'s constructor to bind the `Remark` field to the `Flashcard
 ` 's remark.
 
 **Tests:**
 
-. Modify link:{repoURL}/src/test/java/seedu/address/ui/testutil/GuiTestAssert.java[`GuiTestAssert#assertCardDisplaysPerson(...)`] so that it will compare the now-functioning remark label.
+. Modify link:{repoURL}/src/test/java/seedu/address/ui/testutil/GuiTestAssert.java[`GuiTestAssert#assertCardDisplaysFlashcard(...)`] so that it will compare the now-functioning remark label.
 
 ===== [Step 8] Logic: Implement `RemarkCommand#execute()` logic
 We now have everything set up... but we still can't modify the remarks. Let's finish it up by adding in actual logic for our `remark` command.
@@ -1115,11 +1126,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Find a flashcard |Locate the flashcard I need without going through the entire list
 
-|`* * *` |User |Add a deadline or exam date to a flashcard |Aware of when the content is needed
-
-|`* * *` |User |Add a countdown calendar for my flashcards |Aware of how many days left to be familiar with the content
-
-|`* * *` |User |Delete unnecessary flashcards automatically |Prevent overloading of flashcards
+|`* * *` |User |Add a deadline or note to a flashcard |Aware of when the content is needed
 
 |`* * *` |User |Sort the flashcards according to Difficulty |Categorise the flashcards according to the difficulty levels
 
@@ -1141,9 +1148,13 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Show the content of my flashcard |Quiz myself more effectively
 
+|`* *` |User |Add a countdown calendar for my flashcards |Aware of how many days left to be familiar with the content
+
 |`* *` |User |Categorize each flashcard by importance |Prioritise which information to study or memorise first
 
-|`* *` |User |Choose the color of the subject tag  |Personalize my flashbook
+|`* *` |User |Choose the color of the subject tag  |Personalize my FlashBook
+
+|`* *` |User |Delete unnecessary flashcards automatically |Prevent overloading of flashcards
 
 |`* *` |User |Retrieve a recently deleted flashcard |Retrieve the flashcard which I might have accidentally deleted
 
@@ -1175,7 +1186,19 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 Use case ends.
 
 [discrete]
+=== Use case: Editing a Flashcard
 
+*MSS*
+1.  User enters the flashcard of the flashcard to be edited
+2.  FlashCards displays a list of flashcards belonging to the same flashcard
+3.  User selects the index of the flashcard to edit
+4.  FlashCards prompts for new data
+5. User enters new data
+6. FlashCards displays the updated flashcard
+
+Use case ends.
+
+[discrete]
 === Use case: Deleting a Flashcard
 
 *MSS*
@@ -1187,18 +1210,13 @@ Use case ends.
 Use case ends.
 
 [discrete]
-
-=== Use case: Editing a Flashcard
+=== Use Case: Deleting Flashcards Based on Subject
 
 *MSS*
 
-1.  User enters the flashcard of the flashcard to be edited
-2.  FlashCards displays a list of flashcards belonging to the same flashcard
-3.  User selects the index of the flashcard to edit
-4.  FlashCards prompts for new data
-5. User enters new data
-6. FlashCards displays the updated flashcard
-
+1.  User selects a subject
+2.  FlashCards deletes the list of flashcards for that subject.
++
 Use case ends.
 
 [discrete]
@@ -1264,6 +1282,7 @@ Use case ends.
 
 Use case ends.
 
+[discrete]
 === Use Case: Sorting all Flashcards categorized by Difficulty
 
 *MSS*
@@ -1273,7 +1292,7 @@ Use case ends.
 
 Use case ends.
 
-
+[discrete]
 === Use Case: Create Account (coming in v2.0)
 
 *MSS*
@@ -1332,8 +1351,6 @@ The system should work on common operating systems such as Mac OS, Windows, Linu
 
 === Constraints
 The system is built on Java 9 and it is advisable to use it with the recommended version of Java 9. When used on a newer/older version of Java, the user might not be able to enjoy the full benefits of the application.
-
-_{More to be added}_
 
 [appendix]
 == Glossary
@@ -1394,12 +1411,3 @@ These instructions only provide a starting point for testers to work on; testers
    Expected: No flashcard is deleted. Error details shown in the status message. Status bar remains the same.
 .. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size), `delete a` (where a is any alphabet) +
    Expected: Similar to previous.
-
-
-=======
-=== Saving data
-
-. Dealing with missing/corrupted data files
-
-.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
-_{ more test cases ... }_
