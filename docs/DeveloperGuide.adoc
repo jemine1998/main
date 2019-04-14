@@ -488,7 +488,9 @@ Step 2. Next, it will be parsed through the `FlashBookParser` with commandWord `
 
 Step 3. The `deleteSubject()` in Model will then be executed and the specified subject `physics` will be deleted from the `VersionedFlashBook`.
 
-Step 4. The `SubjectListPanel` and `FlashCardListPanel` will also be updated with new indexes after the deletion.
+Step 4. The `deleteSubject` command calls `Model#commitFlashBook()`, causing another modified flash book state to be saved into the `flashBookStateList`.
+
+Step 5. The `SubjectListPanel` and `FlashCardListPanel` will also be updated with new indexes after the deletion.
 
 [NOTE]
 This action is not reversible. The `undo` and `redo` command do not apply to the deletion of subjects.
@@ -503,15 +505,15 @@ Step 1. When the `clear` command is called, it will call `Logic#clear()`, which 
 
 Step 2. This command also calls `Model#commitAddressBook()`.
 
-Step 3.And since the `currentStatePointer` is not pointing at the end of the `flashBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `clear` command. This is the behavior that most modern desktop applications follow.
+Step 3. Since the `currentStatePointer` is not pointing at the end of the `flashBookStateList`, all flash book states after the `currentStatePointer` will be purged. We designed it this way because it no longer makes sense to redo the `clear` command. This is the behavior that most modern desktop applications follow.
 
 Step 4. Hence, all flashcards and subjects will be deleted in the database.
 
-Step 5. The FlashBook will be in a clean slate.
+Step 5. The FlashBook will then be in a clean slate, at fb3.
 
 image::UndoRedoNewCommand4StateListDiagram.png[width="800"]
 
-The following activity diagram summarizes what happens when a user executes a new command:
+The following activity diagram summarizes what happens when a user executes a 'clear' command:
 
 image::UndoRedoActivityDiagram.png[width="650"]
 
