@@ -35,177 +35,43 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. It
 * *Other contributions*:
 
 ** Project management:
-*** Managed release `v1.4` (The last release) on GitHub
-*** Ensured the final product's commands work properly and correct their respective bugs.
-***
+*** Managed milestone `v1.4` (The last release) on GitHub (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/106[#106])
+*** Ensured the final product's commands work properly and correct their respective bugs. (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/106[#106])
 ** Enhancements to existing features:
-*** Added a status for number of flashcards(Pull requests https://github.com[#33], https://github.com[#34])
-*** Added an event center to track the change in
-*** Modified most of the basic commands to accommodate the filtered subject list. Eg. Clear Command, Find Command, List Command, etc (Pull request)
+*** Added a status for number of flashcards(Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/15[#15], https://github.com/cs2113-ay1819s2-m11-3/main/pull/69[#69])
+*** Added an event center to track the changes. (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/69[#69])
+*** Modified most of the basic commands to accommodate the filtered subject list. Eg. Clear Command, Find Command, List Command, etc (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/106[#106])
+** Testing:
+*** Updated the existing test for the new application (Pull request: https://github.com/cs2113-ay1819s2-m11-3/main/pull/74[#74], )
+*** Created test for the new commands I have created ()
 ** Documentation:
-*** Change most of the sequence diagram and class diagram to reflect the changes we did to the respective components.
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Change most of the sequence diagram and class diagram to reflect the changes we did to the respective components.(Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/79[#79], https://github.com/cs2113-ay1819s2-m11-3/main/pull/106[#106])
+*** Did cosmetic tweaks to existing contents of the User Guide : https://github.com[#14]
 ** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
+*** PRs reviewed (with non-trivial review comments): https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80], https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86], https://github.com/cs2113-ay1819s2-m11-3/main/pull/102[#102], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107]
 *** Contributed to forum discussions (examples:  https://github.com[1], https://github.com[2], https://github.com[3], https://github.com[4])
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
-*** Some parts of the history feature I added was adopted by several other class mates (https://github.com[1], https://github.com[2])
+*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com/cs2113-ay1819s2-t08-1/main/issues/87[#87], https://github.com/cs2113-ay1819s2-t08-1/main/issues/90[#90], https://github.com/cs2113-ay1819s2-t08-1/main/issues/96[#96], https://github.com/cs2113-ay1819s2-t08-1/main/issues/98[#98])
 
 _{you can add/remove categories in the list above}_
 
 == Contributions to the User Guide
-
-
 |===
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-=== Viewing the next flashcard : `next` or `n`
+include::../UserGuide.adoc[tag=findCommand]
 
-Views the next flashcard in line. +
-Format: `next` or `n` +
+include::../UserGuide.adoc[tag=selectSubject]
 
-* Selects the next flashcard and displays its content +
-
-*Steps to view next flashcard:* +
-
-* Use the `select` command (see Section 3.9) to select a flashcard first. +
-* Use this `next` / `n` command to go to the next flashcard. +
-
-*Examples:* +
-
-* `select 2` +
-Selects the 2nd flashcard in the list. +
-`next` +
-Selects the next flashcard in the list (i.e. the 3rd flashcard); and +
-Displays the content of this flashcard.
-* `select 5` +
-Selects the 5th flashcard in the list. +
-`n` +
-Displays the next flashcard in the list (i.e. the 6th flashcard); and +
-Displays the content of this flashcard.
-
-The next flashcard in line will be selected and its content will be displayed.
-
-=== Viewing the next flashcard : `previous` or `p`
-
-Views the previous flashcard in line. +
-Format: `previous` or `p` +
-
-* Selects the previous flashcard and displays its content +
-
-*Steps to view previous flashcard:* +
-
-* Use the `select` command (see Section 3.9) to select a flashcard first. +
-* Use this `previous` / `p` command to go to the previous flashcard. +
-
-*Examples: +
-
-* `select 2` +
-Selects the 2nd flashcard in the list. +
-`previous` +
-Selects the previous flashcard in the list (i.e. the 1st flashcard); and +
-Displays the content of this flashcard.
-* `select 5` +
-Selects the 5th flashcard in the list. +
-`p` +
-Selects the previous flashcard in the list (i.e. the 4th flashcard); and +
-Displays the content of this flashcard.
-
-The previous flashcard in line will be selected and its content will be displayed.
-
-
-include::../UserGuide.adoc[tag=togglemode]
-
+include::../UserGuide.adoc[tag=togglefeature]
 
 
 == Contributions to the Developer Guide
-
 |===
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
-// tag::togglefeature[]
-=== Toggle feature
-==== Current Implementation
-The toggling feature is mainly facilitated by 2 classes, `NextCommand` and `PreviousCommand`. For either commands to work, `SelectCommand` is first executed to retrieve the choice of `Index` of the flashcard to begin toggling.
-Following that, `NextCommand` or `PreviousCommand` can be called interchangeably to toggle the flashcard being displayed in the rightmost panel.
-
-For `NextCommand`, the following operations are implemented:
-
-* `NextCommand#getNextInteger(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
-* `NextCommand#setNextInteger(Index index, int start)` --  pass the index currently being used in `NextCommand` to `PreviousCommand`.
-
-Similarly, for `PreviousCommand`, the following operations are implemented:
-
-* `PreviousCommand#getPreviousIndex(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
-* `NextCommand#setPreviousInteger(Index index, int start)` -- pass the index currently being used in `PreviousCommand` to `NextCommand`.
-
-The sequence diagram below illustrates the execution of `SelectCommand` and how the index will be passed to both `NextCommand` and `PreviousCommand` class.
-
-image::selectCommandSD.png[width="800"]
-
-After `SelectCommand` is being called, `NextCommand` or `PreviousCommand` can be called interchangeably. +
-
-The sequence diagram belows illustrates the execution of `NextCommand` and how the index value will be passed to `PreviousCommand` class. +
-
-image::NextCommandSD.png[width="800"]
-
-To execute toggling of next flashcard, execute the following commands: +
-
-1) `select 2` [2 is just an example, choose index of choice] +
-2) `next` +
-Flashcard with next 3 will be displayed for the example above. +
-
-The sequence diagram below illustrates the execution of `PreviousCommand` and how the index value will be passed to `NextCommand` class. +
-
-image::PreviousCommandSD.png[width="800"]
-
-To execute toggling of previous flashcard, execute the following commands: +
-
-1) `select 2` [2 is just an example, choose index of choice] +
-2) `previous` +
-Flashcard with next 1 will be displayed for the example above. +
-
-==== Design Considerations
-
-* **Alternative 1 (current choice):** Obtain the index after select command.
-** Pros: Easy to implement and convenient for the user.
-** Cons: Have to manually select the first card to choose from.
-* **Alternative 2:** Toggling will begin from the first index.
-** Pros: Saves the user the step of having to select the index of choice.
-** Cons: Might be too troublesome for some users who wants to being from a flashcard index that is large.
-
-
-// end::togglefeature[]
-
-=== Quizzing by Difficulty
-This mode will be largely focused on viewing flashcard based on a chosen difficulty. Flashcards are added with a difficulty level set by the user. The difficulty level can be toggled in this mode for the user to focus more on difficult concepts or easier concepts. This mode can be used along side `"Subject" Testing Mode` to get a further filtered list of flashcards with both chosen subject and difficulty.
-
-==== Current Implementation
-This mode of quizzing is facilitated by `SortCommand`. This command filters all the flashcard with the same difficulty level. +
-When a flashcard is added, user must input a difficulty level 1 (easy), 2 (medium) or 3 (difficult) for each flashcard. +
-The `SortCommand` will help students to focus on one chosen difficulty level, helping them prioritize their time well.
-
-The sequence diagram below illustrate how `SortCommand` is executed.
-
-image::SortCommandSD.png[width="800"]
-
-==== Design Considerations
-* **Alternative 1 (current choice):** Filters flashcard and displays all flashcard with chosen difficulty.
-** Pros: Easy to implement.
-** Cons: Only get to see flashcards under 1 difficulty level.
-* **Alternative 2:** Displays flashcards in ascending or descending difficulty level.
-** Pros: Can view more flashcards at once.
-** Cons: Difficult to implement.
-
-
 include::../DeveloperGuide.adoc[tag=togglefeature]
 
-include::../DeveloperGuide.adoc[tag=quizzingfeature]
+include::../DeveloperGuide.adoc[tag=quizzingbydifficulty]
 
-== PROJECT: PowerPointLabs
-
----
-
-_{Optionally, you may include other projects in your portfolio.}_

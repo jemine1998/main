@@ -246,12 +246,12 @@ Following that, `NextCommand` or `PreviousCommand` can be called interchangeably
 
 For `NextCommand`, the following operations are implemented:
 
-* `NextCommand#getNextIndex(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
+* `NextCommand#getNextIndex(Index index)` -- retrieves the current flashcard's Index from `SelectCommand` class.
 * `NextCommand#setNextIndex(Index index, int start)` --  pass the index currently being used in `NextCommand` to `PreviousCommand`.
 
 Similarly, for `PreviousCommand`, the following operations are implemented:
 
-* `PreviousCommand#getPreviousIndex(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
+* `PreviousCommand#getPreviousIndex(Index index)` -- retrieves the current flashcard's Index from `SelectCommand` class.
 * `PreviousCommand#setPreviousIndex(Index index, int start)` -- pass the index currently being used in `PreviousCommand` to `NextCommand`.
 
 The sequence diagram below illustrates the execution of `SelectCommand` and how the index will be passed to both `NextCommand` and `PreviousCommand` class.
@@ -315,7 +315,6 @@ In NextCommand class, the `nextIndex` will now be replaced by `previousIndex+1` 
 * **Alternative 2:** Toggling will begin from the first index.
 ** Pros: Saves the user the step of having to select the index of choice.
 ** Cons: Might be too troublesome for some users who wants to being from a flashcard index that is large.
-
 
 // end::togglefeature[]
 
@@ -457,6 +456,7 @@ Figure: Sequence Diagram of displaying flashcards according to subject +
 
 // end::quizzingbysubject[]
 
+// tag::quizzingbydifficulty[]
 === Quizzing by Difficulty
 This mode will be largely focused on viewing flashcard based on a chosen difficulty. Flashcards are added with a difficulty level set by the user. The difficulty level can be toggled in this mode for the user to focus more on difficult concepts or easier concepts. This mode can be used along side `"Subject" Testing Mode` to get a further filtered list of flashcards with both chosen subject and difficulty.
 
@@ -477,27 +477,29 @@ image::SortCommandSD.png[width="800"]
 ** Pros: Can view more flashcards at once.
 ** Cons: Difficult to implement.
 
+// end::quizzingbydifficulty[]
+
 === Shelf-Life of FlashCards
 ==== Current Implementation
 
-The user can determine how long the flash cards will exist in the database “FlashCards”.
+The user can determine how long the flashcards will exist in the database “FlashCards”.
 The following operations are available:
 
 * `FlashCards#clearall()` -- Clears the entire database.
 * `FlashCards#clear()` -- Clears a specific flashcard when in "Subject" Knowledge Testing Mode.
 * `FlashCards#deadline()` or `FlashCards#exam()` -- Adds a deadline/exam for the specified flashcard.
 
-For easier modes of implementation, the user can also choose to set a date whereby the flash cards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flash cards will be available for another month after the exam before the auto deletion function is activated.
+For easier modes of implementation, the user can also choose to set a date whereby the flashcards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flash cards will be available for another month after the exam before the auto deletion function is activated.
 
 These operations are exposed in the `Logic` interface as `Logic#clearall()`, `Logic#clear()`, `Logic#deadline()` and `Logic#exam()` respectively.
 
 Given below is an example usage scenario and how the deadline/exam mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedFlashCards` will be initialized with the initial flash card state, and the `currentStatePointer` pointing to that single flash card state.
+Step 1. The user launches the application for the first time. The `VersionedFlashCards` will be initialized with the initial flashcard state, and the `currentStatePointer` pointing to that single flashcard state.
 
 image::UndoRedoStartingStateListDiagram.png[width="800"]
 
-Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flash card after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flash card state.
+Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flashcard after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flash card state.
 
 image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
 
@@ -508,9 +510,9 @@ image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
 [NOTE]
 If a command fails its execution, it will not call `Model#commitFlashBook()`, so the flash book state will not be saved into the `flashBookStateList`.
 
-Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flash card. By executing the `clear` command, he can delete all the respective flash cards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards of the specified flashcard.
+Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flashcard. By executing the `clear` command, he can delete all the respective flashcards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards of the specified flashcard.
 
-Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flash cards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards in FlashCards.
+Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flashcards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards in FlashCards.
 
 image::undoredoExecuteUndoStateListDiagram.png[width="800"]
 
@@ -542,11 +544,11 @@ image::UndoRedoActivityDiagram.png[width="650"]
 
 ===== Aspect: How deadline/exam executes
 
-* **Alternative 1 (current choice):** Auto deletion of the flash cards.
+* **Alternative 1 (current choice):** Auto deletion of the flashcards.
 ** Pros: Easy to implement and convenient for the user.
 ** Cons: Need to have additional internal calendar for the auto deletion.
-* **Alternative 2:** Manual deletion of the flash cards.
-** Pros: Allow the user to have the choice of keeping the flash cards or removing it.
+* **Alternative 2:** Manual deletion of the flashcards.
+** Pros: Allow the user to have the choice of keeping the flashcards or removing it.
 ** Cons: Might be troublesome for some users.
 
 Alternative 1 is chosen to prevent overloading of overdue flashcards, which will take up excess storage if the user does not manually delete.
@@ -554,7 +556,7 @@ Alternative 1 is chosen to prevent overloading of overdue flashcards, which will
 ===== Aspect: Data structure to support the deadline/exam commands
 
 * **Alternative 1 (current choice):** Implement an internal calendar to calculate the number of days left.
-** Pros: Auto deletion of flash cards.
+** Pros: Auto deletion of flashcards.
 ** Cons: Need to pay extra caution for Leap years.
 * **Alternative 2:** Use the `clear` or `clearall` function to manually delete.
 ** Pros: Give the user the choice to keep or delete.
@@ -1072,7 +1074,7 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 
 * Digitizes notes for each flashcard
 * One-stop platform to get all one's notes for different flashcards
-* Help with the memorisation of notes through the use of flash cards (e.g. before exams)
+* Help with the memorisation of notes through the use of flashcards (e.g. before exams)
 * Organised one's notes in one platform
 
 [appendix]
@@ -1086,15 +1088,15 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |New User |See usage instructions |Refer to instructions when I forget how to use the App
 
-|`* * *` |User |Add a new flash card |Insert a new unique flashcard
+|`* * *` |User |Add a new flashcard |Insert a new unique flashcard
 
-|`* * *` |User |Edit a flash card |Change my mistakes
+|`* * *` |User |Edit a flashcard |Change my mistakes
 
-|`* * *` |User |Delete a flash card through its index|Remove flashcards that I no longer need
+|`* * *` |User |Delete a flashcard through its index|Remove flashcards that I no longer need
 
-|`* * *` |User |List flash cards categorized by flashcards |Have an overview of the flashcards I currently have
+|`* * *` |User |List flashcards categorized by flashcards |Have an overview of the flashcards I currently have
 
-|`* * *` |User |Find a flash card |Locate the flashcard I need without going through the entire list
+|`* * *` |User |Find a flashcard |Locate the flashcard I need without going through the entire list
 
 |`* * *` |User |Add a deadline or exam date to a flashcard |Aware of when the content is needed
 
@@ -1102,9 +1104,9 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Delete unnecessary flashcards automatically |Prevent overloading of flashcards
 
-|`* * *` |User |Sort the flash cards according to Difficulty |Categorise the flashcards according to the difficulty levels
+|`* * *` |User |Sort the flashcards according to Difficulty |Categorise the flashcards according to the difficulty levels
 
-|`* * *` |User |Categorise the flash cards according to Subjects |Split the flashcards into respective subjects
+|`* * *` |User |Categorise the flashcards according to Subjects |Split the flashcards into respective subjects
 
 |`* * *` |User |Have a overview of Subject, Flashcard, Topic and Content |Sees the entire flashbook in a glance
 
@@ -1123,7 +1125,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* *` |User |Choose the color of the subject tag  |Personalize my flashbook
 |`* *` |User |Retrieve a recently deleted flashcard |Retrieve the flashcard which I might have accidentally deleted
 
-|`*` |New User |Create a new account |Only see flash cards and flashcards that are customised by me
+|`*` |New User |Create a new account |Only see flashcards and flashcards that are customised by me
 
 |`*` |User |Login | Access my account
 
@@ -1139,48 +1141,48 @@ _{More to be added in future versions of the developer guide}_
 (For all use cases below, the *System* is the `FlashCards` and the *Actor* is the `User`, unless specified otherwise)
 
 [discrete]
-=== Use case: Adding a Flash Card
+=== Use case: Adding a Flashcard
 
 *MSS*
 
-1.  User enters flashcard and data to add as a flash card
-2.  FlashCards displays the flash card that was just added
+1.  User enters flashcard and data to add as a flashcard
+2.  FlashCards displays the flashcard that was just added
 +
 Use case ends.
 
 [discrete]
-=== Use case: Deleting a Flash Card
+=== Use case: Deleting a Flashcard
 
 *MSS*
 
-1.  User enters the flashcard of the flash card to be deleted
-2.  FlashCards displays a list of flash cards belonging to the same flashcard
-3.  User selects the index of the flash card to delete
-4.  FlashCards displays the updated list of flash cards
+1.  User enters the flashcard of the flashcard to be deleted
+2.  FlashCards displays a list of flashcards belonging to the same flashcard
+3.  User selects the index of the flashcard to delete
+4.  FlashCards displays the updated list of flashcards
 +
 Use case ends.
 
 [discrete]
-=== Use case: Editing a Flash Card
+=== Use case: Editing a Flashcard
 
 *MSS*
 
-1.  User enters the flashcard of the flash card to be edited
-2.  FlashCards displays a list of flash cards belonging to the same flashcard
-3.  User selects the index of the flash card to edit
+1.  User enters the flashcard of the flashcard to be edited
+2.  FlashCards displays a list of flashcards belonging to the same flashcard
+3.  User selects the index of the flashcard to edit
 4.  FlashCards prompts for new data
 5. User enters new data
-6. FlashCards displays the updated flash card
+6. FlashCards displays the updated flashcard
 +
 Use case ends.
 
 [discrete]
-=== Use case: Finding a Flash Card
+=== Use case: Finding a Flashcard
 
 *MSS*
 
 1.  User enters a keyword
-2.  FlashCards displays all flash cards that contains the given keyword
+2.  FlashCards displays all flashcards that contains the given keyword
 +
 Use case ends.
 
@@ -1193,43 +1195,43 @@ Use case ends.
 
 
 [discrete]
-=== Use case: Selecting a Flash Card
+=== Use case: Selecting a Flashcard
 
 *MSS*
 
-1.  User enters the subject of the flash card to be displayed
-2.  FlashCards displays a list of flash cards belonging to the same subject
-3.  User selects the index of the flash card to view
-4. FlashCards displays the flash card of the chosen index
+1.  User enters the subject of the flashcard to be displayed
+2.  FlashCards displays a list of flashcards belonging to the same subject
+3.  User selects the index of the flashcard to view
+4. FlashCards displays the flashcard of the chosen index
 +
 Use case ends.
 
 [discrete]
-=== Use case: Viewing the next Flash Card
+=== Use case: Viewing the next Flashcard
 
 *MSS*
 
-1.  User enters the subject of the flash card to be displayed
-2.  FlashCards displays a list of flash cards belonging to the same subject
-3.  User selects the index of the flash card to view
-4. FlashCards displays the flash card of the chosen index
-5. User enters next to view the flash card with the next index
-6. FlashCards displays the next flash card
+1.  User enters the subject of the flashcard to be displayed
+2.  FlashCards displays a list of flashcards belonging to the same subject
+3.  User selects the index of the flashcard to view
+4. FlashCards displays the flashcard of the chosen index
+5. User enters next to view the flashcard with the next index
+6. FlashCards displays the next flashcard
 
 +
 Use case ends.
 
 [discrete]
-=== Use case: Viewing the previous Flash Card
+=== Use case: Viewing the previous Flashcard
 
 *MSS*
 
-1.  User enters the subject of the flash card to be displayed
-2.  FlashCards displays a list of flash cards belonging to the same subject
-3.  User selects the index of the flash card to view
-4. FlashCards displays the flash card of the chosen index
-5. User enters previous to view the flash card with the previous index
-6. FlashCards displays the previous flash card
+1.  User enters the subject of the flashcard to be displayed
+2.  FlashCards displays a list of flashcards belonging to the same subject
+3.  User selects the index of the flashcard to view
+4. FlashCards displays the flashcard of the chosen index
+5. User enters previous to view the flashcard with the previous index
+6. FlashCards displays the previous flashcard
 
 +
 Use case ends.
@@ -1237,23 +1239,23 @@ Use case ends.
 
 
 [discrete]
-=== Use case: Listing all Flash Cards categorized by Subjects
+=== Use case: Listing all Flashcards categorized by Subjects
 
 *MSS*
 
-1. User enters the subject of the flash cards to be displayed
-2. FlashCards displays an indexed list of flash cards categorized by flashcards
+1. User enters the subject of the flashcards to be displayed
+2. FlashCards displays an indexed list of flashcards categorized by flashcards
    +
 Use case ends.
 
 
 [discrete]
-=== Use case: Sorting all Flash Cards categorized by Difficulty
+=== Use case: Sorting all Flashcards categorized by Difficulty
 
 *MSS*
 
-1. User enters the difficulty of the flash cards to be displayed
-2. FlashCards displays an indexed list of flash cards categorized by selected difficulty
+1. User enters the difficulty of the flashcards to be displayed
+2. FlashCards displays an indexed list of flashcards categorized by selected difficulty
    +
 Use case ends.
 
@@ -1265,7 +1267,7 @@ Use case ends.
 *MSS*
 
 1.  User enters clear command
-2.  FlashCards clears all flash cards of the user along with flash cards respective subjects
+2.  FlashCards clears all flashcards of the user along with flashcards respective subjects
 +
 Use case ends.
 
