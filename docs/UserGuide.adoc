@@ -209,9 +209,11 @@ Format: `selectSubject SUBJECT` +
 *Must be a subject that is already in the subject list* +
 
 *Steps to select a subject:* +
+
 * Enter the `selectSubject` command to select a subject;
 
 *Examples:* +
+
 * Enter this command `selectSubject English`, all flashcards that are tagged under "English" will be displayed in the flashcards panel.
 // end::selectSubject[]
 
