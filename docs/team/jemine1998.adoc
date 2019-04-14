@@ -59,10 +59,8 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=findCommand]
 
-include::../UserGuide.adoc[tag=selectSubject]
-
+include::../UserGuide.adoc[tag=togglemode]
 include::../UserGuide.adoc[tag=togglefeature]
 
 
@@ -72,6 +70,11 @@ include::../UserGuide.adoc[tag=togglefeature]
 |===
 
 include::../DeveloperGuide.adoc[tag=togglefeature]
-
 include::../DeveloperGuide.adoc[tag=quizzingbydifficulty]
 
+
+//== PROJECT: PowerPointLabs
+//
+//---
+//
+//_{Optionally, you may include other projects in your portfolio.}_
