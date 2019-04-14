@@ -28,8 +28,8 @@ NOTE
 Also, if the user wants to update the existing deadline, he can enter the command again with a different date and this new date will override the existing date. Implementation of the command was simple and straightforward.
 ** Credits: Help from [https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html[Oracle Java Class Calendar]]
 * *Minor enhancement*: Added tests for *deadline* command. Add *Note* alias (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
-* *Code contributed*: [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/java/seedu/address/logic/commands/DeadlineCommand.java[Functional code]] [https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/test/java/seedu/address/logic/commands/DeadlineCommandTest.java[Test code]]
-
+* *Code contributed*: [https://nuscs2113-ay1819s2.github.io/dashboard-beta/#search=&sort=displayName&since=2019-02-10&until=2019-04-14&timeframe=day&reverse=false&repoSort=true[Functional code]][https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/java/seedu/address/logic/commands/DeadlineCommand.java [Test Code]]
+ 
 * *Major enhancement 2*: added *GUI display of topic and content* (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80], https://github.com/cs2113-ay1819s2-m11-3/main/pull/102[#102], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 ** What it does: The *GUI display* allows the user to alternate between the topic and the content of the flashcard.
 ** Justification: The physical copy of a flashcard has two sides, and to simulate that in the application, I added two buttons for *topic* and *content* respectively. This allows the user to switch between topic and content easily.
