@@ -321,109 +321,115 @@ In NextCommand class, the `nextIndex` will now be replaced by `previousIndex+1` 
 // tag::quizzingbysubject[]
 === Quizzing by Subject
 A subject that is selected will have all the flashcards pertaining to it shown.
-This mode will help users focus on a specific subject before their tests/exams/quizzes.
+This mode will help users to focus on a particular subject's notes when studying.
 
 ==== Current Implementation
 The FlashCards UI is divided into three panels from left to right – Subjects, Flashcards, and Content. +
 
-* Subjects Panel (facilitated by `SubjectListPanel`): +
+image::UI_edited.png[width=800]
+_Figure. GUI of FlashCards_
+
+
+* *Subjects Panel* (facilitated by `SubjectListPanel` class): +
 Displays:
 ** Subject tag
 
-* Flashcards Panel (facilitated by `FlashcardListPanel`): +
+* *Flashcards Panel* (facilitated by `FlashcardListPanel` class): +
 Displays information in this order:
 ** Topic of flashcard
+** Subject tag displayed as a coloured tag
 ** Difficulty level of flashcard
 ** (Optional) Deadline to memorize flashcard
-** Subject tag displayed as a coloured tag
 
-* Content Panel (facilitated by `RightPanel`): +
+* *Content Panel* (facilitated by `RightPanel` class): +
 This panel is further sectioned into 2:
 ** Topic of flashcard
 ** Content of flashcard
 
 Upon adding a flashcard with the `add` command, (e.g. `add t/Pythagoras Theorem diff/1 c/a^2 + b^2 = c^2 s/Math`),
-the subject tag "Math" will be added to a `SubjectBook` and `UniqueSubjectList` before being displayed in the `SubjectListPanel`. +
+the subject tag "Math" will be added to a `SubjectBook` object and `UniqueSubjectList` object before being displayed in the subjects panel. +
 
 An example scenario of adding a flashcard (Step 1) and displaying the flashcards for each subject (Step 2) is shown below.
 
-===== Step 1: Adding a Flashcard
+===== Step 1: Adding a flashcard
 There are 2 possible cases when adding a flashcard:
 
 1. *Subject tag is unique among other flashcards* +
 The Subject tag will be added to the `UniqueSubjectList` object.
 +
-Shown below is the adding mechanism of a flashcard with a unique subject among other flashcards is added: +
+Shown below is the adding mechanism of a flashcard with a unique subject among other flashcards: +
 +
-* Each time a flashcard is added using the Logic component's `AddCommand()`, the adding will be facilitated by `addSubject()` in the Model component.
+* The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
 +
-* The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list containing only unique subjects.
+* The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
 +
-* `SubjectBook` will create a `UniqueSubjectList` object that stores all unique subjects.
+* The `SubjectBook` class will create an `UniqueSubjectList` object to store all unique subjects.
 +
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
 Since it is unique in this scenario, the subject tag of the current flashcard will be added to this `UniqueSubjectList` object.
 +
-* The `SubjectListPanel` then displays this newly added subject.
+* The `SubjectListPanel` class then displays this newly added subject in the subjects panel.
 +
 
 2. *Subject tag already exists in other flashcards* +
 No Subject tag is added to the `UniqueSubjectList` object.
 +
-Shown below is the adding mechanism of a flashcard whose subject already exists in other flashcards is added:
+Shown below is the adding mechanism of a flashcard whose subject already exists in other flashcards:
 +
-* Each time a flashcard is added using the Logic component's `AddCommand()`, the adding will be facilitated by `addSubject()` in the Model component.
+* The Logic component's `AddCommand` class is triggered every time the user adds a flashcard. It will then be facilitated by `addSubject()` in the Model component.
 +
-* The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list containing only unique subjects.
+* The Model component's `addSubject()` will use `SubjectBook` 's `addSubject()` to add the subject to a list that contains only unique subjects.
 +
 * `SubjectBook` will create a `UniqueSubjectList` object that stores all unique subjects.
 +
 * The `UniqueSubjectList` object will invoke its `addSubject()` function. This function will check if the current `UniqueSubjectList` object contains the subject tag of the current flashcard to be added.
-Since it is not unique in this scenario, the subject tag *will not* be added to the `UniqueSubjectList` object.
+Since it is not unique in this scenario, the subject tag *will not* be added to this `UniqueSubjectList` object.
 +
-* The `SubjectListPanel` remains unchanged.
+* The subjects panel remains unchanged.
 
 
-The following sequence diagram summarises what happens in this Step 1: +
+The following sequence diagram summarises what happens in Step 1: +
 
 image::SubjectQuizzingFeature-addSubject.png[width="800"]
-Figure: Sequence Diagram of successfully adding a flashcard +
+_Figure: Sequence Diagram of adding a flashcard successfully_ +
 
-* Blue: -- Logic and Model component
+* Blue -- Logic and Model component
 * Yellow -- JavaFX component
 
 
-===== Step 2: Displaying Flashcards According to Subjects
+===== Step 2: Displaying flashcards according to subjects
 After a flashcard is added, the following sequence of events will happen:
 
-* The UI component's `MainWindow` will create a new `SubjectListPanel` object that takes in and invokes:
+1. The UI component's `MainWindow` class will create a new `SubjectListPanel` object that takes in and invokes:
 
-** Logic component's `getFilteredSubjectList()` -- returns `filteredSubjects` which contains a list of unique subjects
-** Logic component's `selectedSubjectProperty()` -- returns the `selectedSubject` tag clicked by the user
-** Logic component's `setSelectedSubject()` -- replaces previously selected subject with the newly selected subject
+* Logic component's `getFilteredSubjectList()` -- returns `filteredSubjects` which contains the list of unique subjects
+* Logic component's `selectedSubjectProperty()` -- returns the `selectedSubject` tag clicked by the user
+* Logic component's `setSelectedSubject()` -- replaces previously selected subject with the newly selected subject
 
-* In `SubjectListPanel`, `setItems()` and `setCellFactory()` of JavaFX will populate the panel with the unique subject list from `getFilteredSubjectList()`.
+2. In the `SubjectListPanel` class
+* `setItems()` and `setCellFactory()` of JavaFX will populate the subjects panel with the unique subject list from `getFilteredSubjectList()`.
 
-* The UI component's `MainWindow` will create a new `FlashcardListPanel` object that takes in and invokes:
+3. The UI component's `MainWindow` class will create a new `FlashcardListPanel` object that takes in and invokes:
 
-** Logic component's `getFilteredFlashcardList()` -- returns `filteredFlashcards` which contains a list of unique flashcards
-** Logic component's `selectedSubjectProperty()` -- returns the `selectedSubject` tag clicked by the user
+* Logic component's `getFilteredFlashcardList()` -- returns `filteredFlashcards` which contains the list of unique flashcards
+* Logic component's `selectedSubjectProperty()` -- returns the `selectedSubject` tag clicked by the user
 
-* In `FlashcardListPanel`, `setItems()` and `setCellFactory()` of JavaFX will populate the panel with the unique flashcard list from `getFilteredFlashcardList()`.
+4. In the `FlashcardListPanel` class
+* `setItems()` and `setCellFactory()` of JavaFX will populate the flashcards panel with the unique flashcard list from `getFilteredFlashcardList()`.
 
-* A listener is attached to the `selectedSubjectProperty` value passed into `FlashcardListPanel` in order to detect if another subject is selected.
+* A listener is attached to the `selectedSubjectProperty` value passed into this panel in order to detect when another subject is selected.
 
-* When a new subject is selected, `FlashcardListPanel` invokes `updateFlashcardList()`.
+* When another subject is selected, the class invokes `updateFlashcardList()`.
 It matches the subject tag of flashcards from `getFilteredFlashcardList()` with the newly selected subject.
-If the subject tag matches, this flashcard is added to a `newFlashcardList`.
+If the subject tag matches, this flashcard is added to a `newFlashcardList` object.
 
-* The flashcard panel is then populated with flashcards from `newFlashcardList` using `setItems()` and `setCellFactory()` of JavaFX.
+* The flashcard panel is then populated with flashcards from the `newFlashcardList` object using `setItems()` and `setCellFactory()` of JavaFX.
 
 
 The following sequence diagram summarizes what happens in Step 2: +
 
 image::SubjectQuizzingFeature-UI.png[width="800"]
-Figure: Sequence Diagram of displaying flashcards according to subject +
+_Figure: Sequence Diagram of displaying flashcards categorized by subject_ +
 
 * Purple -- UI component
 * Blue -- Model component
@@ -431,28 +437,28 @@ Figure: Sequence Diagram of displaying flashcards according to subject +
 
 ==== Design Considerations
 ===== Aspect: When to add a unique subject to the `UniqueSubjectList` object
-* **Alternative 1 (current choice):** Check if subject is unique in `addSubject()` of `UniqueSubjectList`
+* **Alternative 1 (current choice):** Check if subject is unique in `addSubject()` of `UniqueSubjectList` class
 ** Pros: Supports code reusability.
 ** Cons: More tedious to implement.
-* **Alternative 2:** Check if subject is unique in `AddCommand()`
-** Pros: Easy to implement and faster way of checking.
+* **Alternative 2:** Check if subject is unique in `AddCommand` class
+** Pros: Easy to implement and a faster way of checking.
 ** Cons: Does not support code reusability.
 
-===== Aspect: Populating subjects list on application start up
-* **Alternative 1 (current choice):** Populate the subject list after the flashcard list is populated
-** Pros: No need additional storage for subject list
+===== Aspect: Populating subject list on application startup
+* **Alternative 1 (current choice):** Populate subject list after flashcard list is populated
+** Pros: No need additional storage for the subject list.
 ** Cons: Harder to implement.
 * **Alternative 2:** Populate subject list using what was stored in `SubjectBook`
-** Pros: Easy to implement. Populates subject list the same way as how flashcard list is populated.
-** Cons: Need to create additional storage for subject list.
+** Pros: Easy to implement as it populates subject list the same way as how flashcard list is populated.
+** Cons: Need to create additional storage for the subject list.
 
 ===== Aspect: Displaying subject name as a text label or a coloured subject tag
 * **Alternative 1 (current choice):** Text label
-** Pros: Easier to implement and UI is not overly colourful which makes it easier for users' eyes to adapt.
-** Cons: Inconsistency when displaying subject (i.e. plain text in `SubjectListPanel` but coloured tag in `FlashcardListPanel`).
+** Pros: Easier to implement and UI is not overly colourful which makes it easier for the user's eyes to adapt.
+** Cons: Inconsistency when displaying subject (i.e. plain text in subjects panel but coloured tag in flashcards panel).
 * **Alternative 2:** Coloured subject tag
-** Pros: More consistency when displaying subject in `SubjectListPanel` and `FlashcardListPanel`.
-** Cons: Harder to implement. Might also be harsher on the users' eyes and they might not know where to focus on.
+** Pros: More consistency when displaying subject in subjects panel and flashcards panel.
+** Cons: Harder to implement. Might also be harsher on the user's eyes and he/she might not know where to focus on.
 
 // end::quizzingbysubject[]
 
@@ -485,11 +491,11 @@ image::SortCommandSD.png[width="800"]
 The user can determine how long the flashcards will exist in the database “FlashCards”.
 The following operations are available:
 
-* `FlashCards#clearall()` -- Clears the entire database.
+* `FlashCards#clear()` -- Clears the entire database.
 * `FlashCards#clear()` -- Clears a specific flashcard when in "Subject" Knowledge Testing Mode.
-* `FlashCards#deadline()` or `FlashCards#exam()` -- Adds a deadline/exam for the specified flashcard.
+* `FlashCards#deadline()` or `FlashCards#note()` -- Adds a deadline/note for the specified flashcard.
 
-For easier modes of implementation, the user can also choose to set a date whereby the flashcards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flash cards will be available for another month after the exam before the auto deletion function is activated.
+For easier modes of implementation, the user can also choose to set a date whereby the flashcards would be unavailable thereafter. To activate this function, the user can type in `deadline` or `exam`, followed by the index and the date. For example, in the event where the user knows the specific exam date for the selected flashcard, he/she can set the exam date under the “Subject Details” and the flashcards will be available for another month after the exam before the auto deletion function is activated.
 
 These operations are exposed in the `Logic` interface as `Logic#clearall()`, `Logic#clear()`, `Logic#deadline()` and `Logic#exam()` respectively.
 
@@ -499,7 +505,9 @@ Step 1. The user launches the application for the first time. The `VersionedFlas
 
 image::UndoRedoStartingStateListDiagram.png[width="800"]
 
-Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flashcard after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flash card state.
+
+Step 2. The user executes `list` command to list all the available flashcards in the FlashCards. The `list` command calls `Model#commitAddressBook()`, causing the modified state of the flashcard after the `list` command executes to be saved in the `flashCardStateList`, and the `currentStatePointer` is shifted to the newly inserted flashcard state.
+
 
 image::UndoRedoNewCommand1StateListDiagram.png[width="800"]
 
@@ -510,9 +518,11 @@ image::UndoRedoNewCommand2StateListDiagram.png[width="800"]
 [NOTE]
 If a command fails its execution, it will not call `Model#commitFlashBook()`, so the flash book state will not be saved into the `flashBookStateList`.
 
-Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flashcard. By executing the `clear` command, he can delete all the respective flashcards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards of the specified flashcard.
 
-Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flashcards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flash card state, and clear all the respective flash cards in FlashCards.
+Step 4. The user now decides that the deadline/exam is over and do not wish to save the flashcard in the flashcard. By executing the `clear` command, he can delete all the respective flashcards under the specified flashcard. The `clear` command will call `Logic#Clear()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards of the specified flashcard.
+
+Step 5: Alternatively, the user can execute the `clearall` command which will delete all the flashcards in the FlashCards. The `clearall` command will call `Logic#Clearall()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous flashcard state, and clear all the respective flashcards in FlashCards.
+
 
 image::undoredoExecuteUndoStateListDiagram.png[width="800"]
 
@@ -1066,16 +1076,17 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 *Target user profile*:
 
 * (Mainly) Secondary School students
-* Has a need to memorise notes across different flashcards
+* Has a need to memorise notes
 * Prefer digital notes over paper and pen
-* Reasonably comfortable with using CLI apps
+* Reasonably comfortable with using CLI applications
 
 *Value proposition*:
 
-* Digitizes notes for each flashcard
-* One-stop platform to get all one's notes for different flashcards
+* Digitize notes
+* One-stop platform to access all of one's notes
+* Organize one's notes based on subjects
 * Help with the memorisation of notes through the use of flashcards (e.g. before exams)
-* Organised one's notes in one platform
+
 
 [appendix]
 == User Stories
@@ -1095,6 +1106,12 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* * *` |User |Delete a flashcard through its index|Remove flashcards that I no longer need
 
 |`* * *` |User |List flashcards categorized by flashcards |Have an overview of the flashcards I currently have
+
+|`* * *` |User |View flashcards categorized by subjects |Have an overview of the flashcards I currently have for a particular subject
+
+|`* * *` |User |Use the GUI |Perform certain operations easily with just a click
+
+|`* * *` |User |Identify my flashcards easily |Have a better user experience with the application
 
 |`* * *` |User |Find a flashcard |Locate the flashcard I need without going through the entire list
 
@@ -1120,20 +1137,27 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |User |Alias for commands |Reduce the time to input each long command
 
+|`* * *` |User |Hide the content of my flashcard |Quiz myself more effectively
+
+|`* * *` |User |Show the content of my flashcard |Quiz myself more effectively
+
 |`* *` |User |Categorize each flashcard by importance |Prioritise which information to study or memorise first
 
 |`* *` |User |Choose the color of the subject tag  |Personalize my flashbook
+
 |`* *` |User |Retrieve a recently deleted flashcard |Retrieve the flashcard which I might have accidentally deleted
 
 |`*` |New User |Create a new account |Only see flashcards and flashcards that are customised by me
 
-|`*` |User |Login | Access my account
+|`*` |User |Use an application that is not just monochromatic in colour |Have a better user experience
+
+|`*` |User |Login |Perform actions that only pertain to my account
 
 |`*` |User |Share notes with friends who also have an account| Test myself with my friend's flashcard when I have finished mine.
 
+|`*` |User |Encrypt my data |Ensure my data is secure
 |=======================================================================
 
-_{More to be added in future versions of the developer guide}_
 
 [appendix]
 == Use Cases
@@ -1141,16 +1165,17 @@ _{More to be added in future versions of the developer guide}_
 (For all use cases below, the *System* is the `FlashCards` and the *Actor* is the `User`, unless specified otherwise)
 
 [discrete]
-=== Use case: Adding a Flashcard
+=== Use Case: Adding a Flashcard
 
 *MSS*
 
-1.  User enters flashcard and data to add as a flashcard
+1.  User enters data to add as a flashcard
 2.  FlashCards displays the flashcard that was just added
 +
 Use case ends.
 
 [discrete]
+
 === Use case: Deleting a Flashcard
 
 *MSS*
@@ -1159,10 +1184,10 @@ Use case ends.
 2.  FlashCards displays a list of flashcards belonging to the same flashcard
 3.  User selects the index of the flashcard to delete
 4.  FlashCards displays the updated list of flashcards
-+
 Use case ends.
 
 [discrete]
+
 === Use case: Editing a Flashcard
 
 *MSS*
@@ -1173,26 +1198,20 @@ Use case ends.
 4.  FlashCards prompts for new data
 5. User enters new data
 6. FlashCards displays the updated flashcard
-+
+
 Use case ends.
 
 [discrete]
-=== Use case: Finding a Flashcard
+=== Use Case: Finding a Flashcard
 
 *MSS*
 
-1.  User enters a keyword
-2.  FlashCards displays all flashcards that contains the given keyword
+1. User selects a subject
+2. FlashCards displays a list of flashcards belonging to the same subject
+3. User enters a keyword
+4. FlashCards displays all flashcards that contains the given keyword
 +
 Use case ends.
-
-*Extensions*
-
-[none]
-* 1a. Keyword not found
-+
-Use case ends.
-
 
 [discrete]
 === Use case: Selecting a Flashcard
@@ -1203,26 +1222,26 @@ Use case ends.
 2.  FlashCards displays a list of flashcards belonging to the same subject
 3.  User selects the index of the flashcard to view
 4. FlashCards displays the flashcard of the chosen index
-+
+
 Use case ends.
 
+
 [discrete]
-=== Use case: Viewing the next Flashcard
+=== Use Case: Viewing the next Flashcard
 
 *MSS*
 
-1.  User enters the subject of the flashcard to be displayed
-2.  FlashCards displays a list of flashcards belonging to the same subject
-3.  User selects the index of the flashcard to view
+1. User enters the subject of the flashcard to be displayed
+2. FlashCards displays a list of flashcards belonging to the same subject
+3. User selects the index of the flashcard to view
 4. FlashCards displays the flashcard of the chosen index
 5. User enters next to view the flashcard with the next index
 6. FlashCards displays the next flashcard
-
 +
 Use case ends.
 
 [discrete]
-=== Use case: Viewing the previous Flashcard
+=== Use Case: Viewing the previous Flashcard
 
 *MSS*
 
@@ -1233,10 +1252,7 @@ Use case ends.
 5. User enters previous to view the flashcard with the previous index
 6. FlashCards displays the previous flashcard
 
-+
 Use case ends.
-
-
 
 [discrete]
 === Use case: Listing all Flashcards categorized by Subjects
@@ -1245,34 +1261,51 @@ Use case ends.
 
 1. User enters the subject of the flashcards to be displayed
 2. FlashCards displays an indexed list of flashcards categorized by flashcards
-   +
+
 Use case ends.
 
-
-[discrete]
-=== Use case: Sorting all Flashcards categorized by Difficulty
+=== Use Case: Sorting all Flashcards categorized by Difficulty
 
 *MSS*
 
 1. User enters the difficulty of the flashcards to be displayed
 2. FlashCards displays an indexed list of flashcards categorized by selected difficulty
-   +
+
 Use case ends.
 
 
-
-[discrete]
-=== Use case: Clear all Data of a particular User
+=== Use Case: Create Account (coming in v2.0)
 
 *MSS*
 
-1.  User enters clear command
-2.  FlashCards clears all flashcards of the user along with flashcards respective subjects
+1.  User enters a new username
+2.  FlashCards creates a new User Account
 +
 Use case ends.
 
+*Extensions*
 
-_{More use cases to be added in future versions of the developer guide}_
+[none]
+* 1a. Username is taken
+** 1a1. FlashCards prints error message
++
+Use case resumes at step 1.
+
+[discrete]
+=== Use Case: Login (coming in v2.0)
+
+*MSS*
+1.  User enters username
+2.  FlashCards retrieves all relevant data for user account
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. Account not found
+** 1a1. FlashCards prints error message
++
+Use case resumes at step 1.
 
 [appendix]
 == Non Functional Requirements
@@ -1289,10 +1322,10 @@ The product will have a high performance speed of less than 2 seconds.
 The product will have a simple and user-friendly interface, making it easy even for new users using our application.
 
 === Portability Requirement
-The product can be used through both laptop and smartphone allowing users to use them on the go.
+The product can be used on both laptops and smart phones, allowing users to use them on the go.
 
 === Operational Requirement
-The system is capable of categorizing the cards based on the flashcards and allows easy access to cards when searching for one.
+The system is capable of categorizing the flashcards based on their subjects and allows easy access to flashcards when searching for one.
 
 === Technical Requirement
 The system should work on common operating systems such as Mac OS, Windows, Linux and Solaris platform.
@@ -1350,18 +1383,23 @@ These instructions only provide a starting point for testers to work on; testers
 .. Re-launch the app by double-clicking the jar file. +
    Expected: The most recent window size and location is retained.
 
-_{ more test cases ... }_
-
 === Deleting a flashcard
 
 . Deleting a flashcard while all flashcards are listed
 
-.. Prerequisites: List all flashcards using the `list` command. Multiple flashcards in the list.
+.. Prerequisites: Select a subject via the GUI or `selectSubject` command.
 .. Test case: `delete 1` +
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   Expected: First flashcard is deleted from the filtered list. Details of the deleted flashcard shown in the status message. Timestamp in the status bar is updated.
 .. Test case: `delete 0` +
    Expected: No flashcard is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
+.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size), `delete a` (where a is any alphabet) +
    Expected: Similar to previous.
 
+
+=======
+=== Saving data
+
+. Dealing with missing/corrupted data files
+
+.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
 _{ more test cases ... }_

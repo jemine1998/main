@@ -34,8 +34,8 @@ public class FlashcardCard extends UiPart<Region> {
     private Label id;
     @FXML
     private Label difficulty;
-    @FXML
-    private Label content;
+    //@FXML
+    //private Label content;
     @FXML
     private Label deadline;
     @FXML
@@ -49,7 +49,7 @@ public class FlashcardCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         topic.setText(flashcard.getTopic().fullTopic);
         difficulty.setText(flashcard.getDifficulty().value);
-        content.setText(flashcard.getContent().value);
+        //content.setText(flashcard.getContent().value);
         deadline.setText(flashcard.getDeadline().value);
         tagger(flashcard);
     }

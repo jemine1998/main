@@ -124,7 +124,7 @@ public class SampleDataUtil {
                 getTagSet("Geography")),
             new Flashcard(new Topic("What is a River Flood"), new Difficulty("1"),
                 new Content("A river flood happens when rivers overflow its banks due to increase discharge in the "
-                        + "river due to snowmelt, heavy rainfall or dam failure."), EMPTY_DEADLINE,
+                        + "river due to snow melt, heavy rainfall or dam failure."), EMPTY_DEADLINE,
                 getTagSet("Geography")),
             new Flashcard(new Topic("What is a Flash Flood"), new Difficulty("1"),
                 new Content("A flash flood is a quick rise in water level and takes place suddenly. "

@@ -34,6 +34,10 @@ public class FlashcardListPanelTest extends GuiUnitTest {
     private final SimpleObjectProperty<SubjectTag> selectedSubject = new SimpleObjectProperty<>();
     private FlashcardListPanelHandle flashcardListPanelHandle;
 
+    /**
+     * Verifies the same flashcard is displayed
+     */
+
     @Test
     public void display() {
         initUi(TYPICAL_FLASHCARDS);
@@ -47,6 +51,10 @@ public class FlashcardListPanelTest extends GuiUnitTest {
             assertEquals(Integer.toString(i + 1) + ". ", actualCard.getId());
         }
     }
+
+    /**
+     * Verifies that the selection of subject will lead to a corresponding change in the flashcard
+     */
 
     @Test
     public void selection_modelSelectedFlashcardChanged_selectionChanges() {
