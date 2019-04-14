@@ -92,6 +92,8 @@ public interface Model {
      */
     void setFlashBookFilePath(Path flashBookFilePath);
 
+    SubjectTag getSelectedSubject();
+
     /**
      * Replaces flash book data with the data in {@code flashBook}.
      */

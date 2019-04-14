@@ -197,9 +197,21 @@ Next, enter `delete 1` or `d 1` to delete the specified flashcard at index 1.
 The updated list of flashcards will be displayed in the flashcards panel.
 // end::delete[]
 
+// tag::selectSubject[]
 === Selecting a subject: `selectSubject`
 
+Selects the subject identified by the name used in the displayed list of subjects.+
+Format: `selectSubject SUBJECT` +
 
+* `SUBJECT`: Subject to be selected. This subject name can be found in the displayed list of subjects on the left panel.
+*Must be a subject that is already in the subject list* +
+
+*Steps to select a subject:* +
+* Enter the `selectSubject` command to select a subject;
+
+*Examples:* +
+* Enter this command `selectSubject English`, all flashcards that are tagged under "English" will be displayed in the flashcards panel.
+// end::selectSubject[]
 
 // tag::selectFlashcard[]
 === Selecting a flashcard: `select`
@@ -237,21 +249,25 @@ Format: `next` or `n` +
 
 *Steps to view next flashcard:* +
 
-* Use the `select` command (see Section 3.9) to select a flashcard first. +
-* Use this `next` / `n` command to go to the next flashcard. +
+* First select the subject of the flashcards you want to toggle with `selectSubject` command. +
+* Next, use the `select` command (see Section 3.9) to select a flashcard first. +
+* Use `next` / `n` command to go to the next flashcard. +
 
 *Examples:* +
 
-* `select 2` +
-Selects the 2nd flashcard in the list. +
+* `selectSubject math` +
+ Selects all flashcards that is tagged under subject math. +
+`select 2` +
+Selects the 2nd flashcard in the filtered list. +
 `next` +
-Selects the next flashcard in the list (i.e. the 3rd flashcard); and +
-Displays the content of this flashcard.
-* `select 5` +
+Selects the next flashcard in the list (i.e. the 3rd flashcard); and displays the content of this flashcard.+
+
+* `selectSubject science` +
+ Selects all flashcards that is tagged under subject science. +
+`select 5` +
 Selects the 5th flashcard in the list. +
 `n` +
-Displays the next flashcard in the list (i.e. the 6th flashcard); and +
-Displays the content of this flashcard.
+Displays the next flashcard in the list (i.e. the 6th flashcard); and + displays the content of this flashcard.
 
 The next flashcard in line will be selected and its content will be displayed.
 
@@ -264,21 +280,24 @@ Format: `previous` or `p` +
 
 *Steps to view previous flashcard:* +
 
+* First select the subject of the flashcards you want to toggle with `selectSubject` command. +
 * Use the `select` command (see Section 3.9) to select a flashcard first. +
 * Use this `previous` / `p` command to go to the previous flashcard. +
 
-*Examples: +
+*Examples:* +
 
-* `select 2` +
+* `selectSubject math` +
+Selects all flashcards that is tagged under subject math. +
+`select 2` +
 Selects the 2nd flashcard in the list. +
 `previous` +
-Selects the previous flashcard in the list (i.e. the 1st flashcard); and +
-Displays the content of this flashcard.
-* `select 5` +
+Selects the previous flashcard in the filtered list (i.e. the 1st flashcard); and displays the content of this flashcard.
+* `selectSubject science` +
+   Selects all flashcards that is tagged under subject science. +
+`select 5` +
 Selects the 5th flashcard in the list. +
 `p` +
-Selects the previous flashcard in the list (i.e. the 4th flashcard); and +
-Displays the content of this flashcard.
+Selects the previous flashcard in the list (i.e. the 4th flashcard); and displays the content of this flashcard.
 
 The previous flashcard in line will be selected and its content will be displayed.
 
@@ -292,78 +311,6 @@ Format: `history`
 ====
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
-
-// tag::undoredo[]
-=== Undoing previous command: `undo`
-
-Restores the flashcard to the state before the previous _undoable_ command was executed. +
-Format: `undo`
-
-[NOTE]
-====
-Undoable commands: those commands that modify the flashcard's content (`add`, `delete`, `edit` and `clear`).
-====
-
-Examples:
-
-* `delete 1` +
-Deletes the 1st flashcard in the list. +
-`list` +
-Lists all flashcards. +
-`undo` +
-Reverses the `delete 1` command.
-
-
-* `select 1` +
-Selects the 1st flashcard in the list. +
-`list` +
-Lists all flashcards. +
-`undo` +
-The `undo` command fails as there are no undoable commands executed previously.
-
-* `delete 1` +
-Deletes the 1st flashcard in the list. +
-`clear` +
-Clear all flashcards. +
-`undo` +
-Reverses the `clear` command +
-`undo` +
-Reverses the `delete 1` command +
-
-
-=== Redoing the previously undone command: `redo`
-
-Reverses the most recent `undo` command. +
-Format: `redo`
-
-Examples:
-
-* `delete 1` +
-Deletes the 1st flashcard in the list. +
-`undo` +
-Reverses the `delete 1` command +
-`redo` +
-Reapplies the `delete 1` command +
-
-* `delete 1` +
-Deletes the 1st flashcard in the list. +
-`redo` +
-The `redo` command fails as there are no `undo` commands executed previously.
-
-* `delete 1` +
-Deletes the 1st flashcard in the list. +
-`clear` +
-Clears all flashcards. +
-`undo` +
-Reverses the `clear` command +
-`undo` +
-Reverses the `delete 1` command +
-`redo` +
-Reapplies the `delete 1` command +
-`redo` +
-Reapplies the `clear` command +
-
-// end::undoredo[]
 
 === Clearing all flashcards: `clear` or `c`
 
@@ -415,9 +362,7 @@ e.g. `find Theorem` or `f sun fox`
 * *List* : `list` or `l`
 * *Next* : `next` or `n`
 * *Previous* : `previous` or `p`
-* *Redo* : `redo`
 * *Select* : `select INDEX` +
 e.g.`select 2`
 * *Select Subject* : `selectSubject SUBJECT` +
 e.g. `selectSubject Math`
-* *Undo* : `undo`

@@ -23,9 +23,11 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
+
         SelectSubjectCommand.listCommandCalled();
         model.setSelectedSubject(null);
         model.updateFilteredFlashcardList(PREDICATE_SHOW_ALL_FLASHCARDS);
+
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

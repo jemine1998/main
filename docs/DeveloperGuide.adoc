@@ -170,7 +170,7 @@ image::UiClassDiagram.png[width="800"]
 
 *API* : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `FlashcardListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -246,13 +246,13 @@ Following that, `NextCommand` or `PreviousCommand` can be called interchangeably
 
 For `NextCommand`, the following operations are implemented:
 
-* `NextCommand#getNextInteger(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
-* `NextCommand#setNextInteger(Index index, int start)` --  pass the index currently being used in `NextCommand` to `PreviousCommand`.
+* `NextCommand#getNextIndex(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
+* `NextCommand#setNextIndex(Index index, int start)` --  pass the index currently being used in `NextCommand` to `PreviousCommand`.
 
 Similarly, for `PreviousCommand`, the following operations are implemented:
 
 * `PreviousCommand#getPreviousIndex(Index index)` -- retrieves the current flash card's Index from `SelectCommand` class.
-* `NextCommand#setPreviousInteger(Index index, int start)` -- pass the index currently being used in `PreviousCommand` to `NextCommand`.
+* `PreviousCommand#setPreviousIndex(Index index, int start)` -- pass the index currently being used in `PreviousCommand` to `NextCommand`.
 
 The sequence diagram below illustrates the execution of `SelectCommand` and how the index will be passed to both `NextCommand` and `PreviousCommand` class.
 
@@ -279,6 +279,33 @@ To execute toggling of previous flashcard, execute the following commands: +
 1) `select 2` [2 is just an example, choose index of choice] +
 2) `previous` +
 Flashcard with next 1 will be displayed for the example above. +
+
+An example scenario of selecting the flashcard (Step 1) and executing the next or previous after select (Step 2) or otherwise (Step 3) is shown below. +
+
+===== Step 1: Selecting a Flashcard
+1. Executing a `select INDEX` command. +
+2. The `INDEX` will be passed into Next Command, facilitated by `getNextIndex()` in NextCommand class. In NextCommand class, `nextIndex` will be initiated
+with `INDEX+1` to obtain the index number of the next flashcard. +
+3. The `INDEX` will also be passed into Previous Command, facilitated by `getPreviousIndex()` in PreviousCommand class. In PreviousCommand class, the `previousIndex` will be initiated
+with `INDEX-1` to obtain the index number of the previous flashcard. +
+
+===== Step 2: Executing next or previous after select
+The following is an execution of NextCommand:
+
+1. As mentioned in step 1, `nextIndex` has been initiated with the index obtain through Select command.
+2. When NextCommand is called, the `nextIndex` will be passed into Previous Command, facilitated by `setPreviousIndex()` in PreviousCommand class.
+In PreviousCommand class, the `previousIndex` will now be replaced by `nextIndex -1` to obtain the index number of the previous flashcard.
+3. Lastly nextCommand will set the flashcard of `nextIndex`, facilitated by setSelectedFlashcard() in model.
+4. Thereafter, next or previous can be called interchangeably without having to select a flashcard.
+
+The following is an execution of PreviousCommand:
+
+1. As mentioned in step 1, `previousIndex` has been initiated with the index obtain through Select command.
+2. When PreviousCommand is called, the `previousIndex` will be passed into Next Command, facilitated by `setNextIndex()` in NextCommand class.
+In NextCommand class, the `nextIndex` will now be replaced by `previousIndex+1` to obtain the index number of the next flashcard.
+3. Lastly PreviousCommand will set flashcard of `previousIndex`, facilitated by setSelectedFlashcard() in model.
+4. Thereafter, next or previous can be called interchangeably without having to select a flashcard.
+
 
 ==== Design Considerations
 
@@ -1093,11 +1120,14 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |User |Categorize each flashcard by importance |Prioritise which information to study or memorise first
 
+|`* *` |User |Choose the color of the subject tag  |Personalize my flashbook
 |`* *` |User |Retrieve a recently deleted flashcard |Retrieve the flashcard which I might have accidentally deleted
 
 |`*` |New User |Create a new account |Only see flash cards and flashcards that are customised by me
 
-|`*` |User |Login |
+|`*` |User |Login | Access my account
+
+|`*` |User |Share notes with friends who also have an account| Test myself with my friend's flashcard when I have finished mine.
 
 |=======================================================================
 
@@ -1109,62 +1139,12 @@ _{More to be added in future versions of the developer guide}_
 (For all use cases below, the *System* is the `FlashCards` and the *Actor* is the `User`, unless specified otherwise)
 
 [discrete]
-=== Use case: Create Account
-
-*MSS*
-
-1.  User enters a new username
-2.  FlashCards creates a new User Account
-+
-Use case ends.
-
-*Extensions*
-
-[none]
-* 1a. Username is taken
-** 1a1. FlashCards prints error message
-+
-Use case resumes at step 1.
-
-[discrete]
-=== Use case: Login
-
-*MSS*
-
-1.  User enters username
-2.  FlashCards retrieves all relevant data for user account
-+
-Use case ends.
-
-*Extensions*
-
-[none]
-* 1a. Account not found
-** 1a1. FlashCards prints error message
-+
-Use case resumes at step 1.
-
-[discrete]
 === Use case: Adding a Flash Card
 
 *MSS*
 
 1.  User enters flashcard and data to add as a flash card
 2.  FlashCards displays the flash card that was just added
-+
-Use case ends.
-
-[discrete]
-=== Use case: Editing a Flash Card
-
-*MSS*
-
-1.  User enters the flashcard of the flash card to be edited
-2.  FlashCards displays a list of flash cards belonging to the same flashcard
-3.  User selects the index of the flash card to edit
-4.  FlashCards prompts for new data
-5. User enters new data
-6. FlashCards displays the updated flash card
 +
 Use case ends.
 
@@ -1181,11 +1161,16 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Listing all Flash Cards categorized by Subjects
+=== Use case: Editing a Flash Card
 
 *MSS*
 
-1.  FlashCards displays an indexed list of flash cards categorized by flashcards
+1.  User enters the flashcard of the flash card to be edited
+2.  FlashCards displays a list of flash cards belonging to the same flashcard
+3.  User selects the index of the flash card to edit
+4.  FlashCards prompts for new data
+5. User enters new data
+6. FlashCards displays the updated flash card
 +
 Use case ends.
 
@@ -1206,13 +1191,81 @@ Use case ends.
 +
 Use case ends.
 
+
+[discrete]
+=== Use case: Selecting a Flash Card
+
+*MSS*
+
+1.  User enters the subject of the flash card to be displayed
+2.  FlashCards displays a list of flash cards belonging to the same subject
+3.  User selects the index of the flash card to view
+4. FlashCards displays the flash card of the chosen index
++
+Use case ends.
+
+[discrete]
+=== Use case: Viewing the next Flash Card
+
+*MSS*
+
+1.  User enters the subject of the flash card to be displayed
+2.  FlashCards displays a list of flash cards belonging to the same subject
+3.  User selects the index of the flash card to view
+4. FlashCards displays the flash card of the chosen index
+5. User enters next to view the flash card with the next index
+6. FlashCards displays the next flash card
+
++
+Use case ends.
+
+[discrete]
+=== Use case: Viewing the previous Flash Card
+
+*MSS*
+
+1.  User enters the subject of the flash card to be displayed
+2.  FlashCards displays a list of flash cards belonging to the same subject
+3.  User selects the index of the flash card to view
+4. FlashCards displays the flash card of the chosen index
+5. User enters previous to view the flash card with the previous index
+6. FlashCards displays the previous flash card
+
++
+Use case ends.
+
+
+
+[discrete]
+=== Use case: Listing all Flash Cards categorized by Subjects
+
+*MSS*
+
+1. User enters the subject of the flash cards to be displayed
+2. FlashCards displays an indexed list of flash cards categorized by flashcards
+   +
+Use case ends.
+
+
+[discrete]
+=== Use case: Sorting all Flash Cards categorized by Difficulty
+
+*MSS*
+
+1. User enters the difficulty of the flash cards to be displayed
+2. FlashCards displays an indexed list of flash cards categorized by selected difficulty
+   +
+Use case ends.
+
+
+
 [discrete]
 === Use case: Clear all Data of a particular User
 
 *MSS*
 
 1.  User enters clear command
-2.  FlashCards clears all flash cards of the user
+2.  FlashCards clears all flash cards of the user along with flash cards respective subjects
 +
 Use case ends.
 

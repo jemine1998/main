@@ -9,6 +9,7 @@ import seedu.address.logic.CommandHistory;
 import seedu.address.model.Model;
 import seedu.address.model.flashcard.TopicContainsDifficultyPredicate;
 import seedu.address.model.flashcard.TopicContainsDoublePredicate;
+import seedu.address.model.tag.SubjectTag;
 
 /**
  * Finds and lists all flashcards in FlashCards whose name contains any of the argument keywords.
@@ -35,11 +36,12 @@ public class SortCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
-        if (SelectSubjectCommand.getSelectSubject() == null) {
+        if (model.getSelectedSubject() == null) {
             model.updateFilteredFlashcardList(predicate);
         } else {
-            String name = SelectSubjectCommand.getSelectSubject().toString().trim();
-            String[] subjectName = name.split("\\s+");
+            SubjectTag currentSubject = model.getSelectedSubject();
+            model.setSelectedSubject(null);
+            String[] subjectName = currentSubject.toString().split("\\s+");
             model.updateFilteredFlashcardList(new TopicContainsDoublePredicate(Arrays.asList(subjectName),
                     Arrays.asList(difficultyName)));
         }

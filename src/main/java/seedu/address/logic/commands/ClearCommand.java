@@ -22,8 +22,8 @@ public class ClearCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) {
         requireNonNull(model);
 
-        model.setFlashBook(new FlashBook());
         model.setSubjectBook(new SubjectBook());
+        model.setFlashBook(new FlashBook());
         model.commitFlashBook();
         return new CommandResult(MESSAGE_SUCCESS);
     }
