@@ -338,9 +338,9 @@ Displays:
 * *Flashcards Panel* (facilitated by `FlashcardListPanel` class): +
 Displays information in this order:
 ** Topic of flashcard
+** Subject tag displayed as a coloured tag
 ** Difficulty level of flashcard
 ** (Optional) Deadline to memorize flashcard
-** Subject tag displayed as a coloured tag
 
 * *Content Panel* (facilitated by `RightPanel` class): +
 This panel is further sectioned into 2:
@@ -455,11 +455,11 @@ _Figure: Sequence Diagram of displaying flashcards categorized by subject_ +
 
 ===== Aspect: Displaying subject name as a text label or a coloured subject tag
 * **Alternative 1 (current choice):** Text label
-** Pros: Easier to implement and UI is not overly colourful which makes it easier for users' eyes to adapt.
+** Pros: Easier to implement and UI is not overly colourful which makes it easier for the user's eyes to adapt.
 ** Cons: Inconsistency when displaying subject (i.e. plain text in subjects panel but coloured tag in flashcards panel).
 * **Alternative 2:** Coloured subject tag
 ** Pros: More consistency when displaying subject in subjects panel and flashcards panel.
-** Cons: Harder to implement. Might also be harsher on the users' eyes and they might not know where to focus on.
+** Cons: Harder to implement. Might also be harsher on the user's eyes and he/she might not know where to focus on.
 
 // end::quizzingbysubject[]
 
