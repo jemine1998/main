@@ -20,15 +20,15 @@ The following sections illustrate these enhancements in more details, as well as
 
 == Summary of contributions
 This sections summarises my coding, documentation and other relevant contributions to the team project.
-NOTE
-* *Major enhancement 1*: added *the ability to add deadlines to flashcards* (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/12[#12], https://github.com/cs2113-ay1819s2-m11-3/main/pull/13[#13], https://github.com/cs2113-ay1819s2-m11-3/main/pull/14[#14], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
+
+* *Major enhancement 1*: added *the ability to add deadlines to flashcards* (Pull requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/12[#12], https://github.com/cs2113-ay1819s2-m11-3/main/pull/13[#13], https://github.com/cs2113-ay1819s2-m11-3/main/pull/14[#14], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107]) 
 ** What it does: The *deadline* command allows the user to add deadline or notes to a specified flashcard.
-** Justification: Initially, my team decided on implementing an internal Calendar which will count the number of days left before the deadline and display it below the deadline. However, we decided that it will be more versatile if the user can input his notes in. For example, Clarify with the Teacher. This feature improves the product significantly as it serves as a reminder to the user about the upcoming deadlines or the notes attached.
+** Justification: Initially, my team decided on implementing an internal Calendar which will count the number of days left before the deadline and display it below the deadline. However, we decided that it will be more versatile if the user can input his notes in. For example, Clarify with the Teacher. This feature improves the product significantly as it serves as a reminder to the user about the upcoming deadlines or the notes attached. 
 ** Highlights: This enhancement does not affect existing commands and commands to be added in future. It is an independent command and it can only be added after the selected flashcards exist in the FlashBook. This gives the user the choice to decide if he/she wants to assign a deadline or a note to the flashcard.
 Also, if the user wants to update the existing deadline, he can enter the command again with a different date and this new date will override the existing date. Implementation of the command was simple and straightforward.
 ** Credits: Help from [https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html[Oracle Java Class Calendar]]
 * *Minor enhancement*: Added tests for *deadline* command. Add *Note* alias (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
-* *Code contributed*: [https://nuscs2113-ay1819s2.github.io/dashboard-beta/#search=&sort=displayName&since=2019-02-10&until=2019-04-14&timeframe=day&reverse=false&repoSort=true[Functional code]][https://github.com/cs2113-ay1819s2-m11-3/main/blob/master/src/main/java/seedu/address/logic/commands/DeadlineCommand.java [Test Code]]
+* *Code contributed*: [https://nuscs2113-ay1819s2.github.io/dashboard-beta/#search=dann&sort=displayName&since=2019-02-10&until=2019-04-01&timeframe=day&reverse=false&groupSelect=groupByRepos&breakdown=false&tabAuthor=dannong&tabRepo=CS2113-AY1819S2-M11-3_main_master&repoSort=true[Functional code]]
  
 * *Major enhancement 2*: added *GUI display of topic and content* (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80], https://github.com/cs2113-ay1819s2-m11-3/main/pull/102[#102], https://github.com/cs2113-ay1819s2-m11-3/main/pull/107[#107])
 ** What it does: The *GUI display* allows the user to alternate between the topic and the content of the flashcard.
