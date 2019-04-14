@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -58,11 +59,15 @@ public class PreviousCommand extends Command {
         requireNonNull(model);
 
         List<Flashcard> filteredFlashcardList = model.getFilteredFlashcardList();
+        ObservableList<Flashcard> updatedFlashcardList = model.getUpdatedFlashcardList();
 
         if (previousInteger <= 0) {
             throw new CommandException(MESSAGE_FIRST_FLASHCARD);
+        } else {
+            Flashcard selectedFlashcard = updatedFlashcardList.get(previousIndex.getZeroBased());
+            model.setSelectedSubject(selectedFlashcard.getSubject());
+            model.setSelectedFlashcard(selectedFlashcard);
         }
-        model.setSelectedFlashcard(filteredFlashcardList.get(previousIndex.getZeroBased()));
         return new CommandResult(String.format(MESSAGE_SUCCESS, previousIndex.getOneBased()));
 
     }

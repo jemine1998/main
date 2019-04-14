@@ -2,8 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -54,13 +53,18 @@ public class NextCommand extends Command {
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
 
-        List<Flashcard> filteredFlashcardList = model.getFilteredFlashcardList();
+        ObservableList<Flashcard> updatedFlashcardList = model.getUpdatedFlashcardList();
 
-        if (nextInteger >= filteredFlashcardList.size() + 1) {
+        if (nextInteger >= updatedFlashcardList.size() + 1) {
+
             throw new CommandException(MESSAGE_LAST_FLASHCARD);
         }
+
+        Flashcard selectedFlashcard = updatedFlashcardList.get(nextIndex.getZeroBased());
         PreviousCommand.setPreviousInteger(nextInteger, flashCardBegin);
-        model.setSelectedFlashcard(filteredFlashcardList.get(nextIndex.getZeroBased()));
+        model.setSelectedSubject(selectedFlashcard.getSubject());
+        model.setSelectedFlashcard(selectedFlashcard);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, nextIndex.getOneBased()));
 
     }

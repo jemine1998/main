@@ -159,11 +159,11 @@ public class ModelManager extends ComponentManager implements Model {
     /**
      * Replaces flash book data with the data in {@code flashBook}.
      *
-     * @param subjectBook
+     * @param subjects
      */
     @Override
-    public void setSubjectBook(SubjectBook subjectBook) {
-        subjectBook.resetData(subjectBook);
+    public void setSubjectBook(SubjectBook subjects) {
+        subjectBook.resetData(subjects);
     }
 
 
@@ -195,6 +195,11 @@ public class ModelManager extends ComponentManager implements Model {
                 selectedSubject.setValue(change.getFrom() > 0 ? change.getList().get(change.getFrom() - 1) : null);
             }
         }
+    }
+
+    @Override
+    public SubjectTag getSelectedSubject() {
+        return selectedSubject.get();
     }
 
 
@@ -239,6 +244,7 @@ public class ModelManager extends ComponentManager implements Model {
 
         versionedFlashBook.setFlashcard(target, editedFlashcard);
     }
+
 
     //=========== Filtered Flashcard List Accessors =============================================================
 
