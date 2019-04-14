@@ -316,7 +316,6 @@ In NextCommand class, the `nextIndex` will now be replaced by `previousIndex+1` 
 ** Pros: Saves the user the step of having to select the index of choice.
 ** Cons: Might be too troublesome for some users who wants to being from a flashcard index that is large.
 
-
 // end::togglefeature[]
 
 // tag::quizzingbysubject[]
@@ -461,6 +460,7 @@ _Figure: Sequence Diagram of displaying flashcards categorized by subject_ +
 
 // end::quizzingbysubject[]
 
+// tag::quizzingbydifficulty[]
 === Quizzing by Difficulty
 This mode will be largely focused on viewing flashcard based on a chosen difficulty. Flashcards are added with a difficulty level set by the user. The difficulty level can be toggled in this mode for the user to focus more on difficult concepts or easier concepts. This mode can be used along side `"Subject" Testing Mode` to get a further filtered list of flashcards with both chosen subject and difficulty.
 
@@ -480,6 +480,8 @@ image::SortCommandSD.png[width="800"]
 * **Alternative 2:** Displays flashcards in ascending or descending difficulty level.
 ** Pros: Can view more flashcards at once.
 ** Cons: Difficult to implement.
+
+// end::quizzingbydifficulty[]
 
 // tag::shelflifeofflashcards[]
 === Shelf-Life of FlashCards
@@ -578,6 +580,7 @@ He/She can choose to write a date or write a note under the flashcard, for examp
 
 Alternative 1 is chosen to provide users with the choice of deleting flashcards as and when they want. Even though it will take up extra storage if the user does not manually delete,
 the user will have better control over what they want to store and delete in the application.
+
 // end::shelflifeofflashcards[]
 
 // end::undoredo[]

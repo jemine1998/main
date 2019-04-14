@@ -79,7 +79,7 @@ Format: `add t/TOPIC diff/DIFFICULTY c/CONTENT s/SUBJECT`
 * `DIFFICULTY`: Difficulty level of the flashcard's content indicated by a positive integer 1, 2, or 3 only.
 * `CONTENT`: Content of the flashcard.
 * `SUBJECT`: Subject of the flashcard.
-
+* `Deadline/Note` (optional): Deadline of the flashcard/Notes to be taken.
 
 *Examples:*
 
@@ -94,6 +94,26 @@ It has the content "A chemical reaction that takes place inside a plant, produci
 
 The flashcard that was just added will be displayed in the flashcards panel.
 // end::add[]
+
+// tag::adddeadline[]
+=== Adding a Deadline/Note to a flashcard: `deadline` or `note`
+Adds a deadline or notes to the flashcard. +
+Format: `deadline INDEX d/DEADLINE` or `note INDEX d/NOTE`
+
+* `DEADLINE`: Deadline of flashcard.
+* `NOTE`: Important notes to be added.
+
+*Examples:*
+
+* `deadline 1 d/12 January 2020` +
+Adds a deadline "12 January 2020" into the flashcard with index 1.
+
+* `note 3 d/Clarify with Teacher` +
+Adds a note into the flashcard with content "Clarify with Teacher".
+
+In the case that a new date is to be added to a flashcard with an existing deadline or note, corrections can be made by overwriting the existing information with the same commands.
+
+// end::adddeadline[]
 
 === Listing all flashcards categorized by subjects: `list` or `l`
 
@@ -197,7 +217,25 @@ Next, enter `delete 1` or `d 1` to delete the specified flashcard at index 1.
 The updated list of flashcards will be displayed in the flashcards panel.
 // end::delete[]
 
-// tag::selectSubject[]
+// tag::deletesubject[]
+=== Deleting a subject: `deleteSubject`
+
+Deletes the specified subject. +
+Format: `deleteSubject SUBJECT` +
+
+* `SUBJECT`: Subject to be deleted. This subject name can be found in the displayed list of subjects on the left panel.
+*Must be a subject that is already in the subject list* +
+
+*Examples:* +
+
+* `deleteSubject Chemistry` +
+All flashcards that are tagged under "Chemistry" will be deleted.
+
+*Note* This action is not reversible. The `undo` and `redo` command do not apply to the deletion of subjects.
+
+// end::deletesubject[]
+
+// tag::selectsubject[]
 === Selecting a subject: `selectSubject`
 
 Selects the subject identified by the name used in the displayed list of subjects.+
@@ -211,7 +249,8 @@ Format: `selectSubject SUBJECT` +
 
 *Examples:* +
 * Enter this command `selectSubject English`, all flashcards that are tagged under "English" will be displayed in the flashcards panel.
-// end::selectSubject[]
+
+// end::selectsubject[]
 
 // tag::selectFlashcard[]
 === Selecting a flashcard: `select`
@@ -302,6 +341,7 @@ Selects the previous flashcard in the list (i.e. the 4th flashcard); and display
 The previous flashcard in line will be selected and its content will be displayed.
 
 // end::togglemode[]
+
 === Listing entered commands: `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
@@ -312,10 +352,20 @@ Format: `history`
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
 
+// tag::clear[]
 === Clearing all flashcards: `clear` or `c`
 
 Clears all flashcards. +
 Format: `clear` or `c`
+
+*Examples:* +
+
+* `clear` +
+All flashcards that are in the FlashBook will be deleted.
+
+*Note* This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.
+
+// end::clear[]
 
 === Exiting the program: `exit`
 
@@ -350,9 +400,14 @@ This feature will support multiple users and all operations carried out will onl
 * *Add* :
 `add t/TOPIC diff/DIFFICULTY c/CONTENT d/DEADLINE s/SUBJECT` +
 e.g. `add t/Pythagoras Theorem diff/1 c/a^2 + b^2 = c^2 d/30-03-2019 s/Math`
+* *Add a Deadline/Note* :
+`deadline INDEX d/DEADLINE` or `note INDEX d/NOTE` +
+e.g. `deadline 3 d/12 December 2019` or `note 2 d/Clarify with Teacher`
 * *Clear* : `clear` or `c`
 * *Delete* : `delete INDEX` +
 e.g. `delete 3` or `d 3`
+* *Delete Subject* : `deleteSubject SUBJECT` +
+e.g. `deleteSubject Chemistry`
 * *Edit* : `edit INDEX [t/TOPIC] [diff/DIFFICULTY] [c/CONTENT] [d/DEADLINE] [s/SUBJECT]` +
 e.g. `edit 2 s/Science` or `e 2 c/The quick brown fox`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
