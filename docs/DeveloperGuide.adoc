@@ -327,24 +327,25 @@ This mode will help users to focus on a particular subject's notes when studying
 ==== Current Implementation
 The FlashCards UI is divided into three panels from left to right – Subjects, Flashcards, and Content. +
 
-1. *Subjects Panel* (facilitated by `SubjectListPanel` class): +
+image::UI_edited.png[width=800]
+_Figure. GUI of FlashCards_
+
+
+* *Subjects Panel* (facilitated by `SubjectListPanel` class): +
 Displays:
 ** Subject tag
 
-2. *Flashcards Panel* (facilitated by `FlashcardListPanel` class): +
+* *Flashcards Panel* (facilitated by `FlashcardListPanel` class): +
 Displays information in this order:
 ** Topic of flashcard
 ** Difficulty level of flashcard
 ** (Optional) Deadline to memorize flashcard
 ** Subject tag displayed as a coloured tag
 
-3. *Content Panel* (facilitated by `RightPanel` class): +
+* *Content Panel* (facilitated by `RightPanel` class): +
 This panel is further sectioned into 2:
 ** Topic of flashcard
 ** Content of flashcard
-
-image::UI_edited.png[width=800]
-_Figure. GUI of FlashCards_
 
 Upon adding a flashcard with the `add` command, (e.g. `add t/Pythagoras Theorem diff/1 c/a^2 + b^2 = c^2 s/Math`),
 the subject tag "Math" will be added to a `SubjectBook` object and `UniqueSubjectList` object before being displayed in the subjects panel. +
