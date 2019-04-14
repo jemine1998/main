@@ -115,13 +115,6 @@ In the case that a new date is to be added to a flashcard with an existing deadl
 
 // end::adddeadline[]
 
-=== Listing all flashcards categorized by subjects: `list` or `l`
-
-Displays an indexed list of flashcards categorized by subjects. +
-Format: `list` or `l`
-
-Subject tags will be colour-coded. Same subject tags will have the same colour.
-
 // tag::edit[]
 === Editing a flashcard: `edit` or `e`
 
@@ -379,21 +372,6 @@ Format: `history`
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
 
-// tag::clear[]
-=== Clearing all flashcards: `clear` or `c`
-
-Clears all flashcards. +
-Format: `clear` or `c`
-
-*Examples:* +
-
-* `clear` +
-All flashcards that are in the FlashBook will be deleted.
-
-*Note* This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.
-
-// end::clear[]
-
 === Exiting the program: `exit`
 
 Exits the program. +
@@ -430,7 +408,6 @@ e.g. `add t/Pythagoras Theorem diff/1 c/a^2 + b^2 = c^2 d/30-03-2019 s/Math`
 * *Add a Deadline/Note* :
 `deadline INDEX d/DEADLINE` or `note INDEX d/NOTE` +
 e.g. `deadline 3 d/12 December 2019` or `note 2 d/Clarify with Teacher`
-* *Clear* : `clear` or `c`
 * *Delete* : `delete INDEX` +
 e.g. `delete 3` or `d 3`
 * *Delete Subject* : `deleteSubject SUBJECT` +
@@ -441,7 +418,6 @@ e.g. `edit 2 s/Science` or `e 2 c/The quick brown fox`
 e.g. `find Theorem` or `f sun fox`
 * *Help* : `help`
 * *History* : `history`
-* *List* : `list` or `l`
 * *Next* : `next` or `n`
 * *Previous* : `previous` or `p`
 * *Select* : `select INDEX` +
