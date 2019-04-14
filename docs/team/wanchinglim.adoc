@@ -9,57 +9,94 @@
 
 == Overview
 
-FlashCards is a desktop application used for helping secondary school students memorise their content.
-It also helps them manage all their notes by keeping them in a single application. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+This portfolio serves as a documentation of my contributions to a desktop application my team and I developed in a software engineering module.
+The team consists of 3 members and the application was developed over the course of 6 weeks.
+Due to project constraints, the team needed to start from an existing code base (https://github.com/nusCS2113-AY1819S2/addressbook-level4[addressbook-level4])
+and the user has to interact with the application mainly through the Command Line Interface (CLI).
+However, the user can also interact with the application through the Graphical User Interface (GUI) that is created with JavaFX.
+The entire application is written in Java and has about 10k lines of code.
 
-== Summary of contributions
+Our developed application is titled *FlashCards*.
+FlashCards is a desktop application that targets mainly secondary school students to help them memorise their notes.
+It further serves as a notes management platform by helping them organize all their notes based on the different subjects they have.
 
-* *Major enhancement*: Made enhancement to *GUI*
-** What it does: Allows the user to select a certain subject and only flashcards belonging to that subject will be listed.
-** Justification: This feature helps the user filter flashcards based on their subject with the ability to click via the GUI.
-It can help them to focus on a particular subject's notes when studying.
-** Highlights: This enhancement affects the existing GUI and `add` command.
-It gives the user a better user experience and helps them study more effectively.
-Furthermore, no separate storage is needed even though the subject list is seemingly saved every time the user exits.
-On the next start up, the subject panel will contain the subject list that existed before the user exited the application.
+My role was to develop the *GUI* and *tagging* feature.
+The following sections will depict my contributions in greater detail, as well as the relevant sections I have documented in our user and developer guide based on these enhancements.
 
-* *Minor enhancement*: Added colours to different subject tags so the same subject will have the same colour. This helps users to differentiate flashcards better based on the subject when all flashcards are listed.
+== Summary of Contributions
 
-* *Code contributed*: [https://github.com/cs2113-ay1819s2-m11-3/main/pull/73[Functional code]]
+This section will document the summary of features that I have coded, other helpful contributions to this project, and documentation done for this application.
+An overview of all my contributed code can be found https://nuscs2113-ay1819s2.github.io/dashboard-beta/#search=wanchinglim&sort=displayName&since=2019-02-10&until=2019-04-14&timeframe=day&reverse=false&repoSort=true[here].
 
-* *Other contributions*:
+=== Major Enhancement: GUI
+** *What it does:* It allows the user to click a subject and only flashcards belonging to that subject will be listed.
+** *Justification*: This feature helps users access their notes for any subject with just a click.
+Since the flashcards are categorized based on their subject, users will be able to focus on a particular subject's notes when studying.
+** *Highlights:* This enhancement affects the existing GUI and `add` command.
+It helps the user to automatically categorize their flashcards based on the subject without any additional steps.
+As such, not only will notes pertaining to each subject be easily available to the user, it also offers a better user experience and increases their efficiency when studying for a subject.
+Furthermore, no separate storage is needed even though the list of subjects is seemingly saved every time the user exits.
+The subject panel will still contain the list of subjects that existed before the user exited the application.
+** *Code contributed:*  Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/73[#73] and https://github.com/cs2113-ay1819s2-m11-3/main/pull/94[#94]
 
-** Project management:
-*** Managed relevant documentations (e.g. User Guide etc.) by ensuring everything is correct and well-documented.
-** Enhancements to existing features:
-*** Updated tags to have different colours (Pull request https://github.com/cs2113-ay1819s2-m11-3/main/pull/6[#6])
-*** Enhanced `AddCommand()` to check for unique subjects before adding the subject to a `UniqueSubjectList` object
-** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com/cs2113-ay1819s2-m11-3/main/pull/77/files[#77]
-**** Ensured the consistency in language
+=== Minor Enhancement: Tagging Feature
+** *What is it:* A unique colour was added to each subject tag so that different tags will have different colours.
+** *Justification:* This helps users to differentiate flashcards better based on the subject tag colour when all flashcards are listed.
+** *Code contributed:* Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/6[#6]
+
+=== Other Contributions
+** *Project management:*
+*** Managed relevant documentation (e.g. User Guide, About Us etc.)
+**** Ensured everything is correct and well-documented
+** *Enhancements to existing features:*
+*** Enhanced tagging feature to display different tags in different colours (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/6[#6])
+*** Enhanced `add` command to check if the subject of the flashcard to be added is unique (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/73[#73])
+*** Enhanced `edit` command to edit a flashcard based on the index of the filtered list (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/94[#94] and https://github.com/cs2113-ay1819s2-m11-3/main/pull/97[#97])
+*** Enhanced `delete` command to delete a flashcard based on the index of the filtered list (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/94[#94] and https://github.com/cs2113-ay1819s2-m11-3/main/pull/97[#97])
+*** Enhanced `select` command to select a flashcard based on the index of the filtered list (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/97[#97])
+** *Testing:*
+*** Updated tests to match our application's behaviour (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/94[#94], https://github.com/cs2113-ay1819s2-m11-3/main/pull/97[#97], and https://github.com/cs2113-ay1819s2-m11-3/main/pull/103[#103])
+** *Documentation:*
+*** Edited User Guide extensively (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/77/files[#77], https://github.com/cs2113-ay1819s2-m11-3/main/pull/103[#103])
+**** Ensured consistency in language
 **** Ensured there were no spelling and grammatical errors
-**** Tidied up the formatting of documents
-** Community:
-*** PRs reviewed (with non-trivial review comments): https://github.com/cs2113-ay1819s2-m11-3/main/pull/30[#30] https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80] https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86]
+**** Tidied up the formatting of each section
+*** Edited Developer Guide (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/88[#88], https://github.com/cs2113-ay1819s2-m11-3/main/pull/108[#108])
+**** Ensured consistency in language
+**** Ensured there were no spelling and grammatical errors
+**** Tidied up the formatting of each section
+** *Community:*
+*** Reviewed Pull Requests by the team (Pull Requests https://github.com/cs2113-ay1819s2-m11-3/main/pull/30[#30], https://github.com/cs2113-ay1819s2-m11-3/main/pull/80[#80], and https://github.com/cs2113-ay1819s2-m11-3/main/pull/86[#86])
+*** Fixed bugs of the `selectSubject` command that my teammate was in charge of (Pull Request https://github.com/cs2113-ay1819s2-m11-3/main/pull/97[#97])
+*** Reported bugs and suggestions for other teams (Issues https://github.com/CS2113-AY1819S2-T09-3/main/issues/153[#153],
+https://github.com/CS2113-AY1819S2-T09-3/main/issues/160[#160],
+https://github.com/CS2113-AY1819S2-T09-3/main/issues/164[#164], and
+https://github.com/CS2113-AY1819S2-T09-3/main/issues/170[#170])
 
 
-== Contributions to the User Guide
-
+== Contributions to The User Guide
 
 |===
-|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|_Given the original user guide of the existing code base, we did extensive modifications and tailored it to suit our application.
+The following is an excerpt of our user guide that I documented, mainly the `add`, `edit`, `delete`, and `select` commands._
 |===
 
 include::../UserGuide.adoc[tag=add]
 
-include::../UserGuide.adoc[tag=edit]
-
 include::../UserGuide.adoc[tag=delete]
 
-== Contributions to the Developer Guide
+=== Other Contributions
+Due to space constraints, you can find the remaining documentation that I have done for the user guide in the links below:
+
+* https://cs2113-ay1819s2-m11-3.github.io/main/UserGuide.html#editing-a-flashcard-code-edit-code-or-code-e-code[Edit command]
+* https://cs2113-ay1819s2-m11-3.github.io/main/UserGuide.html#selecting-a-flashcard-code-select-code[Select command]
+
+== Contributions to The Developer Guide
 
 |===
-|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|_Given the original developer guide of the existing code base, we modified various sections and tailored it to suit our application.
+This guide contains all the information regarding the development of this application, and the following will show an excerpt of it that was written by me.
+I took charge of the **Quizzing by Subject** section since it was the feature I had developed for this project._
 |===
 
 include::../DeveloperGuide.adoc[tag=quizzingbysubject]
