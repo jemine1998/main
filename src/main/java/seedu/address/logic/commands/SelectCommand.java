@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
@@ -27,6 +28,8 @@ public class SelectCommand extends Command {
 
     private final Index targetIndex;
 
+    private Flashcard selectedFlashcard;
+
 
     public SelectCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
@@ -35,15 +38,28 @@ public class SelectCommand extends Command {
     @Override
     public CommandResult execute(Model model, CommandHistory history) throws CommandException {
         requireNonNull(model);
+        List<Flashcard> lastShownList = model.getFilteredFlashcardList();
+        ObservableList<Flashcard> updatedFlashcardList = model.getUpdatedFlashcardList();
 
-        List<Flashcard> updatedFlashcardList = model.getUpdatedFlashcardList();
 
-        if (targetIndex.getZeroBased() >= updatedFlashcardList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
+
+        if (model.getSelectedSubject() == null) {
+            if (targetIndex.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
+            }
+            model.setSelectedSubject(null);
+            selectedFlashcard = lastShownList.get(targetIndex.getZeroBased());
+            model.setSelectedFlashcard(selectedFlashcard);
+        } else {
+            if (targetIndex.getZeroBased() >= updatedFlashcardList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
+            }
+            selectedFlashcard = updatedFlashcardList.get(targetIndex.getZeroBased());
+            model.setSelectedSubject(selectedFlashcard.getSubject());
+            model.setSelectedFlashcard(selectedFlashcard);
         }
 
-        model.setSelectedFlashcard(updatedFlashcardList.get(targetIndex.getZeroBased()));
-        model.setSelectedSubject(model.getSelectedFlashcard().getSubject());
+
         return new CommandResult(String.format(MESSAGE_SELECT_FLASHCARD_SUCCESS, targetIndex.getOneBased()));
 
     }

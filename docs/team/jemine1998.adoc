@@ -35,11 +35,15 @@ The user interacts with it using a CLI, and it has a GUI created with JavaFX. It
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.1` - `v1.3` (3 releases) on GitHub
+*** Managed release `v1.4` (The last release) on GitHub
+*** Ensured the final product's commands work properly and correct their respective bugs.
+***
 ** Enhancements to existing features:
 *** Added a status for number of flashcards(Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Added an event center to track the change in
+*** Modified most of the basic commands to accommodate the filtered subject list. Eg. Clear Command, Find Command, List Command, etc (Pull request)
 ** Documentation:
+*** Change most of the sequence diagram and class diagram to reflect the changes we did to the respective components.
 *** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
 ** Community:
 *** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]

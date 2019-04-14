@@ -33,8 +33,7 @@ public class SelectCommandTest {
     @Test
     public void execute_invalidIndexUnfilteredList_failure() {
         model.setSelectedSubject(new SubjectTag("english"));
-        Index outOfBoundsIndex = Index.fromOneBased(model.getUpdatedFlashcardList().size() + 1);
-
+        Index outOfBoundsIndex = Index.fromOneBased(model.getUpdatedFlashcardList().size() + 2);
         assertExecutionFailure(outOfBoundsIndex, Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
     }
 

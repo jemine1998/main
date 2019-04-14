@@ -209,6 +209,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public SubjectTag getSelectedSubject() {
+            return null;
+        }
+
+        @Override
         public void addFlashcard(Flashcard flashcard) {
             throw new AssertionError("This method should not be called.");
         }
