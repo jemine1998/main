@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_DEADLINE;
 
 import java.util.List;
 
+import javafx.collections.ObservableList;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
@@ -22,7 +23,7 @@ import seedu.address.model.flashcard.exceptions.FlashcardNotFoundException;
 public class DeadlineCommand extends Command {
 
     public static final String COMMAND_WORD = "deadline";
-    public static final String COMMAND_ALIAS = "exam";
+    public static final String COMMAND_ALIAS = "note";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the deadline/exam of a flashcard identified "
             + "by the index number used in the last flashcard listing."
@@ -57,12 +58,13 @@ public class DeadlineCommand extends Command {
     @Override
     public CommandResult execute (Model model, CommandHistory history) throws CommandException {
         List<Flashcard> lastShownList = model.getFilteredFlashcardList();
+        ObservableList<Flashcard> updatedList = model.getUpdatedFlashcardList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_FLASHCARD_DISPLAYED_INDEX);
         }
 
-        Flashcard flashcardToEdit = lastShownList.get(index.getZeroBased());
+        Flashcard flashcardToEdit = updatedList.get(index.getZeroBased());
         Flashcard editedFlashcard = new Flashcard(flashcardToEdit.getTopic(), flashcardToEdit.getDifficulty(),
                 flashcardToEdit.getContent(), deadline, flashcardToEdit.getTags());
 
@@ -75,6 +77,7 @@ public class DeadlineCommand extends Command {
         }
 
         model.commitFlashBook();
+        model.setSelectedSubject(editedFlashcard.getSubject());
 
         return new CommandResult(generateSuccessMessage(editedFlashcard));
     }

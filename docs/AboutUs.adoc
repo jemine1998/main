@@ -4,7 +4,9 @@
 :imagesDir: images
 :stylesDir: stylesheets
 
-FlashCards was developed by the https://github.com/CS2113-AY1819S2-M11-3/main[M11-3] team. +
+FlashCards is a desktop application developed by our https://github.com/CS2113-AY1819S2-M11-3/main[team] to help secondary school students memorise their notes.
+It further serves as a notes management platform by helping them organize all their notes based on the different subjects they have. +
+
 We are a team based in the http://www.comp.nus.edu.sg[School of Computing, National University of Singapore].
 
 == Project Team
@@ -32,7 +34,7 @@ image::wanchinglim.png[width="150", align="left"]
 {empty}[http://github.com/wanchinglim[github]] [<<wanchinglim#, portfolio>>]
 
 Role: Documentation and Developer +
-Responsibilities: Logic
+Responsibilities: UI and Logic
 
 '''
 

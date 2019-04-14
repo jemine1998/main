@@ -40,9 +40,9 @@ public class AddCommandIntegrationTest {
         expectedModel.addFlashcard(validFlashcard);
         expectedModel.addSubject(validFlashcard.getSubject());
         expectedModel.commitFlashBook();
-        expectedModel.setSelectedSubject(new SubjectTag("english"));
+        expectedModel.setSelectedSubject(new SubjectTag("English"));
         ObservableList<Flashcard> f = expectedModel.getUpdatedFlashcardList();
-        model.setSelectedSubject(new SubjectTag("english"));
+        model.setSelectedSubject(new SubjectTag("English"));
         f = model.getUpdatedFlashcardList();
         expectedModel.setSelectedSubject(validFlashcard.getSubject());
         expectedModel.setSelectedFlashcard(validFlashcard);

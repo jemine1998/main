@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import javafx.scene.control.TextArea?>
 <SplitPane fx:id="rightMostPane" dividerPositions="0.1" orientation="VERTICAL" prefHeight="50.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <!--<WebView fx:id="browser" opacity="0.0"/>-->
     <items>
@@ -22,8 +21,10 @@
                                     <!--<Button mnemonicParsing="false" text="Topic" onAction="#handleChangeToTopic"/>-->
                                     <!--<Button mnemonicParsing="false" text="Content" onAction="#handleChangeToContent"/>-->
                                     <!--<Button mnemonicParsing="false" text="Topic and Content" />-->
-                                    <Button mnemonicParsing="false" text="Topic" />
-                                    <Button mnemonicParsing="false" text="Content" />
+                                    <Button mnemonicParsing="true" onAction="#handleTopicEvent" text="_Topic" />
+                                    <Button mnemonicParsing="true" onAction="#handleContentEvent" text="_Content" />
+                                    <!--<Button mnemonicParsing="false" text="Topic"/>-->
+                                    <!--<Button mnemonicParsing="false" text="Content"/>-->
                                 </buttons>
                      <effect>
                         <InnerShadow />
@@ -48,10 +49,11 @@
                 <!--<Label fx:id="selectedFlashcardContent" style="-fx-text-fill: white;"/>-->
             <!--</children>-->
         <!--</StackPane>-->
-        <StackPane fx:id="topicAnchorPane" minHeight="600.0" minWidth="500.0" style="-fx-background-color: black;">
+        <StackPane fx:id="topicAnchorPane" minHeight="250.0" minWidth="500.0" style="-fx-background-color: black;">
             <children>
-                <Label fx:id="selectedFlashcardTopic" style="-fx-text-fill: white;" styleClass="cell_big_label" wrapText="true" textAlignment="CENTER" />
-                <Label fx:id="selectedFlashcardContent" style="-fx-text-fill: white;" styleClass="cell_big_label" wrapText="true" textAlignment="CENTER"/>
+                <Label fx:id="selectedFlashcardTopic" lineSpacing="12.0" style="-fx-text-fill: white; -fx-font-size: 22;" styleClass="cell_big_label" textAlignment="CENTER" wrapText="true" />
+                <Label fx:id="selectedFlashcardContent" lineSpacing="12.0" style="-fx-text-fill: white; -fx-font-size: 22;" styleClass="cell_big_label" textAlignment="CENTER" wrapText="true" />
+                <Label fx:id="welcomeMessage" lineSpacing="12.0" style="-fx-text-fill: white; -fx-text-size: 22; -fx-font-size: 22; -fx-background-color: cornflowerblue;" styleClass="cell_big_label" text="Welcome to FlashBook. Having troubles with memorising? Get started by adding a flashcard!" textAlignment="CENTER" wrapText="true" />
             </children>
         </StackPane>
         <!--<StackPane fx:id="contentAnchorPane" minHeight="250.0" minWidth="500.0" style="-fx-background-color: black;">-->
