@@ -29,13 +29,13 @@ public class TopicTest {
         assertFalse(Topic.isValidTopic("")); // empty string
         assertFalse(Topic.isValidTopic(" ")); // spaces only
         assertFalse(Topic.isValidTopic("^")); // only non-alphanumeric characters
-        assertFalse(Topic.isValidTopic("peter*")); // contains non-alphanumeric characters
+        assertFalse(Topic.isValidTopic("chinese*")); // contains non-alphanumeric characters
 
         // valid topic
-        assertTrue(Topic.isValidTopic("peter jack")); // alphabets only
-        assertTrue(Topic.isValidTopic("12345")); // numbers only
-        assertTrue(Topic.isValidTopic("peter the 2nd")); // alphanumeric characters
-        assertTrue(Topic.isValidTopic("Capital Tan")); // with capital letters
-        assertTrue(Topic.isValidTopic("David Roger Jackson Ray Jr 2nd")); // long names
+        assertTrue(Topic.isValidTopic("Chinese language")); // alphabets only
+        assertTrue(Topic.isValidTopic("22")); // numbers only
+        assertTrue(Topic.isValidTopic("chapter 2")); // alphanumeric characters
+        assertTrue(Topic.isValidTopic("MATH")); // with capital letters
+        assertTrue(Topic.isValidTopic("Mathematics chapter 3 about area calculation")); // long topics
     }
 }
