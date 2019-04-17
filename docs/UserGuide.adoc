@@ -96,6 +96,18 @@ The flashcard that was just added will be displayed in the flashcards panel.
 // end::add[]
 
 // tag::adddeadline[]
+
+=== Listing all flashcards categorized by subjects: `list` or `l`	
+
+Displays an indexed list of flashcards categorized by subjects. +	
+Format: `list` or `l`	
+
+*Examples:*
+
+* `list` +
+Displays all the existing flashcards in flashbook.
+
+
 === Adding a Deadline/Note to a flashcard: `deadline` or `note`
 Adds a deadline or notes to the flashcard. +
 Format: `deadline INDEX d/DEADLINE` or `note INDEX d/NOTE`
@@ -114,13 +126,6 @@ Adds a note into the flashcard with content "Clarify with Teacher".
 In the case that a new date is to be added to a flashcard with an existing deadline or note, corrections can be made by overwriting the existing information with the same commands.
 
 // end::adddeadline[]
-
-=== Listing all flashcards categorized by subjects: `list` or `l`
-
-Displays an indexed list of flashcards categorized by subjects. +
-Format: `list` or `l`
-
-Subject tags will be colour-coded. Same subject tags will have the same colour.
 
 // tag::edit[]
 === Editing a flashcard: `edit` or `e`
@@ -369,6 +374,22 @@ Next, enter `select 2` to select the 2nd flashcard of the subject "Math" in the 
 Next, enter `select 1` to select the 1st flashcard of the subject "English" in the flashcards panel.
 // end::togglemode[]
 
+// tag::clear[]	
+=== Clearing all flashcards: `clear` or `c`	
+
+ Clears all flashcards. +	
+Format: `clear` or `c`	
+
+ *Examples:* +	
+
+ * `clear` +	
+All flashcards that are in the FlashBook will be deleted.	
+
+ *Note* This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.	
+
+ // end::clear[]	
+
+
 === Listing entered commands: `history`
 
 Lists all the commands that you have entered in reverse chronological order. +
@@ -378,21 +399,6 @@ Format: `history`
 ====
 Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and next input respectively in the command box.
 ====
-
-// tag::clear[]
-=== Clearing all flashcards: `clear` or `c`
-
-Clears all flashcards. +
-Format: `clear` or `c`
-
-*Examples:* +
-
-* `clear` +
-All flashcards that are in the FlashBook will be deleted.
-
-*Note* This action is not reversible. The `undo` and `redo` command do not apply to the clearing of flashcards and subjects simultaneously.
-
-// end::clear[]
 
 === Exiting the program: `exit`
 
